@@ -1,0 +1,36 @@
+{
+  "name": "ray-tracer",
+  "version": "0.0.0",
+  "description": "A Ray Tracer implementation using JavaScript and WebGL.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node build.js",
+    "build:prod": "cross-env NODE_ENV=production node build.js",
+    "clean": "rm -rf dist",
+    "dev": "concurrently --kill-others \"npm run build\" \"npm run sync\"",
+    "sync": "browser-sync start --server --watch --serveStatic dist",
+    "start": "npm run sync",
+    "test": "jest --watch",
+    "format": "prettier --write *.js src/**/*.{js,html,css}",
+    "lint": "eslint *.js src/**/*.js"
+  },
+  "keywords": [
+    "ray",
+    "tracer"
+  ],
+  "author": "Gary Blackwood <gary@garyblackwood.co.uk>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "7.14.6",
+    "@babel/preset-env": "7.14.7",
+    "babel-jest": "27.0.6",
+    "browser-sync": "2.27.4",
+    "concurrently": "6.2.0",
+    "cross-env": "7.0.3",
+    "esbuild": "0.12.14",
+    "eslint": "7.30.0",
+    "eslint-plugin-jest": "24.3.6",
+    "jest": "27.0.6",
+    "prettier": "2.3.2"
+  }
+}
