@@ -1,6 +1,7 @@
 import { Tuple } from "../src/tuple";
 import { Point } from "../src/point";
 import { Vector } from "../src/vector";
+import { Color } from "../src/color";
 
 test("a tuple with w=1.0 is a point", () => {
   const a = new Tuple(4.3, -4.2, 3.1, 1);
@@ -155,3 +156,46 @@ test("cross product of two vectors", () => {
   expect(a.cross(b)).toEqual(new Vector(-1, 2, -1));
   expect(b.cross(a)).toEqual(new Vector(1, -2, 1));
 });
+
+test("colors are (red, green, blue) tuples", () => {
+  const a = new Color(-0.5, 0.4, 1.7);
+  expect(a.red).toBe(-0.5);
+  expect(a.green).toBe(0.4);
+  expect(a.blue).toBe(1.7);
+});
+
+test("add two colors", () => {
+  const a = new Color(0.9, 0.6, 0.75);
+  const b = new Color(0.7, 0.1, 0.25);
+  const c = a.add(b);
+  expect(c).toEqual(new Color(1.6, 0.7, 1.0));
+});
+
+test("subtract two colors", () => {
+  const a = new Color(0.9, 0.6, 0.75);
+  const b = new Color(0.7, 0.1, 0.25);
+  const c = a.subtract(b);
+  expect(c).toBeDefined();
+  expectToBeCloseTo(c, new Color(0.2, 0.5, 0.5));
+});
+
+test("multiply a color by a scalar", () => {
+  const a = new Color(0.2, 0.3, 0.4);
+  const b = a.multiply(2);
+  expect(b).toEqual(new Color(0.4, 0.6, 0.8));
+});
+
+test("multiply two colors", () => {
+  const a = new Color(1, 0.2, 0.4);
+  const b = new Color(0.9, 1, 0.1);
+  const c = a.multiply(b);
+  expect(c).toBeDefined();
+  expectToBeCloseTo(c, new Color(0.9, 0.2, 0.04));
+});
+
+function expectToBeCloseTo(a, b) {
+  expect(a.x).toBeCloseTo(b.x);
+  expect(a.y).toBeCloseTo(b.y);
+  expect(a.z).toBeCloseTo(b.z);
+  expect(a.w).toBeCloseTo(b.w);
+}

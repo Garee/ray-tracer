@@ -10,10 +10,11 @@ module.exports = {
     "plugin:jest/recommended",
     "plugin:jest/style",
   ],
+  parser: "@babel/eslint-parser",
   parserOptions: {
     ecmaVersion: 12,
     sourceType: "module",
   },
   rules: {},
-  plugins: ["jest"],
+  plugins: ["@babel", "jest"],
 };

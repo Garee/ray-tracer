@@ -1,5 +1,5 @@
 export class Tuple {
-  constructor(x, y, z, w = 1) {
+  constructor(x, y, z, w = 0) {
     this.x = x;
     this.y = y;
     this.z = z;

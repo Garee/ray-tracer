@@ -2,7 +2,7 @@ import { Tuple } from "./tuple";
 
 export class Point extends Tuple {
   constructor(x, y, z) {
-    super(x, y, z);
+    super(x, y, z, 1);
   }
 
   add(t) {
