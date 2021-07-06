@@ -62,4 +62,8 @@ export class Tuple {
     const z = this.z / this.magnitude();
     return new Tuple(x, y, z, this.w);
   }
+
+  toArray() {
+    return [[this.x], [this.y], [this.z], [this.w]];
+  }
 }
