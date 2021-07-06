@@ -21,6 +21,27 @@ export class Matrix {
     return new Matrix(mdarray);
   }
 
+  identity() {
+    const [rows] = dim(this.mdarray);
+    return new Matrix(identity(rows));
+  }
+
+  transpose() {
+    return new Matrix(transpose(this.mdarray));
+  }
+
+  submatrix(row, col) {
+    return new Matrix(submatrix(this.mdarray, row, col));
+  }
+
+  minor(row, col) {
+    return minor(this.mdarray, row, col);
+  }
+
+  cofactor(row, col) {
+    return cofactor(this.mdarray, row, col);
+  }
+
   toArray() {
     return this.mdarray;
   }
@@ -60,4 +81,52 @@ export function zeros(rows, cols) {
     m[r] = new Array(cols).fill(0);
   }
   return m;
+}
+
+export function identity(n) {
+  const z = zeros(n, n);
+  for (let i = 0; i < n; i++) {
+    z[i][i] = 1;
+  }
+  return z;
+}
+
+export function transpose(m) {
+  const [rows, cols] = dim(m);
+  const z = zeros(rows, cols);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      z[c][r] = m[r][c];
+    }
+  }
+  return z;
+}
+
+export function determinantSimple(m) {
+  const a = m[0][0];
+  const b = m[0][1];
+  const c = m[1][0];
+  const d = m[1][1];
+  return a * d - b * c;
+}
+
+export function submatrix(m, row, col) {
+  const s = m.map((r) => {
+    const rr = [...r];
+    rr.splice(col, 1);
+    return rr;
+  });
+  s.splice(row, 1);
+  return s;
+}
+
+export function minor(m, row, col) {
+  const s = submatrix(m, row, col);
+  return determinantSimple(s);
+}
+
+export function cofactor(m, row, col) {
+  const negate = (row + col) % 2 === 1;
+  const min = minor(m, row, col);
+  return negate ? -min : min;
 }

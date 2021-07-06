@@ -1,4 +1,4 @@
-import { Matrix } from "../src/matrix";
+import { determinantSimple, identity, Matrix } from "../src/matrix";
 import { Tuple } from "../src/tuple";
 
 test("construct and inspect a 4x4 matrix", () => {
@@ -103,4 +103,98 @@ test("multiply a matrix and a tuple", () => {
   ]);
   const t = new Tuple(1, 2, 3, 1);
   expect(m.multiply(t)).toEqual(new Tuple(18, 24, 33, 1));
+});
+
+test("multiply a matrix by the identity matrix", () => {
+  const m = new Matrix([
+    [0, 1, 2, 4],
+    [1, 2, 4, 8],
+    [2, 4, 8, 16],
+    [4, 8, 16, 32],
+  ]);
+  expect(m.multiply(m.identity())).toEqual(m);
+});
+
+test("matrix transposition", () => {
+  const m = new Matrix([
+    [0, 9, 3, 0],
+    [9, 8, 0, 8],
+    [1, 8, 5, 3],
+    [0, 0, 5, 8],
+  ]);
+  expect(m.transpose()).toEqual(
+    new Matrix([
+      [0, 9, 1, 0],
+      [9, 8, 8, 0],
+      [3, 0, 5, 5],
+      [0, 8, 3, 8],
+    ])
+  );
+});
+
+test("tranposition of an identity matrix", () => {
+  const i = new Matrix(identity(4));
+  expect(i.transpose()).toEqual(i);
+});
+
+test("calculating the determinant of a 2x2 matrix", () => {
+  const m = [
+    [1, 5],
+    [-3, 2],
+  ];
+  expect(determinantSimple(m)).toEqual(17);
+});
+
+test("submatrix of a 3x3 matrix is a 2x2 matrix", () => {
+  const m = new Matrix([
+    [1, 5, 0],
+    [-3, 2, 7],
+    [0, 6, -3],
+  ]);
+  expect(m.submatrix(0, 2)).toEqual(
+    new Matrix([
+      [-3, 2],
+      [0, 6],
+    ])
+  );
+});
+
+test("submatrix of a 4x4 matrix is a 3x3 matrix", () => {
+  const m = new Matrix([
+    [-6, 1, 1, 6],
+    [-8, 5, 8, 6],
+    [-1, 0, 8, 2],
+    [-7, 1, -1, 1],
+  ]);
+  expect(m.submatrix(2, 1)).toEqual(
+    new Matrix([
+      [-6, 1, 6],
+      [-8, 8, 6],
+      [-7, -1, 1],
+    ])
+  );
+});
+
+test("minor of a 3x3 matrix", () => {
+  const m = new Matrix([
+    [3, 5, 0],
+    [2, -1, -7],
+    [6, -1, 5],
+  ]);
+  const b = m.submatrix(1, 0);
+  const det = determinantSimple(b.toArray());
+  expect(det).toEqual(25);
+  expect(m.minor(1, 0)).toEqual(det);
+});
+
+test("cofactor of a 3x3 matrix", () => {
+  const m = new Matrix([
+    [3, 5, 0],
+    [2, -1, -7],
+    [6, -1, 5],
+  ]);
+  expect(m.minor(0, 0)).toEqual(-12);
+  expect(m.cofactor(0, 0)).toEqual(-12);
+  expect(m.minor(1, 0)).toEqual(25);
+  expect(m.cofactor(1, 0)).toEqual(-25);
 });
