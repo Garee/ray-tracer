@@ -1,8 +1,14 @@
 import { Tuple } from "./tuple";
 
 export class Matrix {
+  mdarray = [];
+
   constructor(mdarray) {
     this.mdarray = mdarray;
+  }
+
+  get(x, y) {
+    return this.mdarray[x][y];
   }
 
   multiply(m) {
@@ -11,7 +17,12 @@ export class Matrix {
       return new Tuple(n[0][0], n[1][0], n[2][0], m.w);
     }
 
-    return multiply(this.mdarray, m);
+    const mdarray = multiply(this.mdarray, m.toArray());
+    return new Matrix(mdarray);
+  }
+
+  toArray() {
+    return this.mdarray;
   }
 }
 
