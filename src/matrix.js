@@ -42,6 +42,10 @@ export class Matrix {
     return cofactor(this.mdarray, row, col);
   }
 
+  determinant() {
+    return determinant(this.mdarray);
+  }
+
   toArray() {
     return this.mdarray;
   }
@@ -110,6 +114,19 @@ export function determinantSimple(m) {
   return a * d - b * c;
 }
 
+export function determinant(m) {
+  const [rows, cols] = dim(m);
+  if (rows == 2) {
+    return determinantSimple(m);
+  }
+
+  let det = 0;
+  for (let c = 0; c < cols; c++) {
+    det += m[0][c] * cofactor(m, 0, c);
+  }
+  return det;
+}
+
 export function submatrix(m, row, col) {
   const s = m.map((r) => {
     const rr = [...r];
@@ -122,7 +139,7 @@ export function submatrix(m, row, col) {
 
 export function minor(m, row, col) {
   const s = submatrix(m, row, col);
-  return determinantSimple(s);
+  return determinant(s);
 }
 
 export function cofactor(m, row, col) {

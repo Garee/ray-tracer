@@ -198,3 +198,29 @@ test("cofactor of a 3x3 matrix", () => {
   expect(m.minor(1, 0)).toEqual(25);
   expect(m.cofactor(1, 0)).toEqual(-25);
 });
+
+test("calculating the determinant of a 3x3 matrix", () => {
+  const m = new Matrix([
+    [1, 2, 6],
+    [-5, 8, -4],
+    [2, 6, 4],
+  ]);
+  expect(m.cofactor(0, 0)).toEqual(56);
+  expect(m.cofactor(0, 1)).toEqual(12);
+  expect(m.cofactor(0, 2)).toEqual(-46);
+  expect(m.determinant()).toEqual(-196);
+});
+
+test("calculating the determinant of a 4x4 matrix", () => {
+  const m = new Matrix([
+    [-2, -8, 3, 5],
+    [-3, 1, 7, 3],
+    [1, 2, -9, 6],
+    [-6, 7, 7, -9],
+  ]);
+  expect(m.cofactor(0, 0)).toEqual(690);
+  expect(m.cofactor(0, 1)).toEqual(447);
+  expect(m.cofactor(0, 2)).toEqual(210);
+  expect(m.cofactor(0, 3)).toEqual(51);
+  expect(m.determinant()).toEqual(-4071);
+});
