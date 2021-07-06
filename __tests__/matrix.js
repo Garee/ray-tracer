@@ -224,3 +224,61 @@ test("calculating the determinant of a 4x4 matrix", () => {
   expect(m.cofactor(0, 3)).toEqual(51);
   expect(m.determinant()).toEqual(-4071);
 });
+
+test("testing invertible matrix for invertability", () => {
+  const m = new Matrix([
+    [6, 4, 4, 4],
+    [5, 5, 7, 6],
+    [4, -9, 3, -7],
+    [9, 1, 7, -6],
+  ]);
+  expect(m.determinant()).toEqual(-2120);
+  expect(m.invertable()).toBe(true);
+});
+
+test("testing non-invertible matrix for invertability", () => {
+  const m = new Matrix([
+    [4, 2, -2, -3],
+    [9, 6, 2, 6],
+    [0, -5, 1, -5],
+    [0, 0, 0, 0],
+  ]);
+  expect(m.determinant()).toEqual(0);
+  expect(m.invertable()).toBe(false);
+});
+
+test("inverse of a matrix", () => {
+  const m = new Matrix([
+    [-5, 2, 6, -8],
+    [1, -5, 1, 8],
+    [7, 7, -6, -7],
+    [1, -3, 7, 4],
+  ]);
+  expect(m.determinant()).toEqual(532);
+  expect(m.cofactor(2, 3)).toEqual(-160);
+  expect(m.cofactor(3, 2)).toEqual(105);
+  const n = m.inverse();
+  expect(n.get(3, 2)).toBeCloseTo(-160 / 532);
+  expect(n.get(2, 3)).toBeCloseTo(105 / 532);
+});
+
+test("multiply a product by its inverse", () => {
+  const m = new Matrix([
+    [3, -9, 7, 3],
+    [3, -8, 2, -9],
+    [-4, 4, 4, 1],
+    [-6, 5, -1, 1],
+  ]);
+  const n = new Matrix([
+    [8, 2, 2, 2],
+    [3, -1, 7, 0],
+    [7, 0, 5, 4],
+    [6, -2, 0, 5],
+  ]);
+  const o = m.multiply(n);
+  o.multiply(n.inverse())
+    .toArray()
+    .forEach((r, i) => {
+      r.forEach((c, j) => expect(c).toBeCloseTo(m.get(i, j)));
+    });
+});

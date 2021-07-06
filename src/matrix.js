@@ -46,6 +46,14 @@ export class Matrix {
     return determinant(this.mdarray);
   }
 
+  invertable() {
+    return invertable(this.mdarray);
+  }
+
+  inverse() {
+    return new Matrix(inverse(this.mdarray));
+  }
+
   toArray() {
     return this.mdarray;
   }
@@ -146,4 +154,25 @@ export function cofactor(m, row, col) {
   const negate = (row + col) % 2 === 1;
   const min = minor(m, row, col);
   return negate ? -min : min;
+}
+
+export function invertable(m) {
+  return determinant(m) !== 0;
+}
+
+export function inverse(m) {
+  if (!invertable(m)) {
+    throw new Error("The matrix is not invertable");
+  }
+
+  const det = determinant(m);
+  const [rows, cols] = dim(m);
+  const inv = zeros(rows, cols);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      inv[c][r] = cofactor(m, r, c) / det;
+    }
+  }
+
+  return inv;
 }
