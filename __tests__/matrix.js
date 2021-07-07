@@ -262,6 +262,46 @@ test("inverse of a matrix", () => {
   expect(n.get(2, 3)).toBeCloseTo(105 / 532);
 });
 
+test("calculating the inverse of another matrix", () => {
+  const m = new Matrix([
+    [8, -5, 9, 2],
+    [7, 5, 6, 1],
+    [-6, 0, 9, 6],
+    [-3, 0, -9, -4],
+  ]);
+  const n = [
+    [-0.15385, -0.15385, -0.28205, -0.53846],
+    [-0.07692, 0.12308, 0.02564, 0.03077],
+    [0.35897, 0.35897, 0.4359, 0.92308],
+    [-0.69231, -0.69231, -0.76923, -1.92308],
+  ];
+  m.inverse()
+    .toArray()
+    .forEach((row, i) => {
+      row.forEach((col, j) => expect(col).toBeCloseTo(n[i][j]));
+    });
+});
+
+test("calculating the inverse of a third matrix", () => {
+  const m = new Matrix([
+    [9, 3, 0, 9],
+    [-5, -2, -6, -3],
+    [-4, 9, 6, 4],
+    [-7, 6, 6, 2],
+  ]);
+  const n = [
+    [-0.04074, -0.07778, 0.14444, -0.22222],
+    [-0.07778, 0.03333, 0.36667, -0.33333],
+    [-0.02901, -0.1463, -0.10926, 0.12963],
+    [0.17778, 0.06667, -0.26667, 0.33333],
+  ];
+  m.inverse()
+    .toArray()
+    .forEach((row, i) => {
+      row.forEach((col, j) => expect(col).toBeCloseTo(n[i][j]));
+    });
+});
+
 test("multiply a product by its inverse", () => {
   const m = new Matrix([
     [3, -9, 7, 3],
