@@ -10,6 +10,7 @@ export class Point extends Tuple {
       throw new Error("You cannot add two Points.");
     }
 
-    return super.add(t);
+    const { x, y, z } = super.add(t);
+    return new Point(x, y, z, this.w);
   }
 }

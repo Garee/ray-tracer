@@ -1,12 +1,7 @@
 import { Point } from "./point";
 import { Canvas } from "./canvas";
 import { Color } from "./color";
-import {
-  rotationX,
-  rotationY,
-  rotationZ,
-  translation,
-} from "./transformations";
+import { translation } from "./transformations";
 
 const white = new Color(1, 1, 1);
 const black = new Color(0, 0, 0);
