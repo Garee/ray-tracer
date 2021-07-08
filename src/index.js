@@ -1,32 +1,14 @@
 import { Point } from "./point";
-import { Vector } from "./vector";
 import { Canvas } from "./canvas";
 import { Color } from "./color";
+import {
+  rotationX,
+  rotationY,
+  rotationZ,
+  translation,
+} from "./transformations";
 
-function Projectile(position, velocity) {
-  return {
-    position: position || new Point(0, 1, 0),
-    velocity: velocity || new Vector(1, 1.8, 0).normalize().multiply(11.25),
-  };
-}
-
-function Environment(gravity, wind) {
-  return {
-    gravity: gravity || new Vector(0, -0.1, 0),
-    wind: wind || new Vector(-0.01, 0, 0),
-  };
-}
-
-function tick(env, p) {
-  const pos = p.position.add(p.velocity);
-  const vel = p.velocity.add(env.gravity).add(env.wind);
-  return new Projectile(pos, vel);
-}
-
-const env = new Environment();
-let p = new Projectile();
-
-const red = new Color(1, 0, 0);
+const white = new Color(1, 1, 1);
 const black = new Color(0, 0, 0);
 
 const width = 900;
@@ -49,15 +31,22 @@ function render(c) {
   ctx.putImageData(imageData, 0, 0);
 }
 
-const interval = setInterval(() => {
-  p = tick(env, p);
+function renderCrossAt(p, c) {
+  const x = Math.round(p.x);
+  const y = Math.round(p.y);
+  return c
+    .writePixel(x, y, white)
+    .writePixel(x, y - 1, white)
+    .writePixel(x, y + 1, white)
+    .writePixel(x - 1, y, white)
+    .writePixel(x + 1, y, white);
+}
 
-  const x = Math.round(p.position.x);
-  const y = c.height - Math.round(p.position.y);
-  c = c.writePixel(x, y, red);
+const radius = width / 8;
+const center = new Point(width / 2, height / 2, 0);
+c = renderCrossAt(center, c);
 
-  if (p.position.y <= 0) {
-    clearInterval(interval);
-    render(c);
-  }
-});
+const twelve = translation(0, -radius, 0).multiply(center);
+c = renderCrossAt(twelve, c);
+
+render(c);
