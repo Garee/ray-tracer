@@ -1,12 +1,17 @@
 import { Point } from "./point";
+import { Intersection } from "./intersection";
+import { Matrix } from "./matrix";
 
 export class Sphere {
   constructor() {
     this.center = new Point(0, 0, 0);
     this.radius = 1;
+    this.transform = Matrix.identity();
   }
 
   intersect(ray) {
+    ray = ray.transform(this.transform.inverse());
+
     const toRay = ray.origin.subtract(this.center);
     const a = ray.direction.dot(ray.direction);
     const b = 2 * ray.direction.dot(toRay);
@@ -19,7 +24,11 @@ export class Sphere {
 
     const t1 = (-b - Math.sqrt(d)) / (2 * a);
     const t2 = (-b + Math.sqrt(d)) / (2 * a);
-    return [t1, t2];
+    return [new Intersection(t1, this), new Intersection(t2, this)];
+  }
+
+  setTransform(transform) {
+    this.transform = transform;
   }
 }
 
