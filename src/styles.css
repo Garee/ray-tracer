@@ -1,4 +1,19 @@
 html,
 body {
   font-family: Helvetica, Arial, sans-serif;
+  background-color: #02111b;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  box-shadow: 5px 5px 20px rgba(255, 255, 255, 0.5);
 }
