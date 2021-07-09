@@ -1,12 +1,14 @@
 import { Point } from "./point";
 import { Intersection } from "./intersection";
 import { Matrix } from "./matrix";
+import { Material } from "./material";
 
 export class Sphere {
   constructor() {
     this.center = new Point(0, 0, 0);
     this.radius = 1;
     this.transform = Matrix.identity();
+    this.material = new Material();
   }
 
   intersect(ray) {
@@ -28,7 +30,25 @@ export class Sphere {
   }
 
   setTransform(transform) {
-    this.transform = transform;
+    const s = new Sphere();
+    s.transform = transform;
+    return s;
+  }
+
+  setMaterial(material) {
+    const s = new Sphere();
+    s.material = material;
+    return s;
+  }
+
+  normalAt(point) {
+    const objPoint = this.transform.inverse().multiply(point);
+    const objNormal = objPoint.subtract(this.center);
+    const worldNormal = this.transform
+      .inverse()
+      .transpose()
+      .multiply(objNormal);
+    return worldNormal.normalize();
   }
 }
 

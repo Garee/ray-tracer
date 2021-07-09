@@ -77,6 +77,10 @@ export class Tuple {
     return new Tuple(x, y, z, this.w);
   }
 
+  reflect(normal) {
+    return this.subtract(normal.multiply(this.dot(normal) * 2));
+  }
+
   toArray() {
     return [[this.x], [this.y], [this.z], [this.w]];
   }

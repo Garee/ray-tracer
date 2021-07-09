@@ -2,6 +2,7 @@ import { Tuple } from "../src/tuple";
 import { Point } from "../src/point";
 import { Vector } from "../src/vector";
 import { Color } from "../src/color";
+import { expectToBeCloseToTuple } from "../src/util";
 
 test("a tuple with w=1.0 is a point", () => {
   const a = new Tuple(4.3, -4.2, 3.1, 1);
@@ -176,7 +177,7 @@ test("subtract two colors", () => {
   const b = new Color(0.7, 0.1, 0.25);
   const c = a.subtract(b);
   expect(c).toBeDefined();
-  expectToBeCloseTo(c, new Color(0.2, 0.5, 0.5));
+  expectToBeCloseToTuple(c, new Color(0.2, 0.5, 0.5));
 });
 
 test("multiply a color by a scalar", () => {
@@ -190,12 +191,19 @@ test("multiply two colors", () => {
   const b = new Color(0.9, 1, 0.1);
   const c = a.multiply(b);
   expect(c).toBeDefined();
-  expectToBeCloseTo(c, new Color(0.9, 0.2, 0.04));
+  expectToBeCloseToTuple(c, new Color(0.9, 0.2, 0.04));
 });
 
-function expectToBeCloseTo(a, b) {
-  expect(a.x).toBeCloseTo(b.x);
-  expect(a.y).toBeCloseTo(b.y);
-  expect(a.z).toBeCloseTo(b.z);
-  expect(a.w).toBeCloseTo(b.w);
-}
+test("reflecting a vector approaching at 45deg", () => {
+  const v = new Vector(1, -1, 0);
+  const n = new Vector(0, 1, 0);
+  expect(n).toBeDefined();
+  expectToBeCloseToTuple(v.reflect(n), new Vector(1, 1, 0));
+});
+
+test("reflecting a vector off a slanted surface", () => {
+  const v = new Vector(0, -1, 0);
+  const n = new Vector(Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0);
+  expect(n).toBeDefined();
+  expectToBeCloseToTuple(v.reflect(n), new Vector(1, 0, 0));
+});
