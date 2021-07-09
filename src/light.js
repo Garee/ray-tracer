@@ -1,4 +1,4 @@
-import { Black } from "./color";
+import { Black, Color } from "./color";
 
 export class Light {
   constructor(position, intensity) {
@@ -36,5 +36,6 @@ export function lighting(material, light, point, eye, normal) {
     }
   }
 
-  return ambient.add(diffuse).add(specular);
+  const { x, y, z } = ambient.add(diffuse).add(specular);
+  return new Color(x, y, z);
 }

@@ -4,6 +4,8 @@ import { Sphere } from "./sphere";
 import { Ray } from "./ray";
 import { Point } from "./point";
 import { hit } from "./intersection";
+import { Light, lighting } from "./light";
+import { Material } from "./material";
 
 const Colors = {
   white: new Color(1, 1, 1),
@@ -17,10 +19,14 @@ const width = 100;
 const height = 100;
 let c = new Canvas(width, height).fill(Colors.black);
 
-const sphere = new Sphere();
-const wallSize = 10;
-const wallZ = 0;
-const cameraZ = -1.1;
+const sphere = new Sphere().setMaterial(
+  new Material({ color: new Color(0, 1, 0) })
+);
+const light = new Light(new Point(-10, 10, -10), Colors.white);
+
+const wallSize = 7;
+const wallZ = 10;
+const cameraZ = -5;
 const origin = new Point(0, 0, cameraZ);
 
 function colorPixels() {
@@ -34,8 +40,14 @@ function colorPixels() {
       const direction = target.subtract(origin).normalize();
       const ray = new Ray(origin, direction);
 
-      if (hit(sphere.intersect(ray))) {
-        c = c.writePixel(x, y, Colors.red);
+      const int = hit(sphere.intersect(ray));
+      if (int) {
+        const { t, obj } = int;
+        const point = ray.position(t);
+        const normal = obj.normalAt(point);
+        const eye = ray.direction.multiply(-1);
+        const color = lighting(obj.material, light, point, eye, normal);
+        c = c.writePixel(x, y, color);
       }
     }
   }
