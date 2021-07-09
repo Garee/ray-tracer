@@ -1,16 +1,47 @@
-import { Point } from "./point";
 import { Canvas } from "./canvas";
 import { Color } from "./color";
-import { translation } from "./transformations";
+import { Sphere } from "./sphere";
+import { Ray } from "./ray";
+import { Point } from "./point";
+import { hit } from "./intersection";
 
-const white = new Color(1, 1, 1);
-const black = new Color(0, 0, 0);
+const Colors = {
+  white: new Color(1, 1, 1),
+  black: new Color(0, 0, 0),
+  red: new Color(1, 0, 0),
+  green: new Color(0, 1, 0),
+  blue: new Color(0, 0, 1),
+};
 
-const width = 900;
-const height = 550;
-let c = new Canvas(width, height).fill(black);
+const width = 100;
+const height = 100;
+let c = new Canvas(width, height).fill(Colors.black);
 
-function render(c) {
+const sphere = new Sphere();
+const wallSize = 10;
+const wallZ = 0;
+const cameraZ = -1.1;
+const origin = new Point(0, 0, cameraZ);
+
+function colorPixels() {
+  const pxSize = wallSize / height;
+  for (let x = 0; x < width; x++) {
+    const worldX = -(wallSize / 2) + pxSize * x;
+    for (let y = 0; y < height; y++) {
+      const worldY = wallSize / 2 - pxSize * y;
+
+      const target = new Point(worldX, worldY, wallZ);
+      const direction = target.subtract(origin).normalize();
+      const ray = new Ray(origin, direction);
+
+      if (hit(sphere.intersect(ray))) {
+        c = c.writePixel(x, y, Colors.red);
+      }
+    }
+  }
+}
+
+function render() {
   const el = document.getElementById("canvas");
   const ctx = el.getContext("2d");
 
@@ -26,22 +57,7 @@ function render(c) {
   ctx.putImageData(imageData, 0, 0);
 }
 
-function renderCrossAt(p, c) {
-  const x = Math.round(p.x);
-  const y = Math.round(p.y);
-  return c
-    .writePixel(x, y, white)
-    .writePixel(x, y - 1, white)
-    .writePixel(x, y + 1, white)
-    .writePixel(x - 1, y, white)
-    .writePixel(x + 1, y, white);
-}
-
-const radius = width / 8;
-const center = new Point(width / 2, height / 2, 0);
-c = renderCrossAt(center, c);
-
-const twelve = translation(0, -radius, 0).multiply(center);
-c = renderCrossAt(twelve, c);
-
-render(c);
+setTimeout(() => {
+  colorPixels();
+  render();
+});
