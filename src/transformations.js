@@ -56,3 +56,16 @@ export function shearing(xy, xz, yx, yz, zx, zy) {
     [0, 0, 0, 1],
   ]);
 }
+
+export function viewTransform(from, to, up) {
+  const forward = to.subtract(from).normalize();
+  const left = forward.cross(up.normalize());
+  const trueUp = left.cross(forward);
+  const orient = new Matrix([
+    [left.x, left.y, left.z, 0],
+    [trueUp.x, trueUp.y, trueUp.z, 0],
+    [-forward.x, -forward.y, -forward.z, 0],
+    [0, 0, 0, 1],
+  ]);
+  return orient.multiply(translation(-from.x, -from.y, -from.z));
+}

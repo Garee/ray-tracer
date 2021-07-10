@@ -1,11 +1,11 @@
-import { Color } from "../src/color";
+import { Color, Black } from "../src/color";
 import { Canvas } from "../src/canvas";
 
 test("create a canvas", () => {
   const c = new Canvas(10, 20);
   expect(c.width).toBe(10);
   expect(c.height).toBe(20);
-  const white = new Color(0, 0, 0);
+  const white = Black;
   c.pixels.forEach((p) => expect(p).toEqual(white));
 });
 

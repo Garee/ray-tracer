@@ -5,11 +5,12 @@ import {
   rotationY,
   rotationZ,
   shearing,
+  viewTransform,
 } from "../src/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 import { Point } from "../src/point";
 import { Vector } from "../src/vector";
-import { expect, test } from "@jest/globals";
+import { Matrix } from "../src/matrix";
 
 test("multiplying by a translation matrix", () => {
   const transform = translation(5, -3, 2);
@@ -153,4 +154,44 @@ test("chained transformations must be applied in reverse order", () => {
   const c = translation(10, 5, 7);
   const t = c.multiply(b).multiply(a);
   expect(t.multiply(point)).toEqual(new Point(15, 0, 7));
+});
+
+test("the transformation matrix for the default orientation", () => {
+  const from = new Point();
+  const to = new Point(0, 0, -1);
+  const up = new Vector(0, 1, 0);
+  const t = viewTransform(from, to, up);
+  expect(t).toEqual(Matrix.identity());
+});
+
+test("a view transformation matrix looking in a positive z direction", () => {
+  const from = new Point();
+  const to = new Point(0, 0, 1);
+  const up = new Vector(0, 1, 0);
+  const t = viewTransform(from, to, up);
+  expect(t).toEqual(scaling(-1, 1, -1));
+});
+
+test("the view transformation moves the world", () => {
+  const from = new Point(0, 0, 8);
+  const to = new Point();
+  const up = new Vector(0, 1, 0);
+  const t = viewTransform(from, to, up);
+  expect(t).toEqual(translation(0, 0, -8));
+});
+
+test("an arbitrary view transformation", () => {
+  const from = new Point(1, 3, 2);
+  const to = new Point(4, -2, 8);
+  const up = new Vector(1, 1, 0);
+  const t = viewTransform(from, to, up);
+  const m = new Matrix([
+    [-0.50709, 0.50709, 0.67612, -2.36643],
+    [0.76772, 0.60609, 0.12122, -2.82843],
+    [-0.35857, 0.59761, -0.71714, 0],
+    [0, 0, 0, 1],
+  ]);
+  t.toArray().forEach((row, i) => {
+    row.forEach((col, j) => expect(col).toBeCloseTo(m.get(i, j)));
+  });
 });

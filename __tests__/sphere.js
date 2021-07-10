@@ -29,7 +29,7 @@ test("a ray misses a sphere", () => {
 });
 
 test("a ray originates inside a sphere", () => {
-  const ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+  const ray = new Ray(new Point(), new Vector(0, 0, 1));
   const sphere = new Sphere();
   const int = sphere.intersect(ray);
   expect(int.map((i) => i.t)).toEqual([-1, 1]);

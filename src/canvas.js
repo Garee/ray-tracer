@@ -1,4 +1,4 @@
-import { Color } from "./color";
+import { Color, Black } from "./color";
 
 export class Canvas {
   #maxColor = 255;
@@ -84,7 +84,7 @@ export class Canvas {
   }
 
   #initPixels(color) {
-    color = color || new Color(0, 0, 0);
+    color = color || Black;
     return new Array(this.width * this.height).fill(color);
   }
 }

@@ -1,5 +1,5 @@
 import { Canvas } from "./canvas";
-import { Color } from "./color";
+import { Color, Black, White } from "./color";
 import { Sphere } from "./sphere";
 import { Ray } from "./ray";
 import { Point } from "./point";
@@ -8,8 +8,8 @@ import { Light, lighting } from "./light";
 import { Material } from "./material";
 
 const Colors = {
-  white: new Color(1, 1, 1),
-  black: new Color(0, 0, 0),
+  white: White,
+  black: Black,
   red: new Color(1, 0, 0),
   green: new Color(0, 1, 0),
   blue: new Color(0, 0, 1),

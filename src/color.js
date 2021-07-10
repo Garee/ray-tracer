@@ -35,3 +35,4 @@ export class Color extends Tuple {
 }
 
 export const Black = new Color(0, 0, 0);
+export const White = new Color(1, 1, 1);

@@ -11,6 +11,11 @@ export class Vector extends Tuple {
     }
 
     const { x, y, z } = super.subtract(t);
-    return new Vector(x, y, z, this.w);
+    return new Vector(x, y, z);
+  }
+
+  multiply(t) {
+    const { x, y, z } = super.multiply(t);
+    return new Vector(x, y, z);
   }
 }

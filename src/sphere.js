@@ -5,7 +5,7 @@ import { Material } from "./material";
 
 export class Sphere {
   constructor() {
-    this.center = new Point(0, 0, 0);
+    this.center = new Point();
     this.radius = 1;
     this.transform = Matrix.identity();
     this.material = new Material();
