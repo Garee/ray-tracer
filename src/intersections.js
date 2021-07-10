@@ -10,10 +10,13 @@ export function prepareComputations(intersection, ray) {
     normal = normal.multiply(-1); // Yes.
   }
 
+  const overPoint = point.add(normal.multiply(0.0005));
+
   return {
     t,
     obj,
     point,
+    overPoint,
     eye,
     normal,
     inside,

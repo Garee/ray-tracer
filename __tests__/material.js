@@ -65,3 +65,12 @@ test("lighting with the light behind the surface", () => {
   const light = new Light(new Point(0, 0, 10), White);
   expect(lighting(m, light, p, eye, normal)).toEqual(new Color(0.1, 0.1, 0.1));
 });
+
+test("lighting with the surface in shadow", () => {
+  const eye = new Vector(0, 0, -1);
+  const normal = new Vector(0, 0, -1);
+  const light = new Light(new Point(0, 0, -10), White);
+  const inShadow = true;
+  const color = lighting(m, light, p, eye, normal, inShadow);
+  expect(color).toEqual(new Color(0.1, 0.1, 0.1));
+});

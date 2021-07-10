@@ -7,7 +7,15 @@ export class Light {
   }
 }
 
-export function lighting(material, light, point, eye, normal) {
+// The Phong Reflection Model
+export function lighting(
+  material,
+  light,
+  point,
+  eye,
+  normal,
+  inShadow = false
+) {
   // Combine the surface color with the light's colour.
   const color = material.color.multiply(light.intensity);
   // The ambient light contribution.
@@ -36,6 +44,11 @@ export function lighting(material, light, point, eye, normal) {
     }
   }
 
-  const { x, y, z } = ambient.add(diffuse).add(specular);
+  let result = ambient;
+  if (!inShadow) {
+    result = result.add(diffuse).add(specular);
+  }
+
+  const { x, y, z } = result;
   return new Color(x, y, z);
 }

@@ -25,7 +25,7 @@ let camera = new Camera(width, height, fov).setTransform(
 const floor = new Sphere()
   .setMaterial(
     new Material({
-      color: new Color(1, 0.9, 0.9),
+      color: new Color(0.9, 0.9, 0.9),
       specular: 0,
     })
   )
@@ -34,7 +34,7 @@ const floor = new Sphere()
 const leftWall = new Sphere()
   .setMaterial(
     new Material({
-      color: new Color(1, 0.9, 0.9),
+      color: new Color(0.01, 0.01, 0.01),
       specular: 0,
     })
   )
@@ -49,7 +49,7 @@ const leftWall = new Sphere()
 const rightWall = new Sphere()
   .setMaterial(
     new Material({
-      color: new Color(1, 0.9, 0.9),
+      color: new Color(0.1, 0.1, 0.1),
       specular: 0,
     })
   )

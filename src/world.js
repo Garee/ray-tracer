@@ -6,6 +6,7 @@ import { Point } from "./point";
 import { Color, White, Black } from "./color";
 import { prepareComputations } from "./intersections";
 import { hit } from "./intersection";
+import { Ray } from "./ray";
 
 export class World {
   constructor(lights, objs) {
@@ -49,16 +50,15 @@ export class World {
   }
 
   shadeHit(computations) {
-    const { obj, point, eye, normal } = computations;
+    const { obj, point, overPoint, eye, normal } = computations;
     const colors = this.lights.map((light) => {
-      return lighting(obj.material, light, point, eye, normal);
+      const isShadowed = this.isShadowed(overPoint);
+      return lighting(obj.material, light, point, eye, normal, isShadowed);
     });
-    // TODO:  Add multiple light support.
-    /*return colors.reduce((acc, color) => {
+    return colors.reduce((acc, color) => {
       const { x, y, z } = acc.add(color);
       return new Color(x, y, z);
-    }, Black);*/
-    return colors[0];
+    }, Black);
   }
 
   colorAt(ray) {
@@ -69,5 +69,16 @@ export class World {
 
     const comps = prepareComputations(int, ray);
     return this.shadeHit(comps);
+  }
+
+  isShadowed(point) {
+    return this.lights.some((light) => {
+      const v = light.position.subtract(point);
+      const distance = v.magnitude();
+      const direction = v.normalize();
+      const ray = new Ray(point, direction);
+      const int = hit(this.intersect(ray));
+      return !!int && int.t < distance;
+    });
   }
 }

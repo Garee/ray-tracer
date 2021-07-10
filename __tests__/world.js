@@ -8,6 +8,7 @@ import { Sphere } from "../src/sphere";
 import { Intersection } from "../src/intersection";
 import { prepareComputations } from "../src/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
+import { translation } from "../src/transformations";
 
 test("creating a world", () => {
   const w = new World();
@@ -75,4 +76,36 @@ test("the color with an intersection behind the ray", () => {
   const ray = new Ray(new Point(0, 0, 0.75), new Vector(0, 0, -1));
   expect(ray).toBeDefined();
   expectToBeCloseToTuple(w.colorAt(ray), inner.material.color);
+});
+
+test("there is no shadow when nothing is collinear with point and light", () => {
+  const world = World.default();
+  expect(world.isShadowed(new Point(0, 10, 0))).toBe(false);
+});
+
+test("the shadow when an object is between the point and the light", () => {
+  const world = World.default();
+  expect(world.isShadowed(new Point(10, -10, 10))).toBe(true);
+});
+
+test("there is no shadow when an object is behind the light", () => {
+  const world = World.default();
+  expect(world.isShadowed(new Point(-20, -20, -20))).toBe(false);
+});
+
+test("there is no shadow when an object is behind the point", () => {
+  const world = World.default();
+  expect(world.isShadowed(new Point(-2, -2, -2))).toBe(false);
+});
+
+test("shadeHit is given an intersection in shadow", () => {
+  const light = new Light(new Point(0, 0, -10), White);
+  const s1 = new Sphere();
+  const s2 = new Sphere().setTransform(translation(0, 0, 10));
+  const world = World.default(light).addObject(s1).addObject(s2);
+  const ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
+  const int = new Intersection(4, s2);
+  const comps = prepareComputations(int, ray);
+  const color = world.shadeHit(comps);
+  expect(color).toEqual(new Color(0.1, 0.1, 0.1));
 });
