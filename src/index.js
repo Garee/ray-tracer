@@ -1,4 +1,4 @@
-import { Color, White, Green, Red, Blue } from "./color";
+import { Color, White, Green, Red, Blue, Black } from "./color";
 import { Point } from "./point";
 import { Light } from "./light";
 import { World } from "./world";
@@ -9,10 +9,12 @@ import {
   scaling,
   rotationX,
   rotationY,
+  rotationZ,
 } from "./transformations";
 import { Vector } from "./vector";
 import { Sphere } from "./sphere";
 import { Material } from "./material";
+import { Plane } from "./plane";
 
 let width = 100;
 let height = 50;
@@ -93,10 +95,26 @@ const sphere3 = new Sphere()
     translation(-1.5, 0.33, -0.75).multiply(scaling(0.33, 0.33, 0.33))
   );
 
+const floorPlane = new Plane().setMaterial(
+  new Material({
+    color: new Color(0, 0.3, 0),
+  })
+);
+
+const background = new Plane()
+  .setMaterial(
+    new Material({
+      color: new Color(0, 0, 0.2),
+    })
+  )
+  .setTransform(translation(0, 0, 10).multiply(rotationX(Math.PI / 2)));
+
 const world = new World([light])
-  .addObject(floor)
-  .addObject(leftWall)
-  .addObject(rightWall)
+  .addObject(floorPlane)
+  .addObject(background)
+  //.addObject(floor)
+  //  .addObject(leftWall)
+  //  .addObject(rightWall)
   .addObject(sphere1)
   .addObject(sphere2)
   .addObject(sphere3);

@@ -1,32 +1,10 @@
-import { Point } from "./point";
+import { Shape } from "./shape";
+import { discriminant } from "./math";
 import { Intersection } from "./intersection";
-import { Matrix } from "./matrix";
-import { Material } from "./material";
-
-export class Sphere {
+export class Sphere extends Shape {
   constructor(material, transform) {
-    this.center = new Point();
+    super(material, transform);
     this.radius = 1;
-    this.transform = transform ?? Matrix.identity();
-    this.material = material ?? new Material();
-  }
-
-  intersect(ray) {
-    ray = ray.transform(this.transform.inverse());
-
-    const toRay = ray.origin.subtract(this.center);
-    const a = ray.direction.dot(ray.direction);
-    const b = 2 * ray.direction.dot(toRay);
-    const c = toRay.dot(toRay) - 1;
-    const d = discriminant(a, b, c);
-
-    if (d < 0) {
-      return [];
-    }
-
-    const t1 = (-b - Math.sqrt(d)) / (2 * a);
-    const t2 = (-b + Math.sqrt(d)) / (2 * a);
-    return [new Intersection(t1, this), new Intersection(t2, this)];
   }
 
   setTransform(transform) {
@@ -37,17 +15,25 @@ export class Sphere {
     return new Sphere(material, this.transform);
   }
 
-  normalAt(point) {
-    const objPoint = this.transform.inverse().multiply(point);
-    const objNormal = objPoint.subtract(this.center);
-    const worldNormal = this.transform
-      .inverse()
-      .transpose()
-      .multiply(objNormal);
-    return worldNormal.normalize();
-  }
-}
+  intersect(ray) {
+    return super.intersect(ray, (r) => {
+      const toRay = r.origin.subtract(this.center);
+      const a = r.direction.dot(r.direction);
+      const b = 2 * r.direction.dot(toRay);
+      const c = toRay.dot(toRay) - 1;
+      const d = discriminant(a, b, c);
 
-function discriminant(a, b, c) {
-  return b ** 2 - 4 * a * c;
+      if (d < 0) {
+        return [];
+      }
+
+      const t1 = (-b - Math.sqrt(d)) / (2 * a);
+      const t2 = (-b + Math.sqrt(d)) / (2 * a);
+      return [new Intersection(t1, this), new Intersection(t2, this)];
+    });
+  }
+
+  normalAt(point) {
+    return super.normalAt(point, (objPoint) => objPoint.subtract(this.center));
+  }
 }

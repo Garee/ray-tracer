@@ -24,10 +24,6 @@ canvas {
   padding: 1rem;
 }
 
-#progress:hover {
-  color: yellow;
-}
-
 form {
   display: flex;
   flex-direction: column;

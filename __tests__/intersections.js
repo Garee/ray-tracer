@@ -43,6 +43,6 @@ test("the hit should offset the point", () => {
   const shape = new Sphere().setTransform(translation(0, 0, 1));
   const int = new Intersection(5, shape);
   const comps = prepareComputations(int, ray);
-  expect(comps.overPoint.z).toBeLessThan(-0.0005 / 2);
+  expect(comps.overPoint.z).toBeLessThan(-0.000001 / 2);
   expect(comps.point.z).toBeGreaterThan(comps.overPoint.z);
 });

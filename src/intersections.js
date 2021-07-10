@@ -10,7 +10,7 @@ export function prepareComputations(intersection, ray) {
     normal = normal.multiply(-1); // Yes.
   }
 
-  const overPoint = point.add(normal.multiply(0.0005));
+  const overPoint = point.add(normal.multiply(0.000001));
 
   return {
     t,

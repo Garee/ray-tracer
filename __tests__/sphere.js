@@ -6,6 +6,7 @@ import { Matrix } from "../src/matrix";
 import { translation, scaling, rotationZ } from "../src/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 import { Material } from "../src/material";
+import { Shape } from "../src/shape";
 
 test("a ray intersects a sphere at two points", () => {
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
@@ -140,4 +141,9 @@ test("a sphere may be assigned a material", () => {
   const m = new Material({ ambient: 1 });
   sphere = sphere.setMaterial(m);
   expect(sphere.material).toEqual(m);
+});
+
+test("a sphere is a shape", () => {
+  const sphere = new Sphere();
+  expect(sphere.__proto__ instanceof Shape).toBe(true);
 });
