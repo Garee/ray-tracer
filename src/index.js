@@ -1,64 +1,125 @@
-import { Canvas } from "./canvas";
-import { Color, Black, White } from "./color";
-import { Sphere } from "./sphere";
-import { Ray } from "./ray";
+import { Color, White, Green, Red, Blue } from "./color";
 import { Point } from "./point";
-import { hit } from "./intersection";
-import { Light, lighting } from "./light";
+import { Light } from "./light";
+import { World } from "./world";
+import { Camera } from "./camera";
+import {
+  viewTransform,
+  translation,
+  scaling,
+  rotationX,
+  rotationY,
+} from "./transformations";
+import { Vector } from "./vector";
+import { Sphere } from "./sphere";
 import { Material } from "./material";
 
-const Colors = {
-  white: White,
-  black: Black,
-  red: new Color(1, 0, 0),
-  green: new Color(0, 1, 0),
-  blue: new Color(0, 0, 1),
-};
-
-const width = 100;
+const width = 200;
 const height = 100;
-let c = new Canvas(width, height).fill(Colors.black);
-
-const sphere = new Sphere().setMaterial(
-  new Material({ color: new Color(0, 1, 0) })
+const fov = Math.PI / 3;
+const light = new Light(new Point(-10, 10, -10), White);
+const camera = new Camera(width, height, fov).setTransform(
+  viewTransform(new Point(0, 1.5, -5), new Point(0, 1, 0), new Vector(0, 1, 0))
 );
-const light = new Light(new Point(-10, 10, -10), Colors.white);
 
-const wallSize = 7;
-const wallZ = 10;
-const cameraZ = -5;
-const origin = new Point(0, 0, cameraZ);
+const floor = new Sphere()
+  .setMaterial(
+    new Material({
+      color: new Color(1, 0.9, 0.9),
+      specular: 0,
+    })
+  )
+  .setTransform(scaling(10, 0.01, 10));
 
-function colorPixels() {
-  const pxSize = wallSize / height;
-  for (let x = 0; x < width; x++) {
-    const worldX = -(wallSize / 2) + pxSize * x;
-    for (let y = 0; y < height; y++) {
-      const worldY = wallSize / 2 - pxSize * y;
+const leftWall = new Sphere()
+  .setMaterial(
+    new Material({
+      color: new Color(1, 0.9, 0.9),
+      specular: 0,
+    })
+  )
+  .setTransform(
+    translation(0, 0, 5).multiply(
+      rotationY(-Math.PI / 4).multiply(
+        rotationX(Math.PI / 2).multiply(scaling(10, 0.01, 10))
+      )
+    )
+  );
 
-      const target = new Point(worldX, worldY, wallZ);
-      const direction = target.subtract(origin).normalize();
-      const ray = new Ray(origin, direction);
+const rightWall = new Sphere()
+  .setMaterial(
+    new Material({
+      color: new Color(1, 0.9, 0.9),
+      specular: 0,
+    })
+  )
+  .setTransform(
+    translation(0, 0, 5).multiply(
+      rotationY(Math.PI / 4).multiply(
+        rotationX(Math.PI / 2).multiply(scaling(10, 0.01, 10))
+      )
+    )
+  );
 
-      const int = hit(sphere.intersect(ray));
-      if (int) {
-        const { t, obj } = int;
-        const point = ray.position(t);
-        const normal = obj.normalAt(point);
-        const eye = ray.direction.multiply(-1);
-        const color = lighting(obj.material, light, point, eye, normal);
-        c = c.writePixel(x, y, color);
-      }
+const sphere1 = new Sphere()
+  .setMaterial(
+    new Material({
+      color: Green,
+      diffuse: 0.7,
+      specular: 0.3,
+    })
+  )
+  .setTransform(translation(-0.5, 1, 0.5));
+
+const sphere2 = new Sphere()
+  .setMaterial(
+    new Material({
+      color: Red,
+      diffuse: 0.7,
+      specular: 0.3,
+    })
+  )
+  .setTransform(translation(1.5, 0.5, -0.5).multiply(scaling(0.5, 0.5, 0.5)));
+
+const sphere3 = new Sphere()
+  .setMaterial(
+    new Material({
+      color: Blue,
+      diffuse: 0.7,
+      specular: 0.3,
+    })
+  )
+  .setTransform(
+    translation(-1.5, 0.33, -0.75).multiply(scaling(0.33, 0.33, 0.33))
+  );
+
+const world = new World([light])
+  .addObject(floor)
+  .addObject(leftWall)
+  .addObject(rightWall)
+  .addObject(sphere1)
+  .addObject(sphere2)
+  .addObject(sphere3);
+
+addEventListener("DOMContentLoaded", () => {
+  const onRowRender = (row) => {
+    const el = document.getElementById("progress");
+    const pc = (((row + 1) / width) * 100).toFixed(2);
+    if (pc < 100) {
+      el.innerText = `Rendering: ${pc}%`;
+    } else {
+      el.innerText = "";
     }
-  }
-}
+  };
+  camera.renderAsync(world, onRowRender).then(draw);
+});
 
-function render() {
+function draw(frame) {
   const el = document.getElementById("canvas");
   const ctx = el.getContext("2d");
 
-  const imageData = ctx.createImageData(c.width, c.height);
-  c.scalePixels().forEach((p, i) => {
+  const imageData = ctx.createImageData(frame.width, frame.height);
+  frame.scalePixels().forEach((p, i) => {
     const idx = i * 4;
     imageData.data[idx] = p.red;
     imageData.data[idx + 1] = p.green;
@@ -68,8 +129,3 @@ function render() {
 
   ctx.putImageData(imageData, 0, 0);
 }
-
-setTimeout(() => {
-  colorPixels();
-  render();
-});

@@ -12,8 +12,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 canvas {
   box-shadow: 5px 5px 20px rgba(255, 255, 255, 0.5);
+}
+
+#progress {
+  padding: 1rem;
+  color: white;
+}
+
+#progress:hover {
+  color: yellow;
 }

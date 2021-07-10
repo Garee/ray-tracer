@@ -36,3 +36,6 @@ export class Color extends Tuple {
 
 export const Black = new Color(0, 0, 0);
 export const White = new Color(1, 1, 1);
+export const Red = new Color(1, 0, 0);
+export const Green = new Color(0, 1, 0);
+export const Blue = new Color(0, 0, 1);

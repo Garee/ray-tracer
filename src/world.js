@@ -8,10 +8,8 @@ import { prepareComputations } from "./intersections";
 import { hit } from "./intersection";
 
 export class World {
-  constructor(light, objs) {
-    if (light) {
-      this.lights = [light];
-    }
+  constructor(lights, objs) {
+    this.lights = lights;
     this.objs = objs;
   }
 
@@ -29,7 +27,13 @@ export class World {
   ];
 
   static default(light) {
-    return new World(light ?? World.defaultLight, World.defaultObjects);
+    const lights = light ? [light] : [World.defaultLight];
+    return new World(lights, World.defaultObjects);
+  }
+
+  addObject(obj) {
+    const objs = this.objs ?? [];
+    return new World(this.lights, [...objs, obj]);
   }
 
   contains(obj) {
@@ -49,7 +53,12 @@ export class World {
     const colors = this.lights.map((light) => {
       return lighting(obj.material, light, point, eye, normal);
     });
-    return colors.reduce((acc, color) => acc.add(color), Black);
+    // TODO:  Add multiple light support.
+    /*return colors.reduce((acc, color) => {
+      const { x, y, z } = acc.add(color);
+      return new Color(x, y, z);
+    }, Black);*/
+    return colors[0];
   }
 
   colorAt(ray) {

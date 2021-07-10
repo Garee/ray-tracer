@@ -4,11 +4,11 @@ import { Matrix } from "./matrix";
 import { Material } from "./material";
 
 export class Sphere {
-  constructor() {
+  constructor(material, transform) {
     this.center = new Point();
     this.radius = 1;
-    this.transform = Matrix.identity();
-    this.material = new Material();
+    this.transform = transform ?? Matrix.identity();
+    this.material = material ?? new Material();
   }
 
   intersect(ray) {
@@ -30,15 +30,11 @@ export class Sphere {
   }
 
   setTransform(transform) {
-    const s = new Sphere();
-    s.transform = transform;
-    return s;
+    return new Sphere(this.material, transform);
   }
 
   setMaterial(material) {
-    const s = new Sphere();
-    s.material = material;
-    return s;
+    return new Sphere(material, this.transform);
   }
 
   normalAt(point) {

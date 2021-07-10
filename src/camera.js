@@ -21,6 +21,37 @@ export class Camera {
         canvas = canvas.writePixel(x, y, color);
       }
     }
+
+    return canvas;
+  }
+
+  renderAsync(world, onRowRender) {
+    let canvas = new Canvas(this.width, this.height);
+    return this.renderRowsAsync(world, canvas, onRowRender);
+  }
+
+  renderRowsAsync(world, canvas, onRowRender, row = 0) {
+    if (row >= this.width) {
+      return Promise.resolve(canvas);
+    }
+    onRowRender?.(row);
+    return new Promise((resolve) => {
+      canvas = this.renderRow(row, world, canvas);
+      requestAnimationFrame(() => {
+        this.renderRowsAsync(world, canvas, onRowRender, row + 1).then((c) =>
+          resolve(c)
+        );
+      });
+    });
+  }
+
+  renderRow(x, world, canvas) {
+    for (let y = 0; y < this.height; y++) {
+      const ray = this.rayForPixelAt(x, y);
+      const color = world.colorAt(ray);
+      canvas = canvas.writePixel(x, y, color);
+    }
+
     return canvas;
   }
 
