@@ -14,11 +14,11 @@ import { Vector } from "./vector";
 import { Sphere } from "./sphere";
 import { Material } from "./material";
 
-const width = 200;
-const height = 100;
+let width = 100;
+let height = 50;
 const fov = Math.PI / 3;
 const light = new Light(new Point(-10, 10, -10), White);
-const camera = new Camera(width, height, fov).setTransform(
+let camera = new Camera(width, height, fov).setTransform(
   viewTransform(new Point(0, 1.5, -5), new Point(0, 1, 0), new Vector(0, 1, 0))
 );
 
@@ -102,6 +102,11 @@ const world = new World([light])
   .addObject(sphere3);
 
 addEventListener("DOMContentLoaded", () => {
+  initForm();
+  raytrace();
+});
+
+function raytrace() {
   const onRowRender = (row) => {
     const el = document.getElementById("progress");
     const pc = (((row + 1) / width) * 100).toFixed(2);
@@ -112,7 +117,7 @@ addEventListener("DOMContentLoaded", () => {
     }
   };
   camera.renderAsync(world, onRowRender).then(draw);
-});
+}
 
 function draw(frame) {
   const el = document.getElementById("canvas");
@@ -128,4 +133,29 @@ function draw(frame) {
   });
 
   ctx.putImageData(imageData, 0, 0);
+}
+
+function initForm() {
+  const wInput = document.getElementById("width-input");
+  const hInput = document.getElementById("height-input");
+  const form = document.getElementById("render-form");
+  const canvas = document.getElementById("canvas");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    width = wInput.value;
+    height = hInput.value;
+    canvas.width = width;
+    canvas.height = height;
+
+    camera = new Camera(width, height, fov).setTransform(
+      viewTransform(
+        new Point(0, 1.5, -5),
+        new Point(0, 1, 0),
+        new Vector(0, 1, 0)
+      )
+    );
+
+    raytrace();
+  });
 }
