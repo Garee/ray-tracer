@@ -1,11 +1,6 @@
-import { Shape } from "../src/shape";
-import { Matrix } from "../src/matrix";
-import { rotationZ, scaling, translation } from "../src/transformations";
-import { Material } from "../src/material";
-import { Point } from "../src/point";
-import { Sphere } from "../src/sphere";
-import { Vector } from "../src/vector";
-import { Ray } from "../src/ray";
+import { Shape, Sphere } from "../src/models/shapes";
+import { Matrix, Material, Point, Vector, Ray } from "../src/models";
+import { rotationZ, scaling, translation } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
 test("the default transformation", () => {

@@ -6,11 +6,9 @@ import {
   rotationZ,
   shearing,
   viewTransform,
-} from "../src/transformations";
+} from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
-import { Point } from "../src/point";
-import { Vector } from "../src/vector";
-import { Matrix } from "../src/matrix";
+import { Point, Vector, Matrix } from "../src/models";
 
 test("multiplying by a translation matrix", () => {
   const transform = translation(5, -3, 2);

@@ -1,6 +1,6 @@
-import { Intersection } from "./intersection";
+import { Intersection } from "../intersection";
 import { Shape } from "./shape";
-import { Vector } from "./vector";
+import { Vector } from "../vector";
 
 export class Plane extends Shape {
   constructor(material, transform) {

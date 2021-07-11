@@ -1,12 +1,7 @@
-import { Point } from "../src/point";
-import { Vector } from "../src/vector";
-import { Ray } from "../src/ray";
-import { Sphere } from "../src/sphere";
-import { Matrix } from "../src/matrix";
-import { translation, scaling, rotationZ } from "../src/transformations";
+import { Point, Vector, Ray, Matrix, Material } from "../src/models";
+import { Shape, Sphere } from "../src/models/shapes";
+import { translation, scaling, rotationZ } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
-import { Material } from "../src/material";
-import { Shape } from "../src/shape";
 
 test("a ray intersects a sphere at two points", () => {
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));

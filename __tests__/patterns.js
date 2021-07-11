@@ -1,14 +1,14 @@
-import { Black, Color, White } from "../src/color";
-import { Point } from "../src/point";
-import { StripePattern } from "../src/patterns/stripe";
-import { Sphere } from "../src/sphere";
-import { scaling, translation } from "../src/transformations";
-import { Matrix } from "../src/matrix";
-import { Pattern } from "../src/patterns/pattern";
-import { GradientPattern } from "../src/patterns/gradient";
-import { RingPattern } from "../src/patterns/ring";
-import { Material } from "../src/material";
-import { CheckPattern } from "../src/patterns/check";
+import { Black, White } from "../src/models/color";
+import { Color, Point, Matrix, Material } from "../src/models";
+import {
+  Pattern,
+  GradientPattern,
+  RingPattern,
+  CheckPattern,
+  StripePattern,
+} from "../src/models/patterns";
+import { Sphere } from "../src/models/shapes";
+import { scaling, translation } from "../src/models/transformations";
 
 test("creating a stripe pattern", () => {
   const pattern = new StripePattern(White, Black);

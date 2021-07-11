@@ -1,11 +1,8 @@
-import { Color, White, Black } from "../src/color";
-import { StripePattern } from "../src/patterns/stripe";
-import { Light, lighting } from "../src/light";
-import { Material } from "../src/material";
-import { Point } from "../src/point";
-import { Vector } from "../src/vector";
+import { White, Black } from "../src/models/color";
+import { StripePattern } from "../src/models/patterns";
+import { Color, Light, lighting, Material, Point, Vector } from "../src/models";
 import { expectToBeCloseToTuple } from "../src/util";
-import { Sphere } from "../src/sphere";
+import { Sphere } from "../src/models/shapes";
 
 let m, p;
 beforeEach(() => {

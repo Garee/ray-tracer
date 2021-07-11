@@ -1,10 +1,9 @@
-import { Camera } from "../src/camera";
-import { Matrix } from "../src/matrix";
-import { Point } from "../src/point";
-import { Vector } from "../src/vector";
-import { Color } from "../src/color";
-import { World } from "../src/world";
-import { rotationY, translation, viewTransform } from "../src/transformations";
+import { Camera, Matrix, Point, Vector, Color, World } from "../src/models";
+import {
+  rotationY,
+  translation,
+  viewTransform,
+} from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
 test("constructing a camera", () => {

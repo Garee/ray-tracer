@@ -1,7 +1,5 @@
-import { Point } from "../src/point";
-import { Vector } from "../src/vector";
-import { Ray } from "../src/ray";
-import { translation, scaling } from "../src/transformations";
+import { Point, Vector, Ray } from "../src/models";
+import { translation, scaling } from "../src/models/transformations";
 
 test("creating and querying a ray", () => {
   const origin = new Point(1, 2, 3);

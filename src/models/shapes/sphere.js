@@ -1,6 +1,7 @@
 import { Shape } from "./shape";
-import { discriminant } from "./math";
-import { Intersection } from "./intersection";
+import { discriminant } from "../../util/math";
+import { Intersection } from "../intersection";
+
 export class Sphere extends Shape {
   constructor(material, transform) {
     super(material, transform);

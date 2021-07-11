@@ -1,5 +1,5 @@
-import { Color, Black } from "../src/color";
-import { Canvas } from "../src/canvas";
+import { Black } from "../src/models/color";
+import { Canvas, Color } from "../src/models";
 
 test("create a canvas", () => {
   const c = new Canvas(10, 20);

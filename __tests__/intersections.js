@@ -1,11 +1,8 @@
-import { Point } from "../src/point";
-import { Ray } from "../src/ray";
-import { Sphere } from "../src/sphere";
-import { Vector } from "../src/vector";
-import { Intersection } from "../src/intersection";
-import { prepareComputations } from "../src/intersections";
+import { Point, Ray, Vector, Intersection } from "../src/models";
+import { Sphere } from "../src/models/shapes";
+import { prepareComputations } from "../src/models/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
-import { translation } from "../src/transformations";
+import { translation } from "../src/models/transformations";
 
 test("precomputing the state of an intersection", () => {
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));

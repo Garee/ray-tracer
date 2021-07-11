@@ -1,4 +1,4 @@
-import { Sphere } from "./sphere";
+import { Sphere } from "./shapes/sphere";
 import { Material } from "./material";
 import { scaling } from "./transformations";
 import { Light, lighting } from "./light";

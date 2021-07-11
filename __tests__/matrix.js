@@ -1,5 +1,5 @@
-import { determinantSimple, identity, Matrix } from "../src/matrix";
-import { Tuple } from "../src/tuple";
+import { determinantSimple, identity } from "../src/models/matrix";
+import { Matrix, Tuple } from "../src/models";
 
 test("construct and inspect a 4x4 matrix", () => {
   const m = new Matrix([

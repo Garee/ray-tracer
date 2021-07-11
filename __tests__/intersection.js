@@ -1,5 +1,5 @@
-import { Intersection, hit } from "../src/intersection";
-import { Sphere } from "../src/sphere";
+import { Intersection, hit } from "../src/models";
+import { Sphere } from "../src/models/shapes";
 
 test("an intersection encapsulates t and obj", () => {
   const sphere = new Sphere();

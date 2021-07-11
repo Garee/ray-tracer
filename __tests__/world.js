@@ -1,14 +1,17 @@
-import { World } from "../src/world";
-import { Color, White, Black } from "../src/color";
-import { Point } from "../src/point";
-import { Light } from "../src/light";
-import { Ray } from "../src/ray";
-import { Vector } from "../src/vector";
-import { Sphere } from "../src/sphere";
-import { Intersection } from "../src/intersection";
-import { prepareComputations } from "../src/intersections";
+import {
+  World,
+  Color,
+  Point,
+  Light,
+  Ray,
+  Vector,
+  Intersection,
+} from "../src/models";
+import { White, Black } from "../src/models/color";
+import { Sphere } from "../src/models/shapes";
+import { prepareComputations } from "../src/models/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
-import { translation } from "../src/transformations";
+import { translation } from "../src/models/transformations";
 
 test("creating a world", () => {
   const w = new World();

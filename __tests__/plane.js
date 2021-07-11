@@ -1,8 +1,5 @@
-import { Plane } from "../src/plane";
-import { Point } from "../src/point";
-import { Vector } from "../src/vector";
-import { Ray } from "../src/ray";
-import { Intersection } from "../src/intersection";
+import { Plane } from "../src/models/shapes";
+import { Point, Vector, Ray, Intersection } from "../src/models";
 
 test("the normal of a plane is constant everywhere", () => {
   const plane = new Plane();

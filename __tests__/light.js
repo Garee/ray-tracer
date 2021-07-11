@@ -1,6 +1,5 @@
-import { Point } from "../src/point";
-import { White } from "../src/color";
-import { Light } from "../src/light";
+import { Point, Light } from "../src/models";
+import { White } from "../src/models/color";
 
 test("a point light has a position and intensity", () => {
   const p = new Point();

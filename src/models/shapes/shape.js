@@ -1,6 +1,6 @@
-import { Material } from "./material";
-import { Point } from "./point";
-import { Matrix } from "./matrix";
+import { Material } from "../material";
+import { Point } from "../point";
+import { Matrix } from "../matrix";
 
 export class Shape {
   constructor(material, transform) {

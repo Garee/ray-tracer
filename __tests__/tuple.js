@@ -1,7 +1,4 @@
-import { Tuple } from "../src/tuple";
-import { Point } from "../src/point";
-import { Vector } from "../src/vector";
-import { Color } from "../src/color";
+import { Tuple, Point, Vector, Color } from "../src/models";
 import { expectToBeCloseToTuple } from "../src/util";
 
 test("a tuple with w=1.0 is a point", () => {

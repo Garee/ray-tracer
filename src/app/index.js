@@ -1,22 +1,22 @@
-import { Color, White, Green, Red, Blue, Black } from "./color";
-import { Point } from "./point";
-import { Light } from "./light";
-import { World } from "./world";
-import { Camera } from "./camera";
+import {
+  Color,
+  Point,
+  Light,
+  World,
+  Camera,
+  Vector,
+  Material,
+} from "../models";
+import { White, Green, Red, Blue, Black } from "../models/color";
+import { Sphere, Plane } from "../models/shapes";
 import {
   viewTransform,
   translation,
   scaling,
   rotationX,
   rotationZ,
-} from "./transformations";
-import { Vector } from "./vector";
-import { Sphere } from "./sphere";
-import { Material } from "./material";
-import { Plane } from "./plane";
-import { RingPattern } from "./patterns/ring";
-import { GradientPattern } from "./patterns/gradient";
-import { CheckPattern } from "./patterns/check";
+} from "../models/transformations";
+import { CheckPattern, GradientPattern, RingPattern } from "../models/patterns";
 
 (() => {
   let width = 100;
