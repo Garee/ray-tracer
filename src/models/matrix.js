@@ -3,7 +3,7 @@ import { Tuple } from "./tuple";
 export class Matrix {
   mdarray = [];
 
-  static identity = (n = 4) => new Matrix(identity(n));
+  static identity = new Matrix(identity(4));
 
   constructor(mdarray) {
     this.mdarray = mdarray;

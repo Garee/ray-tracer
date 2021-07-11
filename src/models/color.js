@@ -5,11 +5,15 @@ export class Color extends Tuple {
     super(red, green, blue);
   }
 
-  static of(r, g, b) {
+  static of({ r = 0, g = 0, b = 0 } = {}) {
     return new Color(r, g, b);
   }
 
-  static white = Color.of(1, 1, 1);
+  static black = Color.of();
+  static white = Color.of({ r: 1, g: 1, b: 1 });
+  static red = Color.of({ r: 1 });
+  static green = Color.of({ g: 1 });
+  static blue = Color.of({ b: 1 });
 
   get red() {
     return this.x;
@@ -33,15 +37,9 @@ export class Color extends Tuple {
   }
 
   #multiplyColor(c) {
-    const red = this.red * c.red;
-    const green = this.green * c.green;
-    const blue = this.blue * c.blue;
-    return new Color(red, green, blue);
+    const r = this.red * c.red;
+    const g = this.green * c.green;
+    const b = this.blue * c.blue;
+    return Color.of({ r, g, b });
   }
 }
-
-export const Black = new Color(0, 0, 0);
-export const White = new Color(1, 1, 1);
-export const Red = new Color(1, 0, 0);
-export const Green = new Color(0, 1, 0);
-export const Blue = new Color(0, 0, 1);

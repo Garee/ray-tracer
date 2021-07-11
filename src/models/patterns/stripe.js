@@ -1,21 +1,17 @@
 import { Pattern } from "./pattern";
+import { isEven } from "../../util/maths";
 
 export class StripePattern extends Pattern {
-  constructor(a, b, transform) {
-    super(transform);
-    this.a = a;
-    this.b = b;
+  constructor(colors, transform) {
+    super(colors, transform);
   }
 
-  colorAt(point) {
-    if (Math.floor(point.x) % 2 === 0) {
-      return this.a;
-    }
-
-    return this.b;
+  static of(colors, transform) {
+    return new StripePattern(colors, transform);
   }
 
-  setTransform(transform) {
-    return new StripePattern(this.a, this.b, transform);
+  colorAt({ x }) {
+    const [a, b] = this.colors;
+    return isEven(x) ? a : b;
   }
 }

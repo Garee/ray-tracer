@@ -1,4 +1,4 @@
-import { Black, Color } from "./color";
+import { Color } from "./color";
 
 export class Light {
   constructor(position, intensity) {
@@ -33,8 +33,8 @@ export function lighting(
   let diffuse, specular;
   if (lightDotNormal < 0) {
     // The light is on the other side of the surface.
-    diffuse = Black;
-    specular = Black;
+    diffuse = Color.black;
+    specular = Color.black;
   } else {
     diffuse = color.multiply(material.diffuse * lightDotNormal);
     // The cosine of the angle between the reflection vector and eye vector.
@@ -42,7 +42,7 @@ export function lighting(
     const reflectDotEye = reflect.dot(eye);
     if (reflectDotEye < 0) {
       // The light reflects away from the eye.
-      specular = Black;
+      specular = Color.black;
     } else {
       const factor = Math.pow(reflectDotEye, material.shininess);
       specular = light.intensity.multiply(material.specular * factor);
@@ -54,6 +54,6 @@ export function lighting(
     result = result.add(diffuse).add(specular);
   }
 
-  const { x, y, z } = result;
-  return new Color(x, y, z);
+  const { x: r, y: g, z: b } = result;
+  return Color.of({ r, g, b });
 }

@@ -47,7 +47,7 @@ test("intersect sets the object on the intersection", () => {
 
 test("a sphere's default transformation", () => {
   const sphere = new Sphere();
-  expect(sphere.transform).toEqual(Matrix.identity());
+  expect(sphere.transform).toEqual(Matrix.identity);
 });
 
 test("changing a sphere's transformation", () => {

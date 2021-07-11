@@ -156,39 +156,39 @@ test("cross product of two vectors", () => {
 });
 
 test("colors are (red, green, blue) tuples", () => {
-  const a = new Color(-0.5, 0.4, 1.7);
+  const a = Color.of({ r: -0.5, g: 0.4, b: 1.7 });
   expect(a.red).toBe(-0.5);
   expect(a.green).toBe(0.4);
   expect(a.blue).toBe(1.7);
 });
 
 test("add two colors", () => {
-  const a = new Color(0.9, 0.6, 0.75);
-  const b = new Color(0.7, 0.1, 0.25);
+  const a = Color.of({ r: 0.9, g: 0.6, b: 0.75 });
+  const b = Color.of({ r: 0.7, g: 0.1, b: 0.25 });
   const c = a.add(b);
-  expect(c).toEqual(new Color(1.6, 0.7, 1.0));
+  expect(c).toEqual(Color.of({ r: 1.6, g: 0.7, b: 1.0 }));
 });
 
 test("subtract two colors", () => {
-  const a = new Color(0.9, 0.6, 0.75);
-  const b = new Color(0.7, 0.1, 0.25);
+  const a = Color.of({ r: 0.9, g: 0.6, b: 0.75 });
+  const b = Color.of({ r: 0.7, g: 0.1, b: 0.25 });
   const c = a.subtract(b);
   expect(c).toBeDefined();
-  expectToBeCloseToTuple(c, new Color(0.2, 0.5, 0.5));
+  expectToBeCloseToTuple(c, Color.of({ r: 0.2, g: 0.5, b: 0.5 }));
 });
 
 test("multiply a color by a scalar", () => {
-  const a = new Color(0.2, 0.3, 0.4);
+  const a = Color.of({ r: 0.2, g: 0.3, b: 0.4 });
   const b = a.multiply(2);
-  expect(b).toEqual(new Color(0.4, 0.6, 0.8));
+  expect(b).toEqual(Color.of({ r: 0.4, g: 0.6, b: 0.8 }));
 });
 
 test("multiply two colors", () => {
-  const a = new Color(1, 0.2, 0.4);
-  const b = new Color(0.9, 1, 0.1);
+  const a = Color.of({ r: 1, g: 0.2, b: 0.4 });
+  const b = Color.of({ r: 0.9, g: 1, b: 0.1 });
   const c = a.multiply(b);
   expect(c).toBeDefined();
-  expectToBeCloseToTuple(c, new Color(0.9, 0.2, 0.04));
+  expectToBeCloseToTuple(c, Color.of({ r: 0.9, g: 0.2, b: 0.04 }));
 });
 
 test("reflecting a vector approaching at 45deg", () => {

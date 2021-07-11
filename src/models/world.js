@@ -3,7 +3,7 @@ import { Material } from "./material";
 import { scaling } from "./transformations";
 import { Light, lighting } from "./light";
 import { Point } from "./point";
-import { Color, White, Black } from "./color";
+import { Color } from "./color";
 import { prepareComputations } from "./intersections";
 import { hit } from "./intersection";
 import { Ray } from "./ray";
@@ -14,12 +14,12 @@ export class World {
     this.objs = objs;
   }
 
-  static defaultLight = new Light(new Point(-10, 10, -10), White);
+  static defaultLight = new Light(new Point(-10, 10, -10), Color.white);
 
   static defaultObjects = [
     new Sphere().setMaterial(
       new Material({
-        color: new Color(0.8, 1, 0.6),
+        color: Color.of({ r: 0.8, g: 1, b: 0.6 }),
         diffuse: 0.7,
         specular: 0.2,
       })
@@ -56,15 +56,15 @@ export class World {
       return lighting(obj.material, obj, light, point, eye, normal, isShadowed);
     });
     return colors.reduce((acc, color) => {
-      const { x, y, z } = acc.add(color);
-      return new Color(x, y, z);
-    }, Black);
+      const { x: r, y: g, z: b } = acc.add(color);
+      return Color.of({ r, g, b });
+    }, Color.black);
   }
 
   colorAt(ray) {
     const int = hit(this.intersect(ray));
     if (!int) {
-      return Black;
+      return Color.black;
     }
 
     const comps = prepareComputations(int, ray);

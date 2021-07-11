@@ -1,20 +1,17 @@
-import { Black } from "../src/models/color";
 import { Canvas, Color } from "../src/models";
 
 test("create a canvas", () => {
   const c = new Canvas(10, 20);
   expect(c.width).toBe(10);
   expect(c.height).toBe(20);
-  const white = Black;
-  c.pixels.forEach((p) => expect(p).toEqual(white));
+  c.pixels.forEach((p) => expect(p).toEqual(Color.black));
 });
 
 test("write pixels to a canvas", () => {
   let c = new Canvas(10, 20);
-  const red = new Color(1, 0, 0);
-  c = c.writePixel(2, 3, red);
+  c = c.writePixel(2, 3, Color.red);
   const px = c.getPixel(2, 3);
-  expect(px).toEqual(red);
+  expect(px).toEqual(Color.red);
 });
 
 test("create a PPM header from a cavas", () => {
@@ -26,9 +23,9 @@ test("create a PPM header from a cavas", () => {
 
 test("create a PPM file from a canvas", () => {
   let c = new Canvas(5, 3)
-    .writePixel(0, 0, new Color(1.5, 0, 0))
-    .writePixel(2, 1, new Color(0, 0.5, 0))
-    .writePixel(4, 2, new Color(-0.5, 0, 1));
+    .writePixel(0, 0, Color.of({ r: 1.5 }))
+    .writePixel(2, 1, Color.of({ g: 0.5 }))
+    .writePixel(4, 2, Color.of({ r: -0.5, b: 1 }));
   const ppm = c.toPpm();
   expect(ppm.slice(3, ppm.length - 1)).toEqual([
     "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
@@ -38,7 +35,7 @@ test("create a PPM file from a canvas", () => {
 });
 
 test("PPM file lines have a max length of 70", () => {
-  const c = new Canvas(10, 2).fill(new Color(1, 0.8, 0.6));
+  const c = new Canvas(10, 2).fill(Color.of({ r: 1, g: 0.8, b: 0.6 }));
   const ppm = c.toPpm();
   expect(ppm.slice(3, ppm.length - 1)).toEqual([
     "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204",

@@ -1,4 +1,4 @@
-import { Color, Black } from "./color";
+import { Color } from "./color";
 
 export class Canvas {
   #maxColor = 255;
@@ -67,24 +67,17 @@ export class Canvas {
   }
 
   #scalePixel(px, max = this.#maxColor) {
-    const red = Math.max(Math.min(Math.round(px.red * max), this.#maxColor), 0);
-    const green = Math.max(
-      Math.min(Math.round(px.green * max), this.#maxColor),
-      0
-    );
-    const blue = Math.max(
-      Math.min(Math.round(px.blue * max), this.#maxColor),
-      0
-    );
-    return new Color(red, green, blue);
+    const r = Math.max(Math.min(Math.round(px.red * max), this.#maxColor), 0);
+    const g = Math.max(Math.min(Math.round(px.green * max), this.#maxColor), 0);
+    const b = Math.max(Math.min(Math.round(px.blue * max), this.#maxColor), 0);
+    return Color.of({ r, g, b });
   }
 
   scalePixels() {
     return this.pixels.map((p) => this.#scalePixel(p));
   }
 
-  #initPixels(color) {
-    color = color || Black;
+  #initPixels(color = Color.black) {
     return new Array(this.width * this.height).fill(color);
   }
 }

@@ -1,18 +1,18 @@
 import { Pattern } from "./pattern";
+import { isEven } from "../../util/maths";
 
 export class CheckPattern extends Pattern {
-  constructor(a, b, transform) {
-    super(transform);
-    this.a = a;
-    this.b = b;
+  constructor(colors, transform) {
+    super(colors, transform);
+  }
+
+  static of(colors, transform) {
+    return new CheckPattern(colors, transform);
   }
 
   colorAt({ x, y, z }) {
+    const [a, b] = this.colors;
     const sum = Math.floor(x) + Math.floor(y) + Math.floor(z);
-    return sum % 2 === 0 ? this.a : this.b;
-  }
-
-  setTransform(transform) {
-    return new CheckPattern(this.a, this.b, transform);
+    return isEven(sum) ? a : b;
   }
 }

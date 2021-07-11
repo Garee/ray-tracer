@@ -3,10 +3,10 @@ import { Point } from "../point";
 import { Matrix } from "../matrix";
 
 export class Shape {
-  constructor(material, transform) {
-    this.center = new Point();
-    this.material = material ?? new Material();
-    this.transform = transform ?? Matrix.identity();
+  constructor(material = new Material(), transform = Matrix.identity) {
+    this.center = Point.origin;
+    this.material = material;
+    this.transform = transform;
   }
 
   setTransform(transform) {

@@ -1,21 +1,17 @@
+import { isEven } from "../../util/maths";
 import { Pattern } from "./pattern";
 
 export class RingPattern extends Pattern {
-  constructor(a, b, transform) {
-    super(transform);
-    this.a = a;
-    this.b = b;
+  constructor(colors, transform) {
+    super(colors, transform);
+  }
+
+  static of(colors, transform) {
+    return new RingPattern(colors, transform);
   }
 
   colorAt({ x, z }) {
-    if (Math.floor(Math.sqrt(x ** 2 + z ** 2)) % 2 === 0) {
-      return this.a;
-    }
-
-    return this.b;
-  }
-
-  setTransform(transform) {
-    return new RingPattern(this.a, this.b, transform);
+    const [a, b] = this.colors;
+    return isEven(Math.sqrt(x ** 2 + z ** 2)) ? a : b;
   }
 }

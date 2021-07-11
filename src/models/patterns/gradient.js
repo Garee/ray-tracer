@@ -1,19 +1,18 @@
 import { Pattern } from "./pattern";
 
 export class GradientPattern extends Pattern {
-  constructor(a, b, transform) {
-    super(transform);
-    this.a = a;
-    this.b = b;
+  constructor(colors, transform) {
+    super(colors, transform);
+  }
+
+  static of(colors, transform) {
+    return new GradientPattern(colors, transform);
   }
 
   colorAt({ x }) {
-    const distance = this.b.subtract(this.a);
+    const [a, b] = this.colors;
+    const distance = b.subtract(a);
     const fraction = x - Math.floor(x);
-    return this.a.add(distance.multiply(fraction));
-  }
-
-  setTransform(transform) {
-    return new GradientPattern(this.a, this.b, transform);
+    return distance.multiply(fraction).add(a);
   }
 }

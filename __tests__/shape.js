@@ -5,7 +5,7 @@ import { expectToBeCloseToTuple } from "../src/util";
 
 test("the default transformation", () => {
   const shape = new Shape();
-  expect(shape.transform).toEqual(Matrix.identity());
+  expect(shape.transform).toEqual(Matrix.identity);
 });
 
 test("assiging a transformation", () => {

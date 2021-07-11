@@ -1,11 +1,15 @@
 import { Shape } from "./shape";
-import { discriminant } from "../../util/math";
+import { discriminant } from "../../util/maths";
 import { Intersection } from "../intersection";
 
 export class Sphere extends Shape {
   constructor(material, transform) {
     super(material, transform);
     this.radius = 1;
+  }
+
+  static of(material, transform) {
+    return new Sphere(material, transform);
   }
 
   setTransform(transform) {

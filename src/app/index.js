@@ -7,7 +7,6 @@ import {
   Vector,
   Material,
 } from "../models";
-import { White, Green, Red, Blue, Black } from "../models/color";
 import { Sphere, Plane } from "../models/shapes";
 import {
   viewTransform,
@@ -22,7 +21,7 @@ import { CheckPattern, GradientPattern, RingPattern } from "../models/patterns";
   let width = 100;
   let height = 50;
   const fov = Math.PI / 3;
-  const light = new Light(new Point(-10, 10, -10), White);
+  const light = new Light(new Point(-10, 10, -10), Color.white);
   let camera = new Camera(width, height, fov).setTransform(
     viewTransform(
       new Point(0, 1.5, -5),
@@ -36,7 +35,7 @@ import { CheckPattern, GradientPattern, RingPattern } from "../models/patterns";
       new Material({
         diffuse: 0.7,
         ambient: 0.2,
-        pattern: new CheckPattern(White, Blue).setTransform(
+        pattern: new CheckPattern([Color.white, Color.blue]).setTransform(
           rotationZ(Math.PI / 2).multiply(scaling(0.01, 0.01, 0.01))
         ),
       })
@@ -48,7 +47,7 @@ import { CheckPattern, GradientPattern, RingPattern } from "../models/patterns";
       new Material({
         diffuse: 0.7,
         ambient: 0.2,
-        pattern: new GradientPattern(Red, Blue).setTransform(
+        pattern: new GradientPattern([Color.red, Color.blue]).setTransform(
           scaling(0.01, 0.01, 0.01)
         ),
       })
@@ -60,7 +59,7 @@ import { CheckPattern, GradientPattern, RingPattern } from "../models/patterns";
       new Material({
         diffuse: 0.7,
         specular: 0.3,
-        pattern: new RingPattern(Green, Black).setTransform(
+        pattern: new RingPattern([Color.green, Color.black]).setTransform(
           scaling(0.01, 0.01, 0.01)
         ),
       })
@@ -71,14 +70,14 @@ import { CheckPattern, GradientPattern, RingPattern } from "../models/patterns";
 
   const floorPlane = new Plane().setMaterial(
     new Material({
-      color: new Color(0, 0.3, 0),
+      color: Color.of({ g: 0.3 }),
     })
   );
 
   const background = new Plane()
     .setMaterial(
       new Material({
-        color: new Color(0, 0, 0.2),
+        color: Color.of({ b: 0.2 }),
       })
     )
     .setTransform(translation(0, 0, 10).multiply(rotationX(Math.PI / 2)));

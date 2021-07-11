@@ -1,5 +1,4 @@
-import { Black, White } from "../src/models/color";
-import { Color, Point, Matrix, Material } from "../src/models";
+import { Color, Point, Matrix } from "../src/models";
 import {
   Pattern,
   GradientPattern,
@@ -10,156 +9,156 @@ import {
 import { Sphere } from "../src/models/shapes";
 import { scaling, translation } from "../src/models/transformations";
 
-test("creating a stripe pattern", () => {
-  const pattern = new StripePattern(White, Black);
-  expect(pattern.a).toEqual(White);
-  expect(pattern.b).toEqual(Black);
+describe("StripePattern", () => {
+  let colors, pattern, sphere;
+
+  beforeEach(() => {
+    colors = [Color.white, Color.black];
+    pattern = StripePattern.of(colors);
+    sphere = Sphere.of();
+  });
+
+  test("creating a stripe pattern", () => {
+    expect(pattern.colors).toEqual(colors);
+  });
+
+  test("a stripe pattern is constant in y", () => {
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ y: 1 }))).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ y: 2 }))).toEqual(Color.white);
+  });
+
+  test("a stripe pattern is constant in z", () => {
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ z: 1 }))).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ z: 2 }))).toEqual(Color.white);
+  });
+
+  test("a stripe pattern alternates in x", () => {
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ x: 0.9 }))).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ x: 1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ x: -0.1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ x: -1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ x: -1.1 }))).toEqual(Color.white);
+  });
+
+  test("stripes with an object transformation", () => {
+    sphere = sphere.setTransform(scaling(2, 2, 2));
+    expect(pattern.at(sphere, Point.of({ x: 1.5 }))).toEqual(Color.white);
+  });
+
+  test("stripes with a pattern transformation", () => {
+    pattern = pattern.setTransform(scaling(2, 2, 2));
+    expect(pattern.at(sphere, Point.of({ x: 1.5 }))).toEqual(Color.white);
+  });
+
+  test("stripes with both an object and a pattern transformation", () => {
+    sphere = sphere.setTransform(scaling(2, 2, 2));
+    pattern = pattern.setTransform(translation(0.5, 0, 0));
+    expect(pattern.at(sphere, Point.of({ x: 2.5 }))).toEqual(Color.white);
+  });
 });
 
-test("a stripe pattern is constant in y", () => {
-  const pattern = new StripePattern(White, Black);
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 1, 0))).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 2, 0))).toEqual(White);
-});
-
-test("a stripe pattern is constant in z", () => {
-  const pattern = new StripePattern(White, Black);
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 0, 1))).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 0, 2))).toEqual(White);
-});
-
-test("a stripe pattern alternates in x", () => {
-  const pattern = new StripePattern(White, Black);
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(0.9, 0, 0))).toEqual(White);
-  expect(pattern.colorAt(new Point(1, 0, 0))).toEqual(Black);
-  expect(pattern.colorAt(new Point(-0.1, 0, 0))).toEqual(Black);
-  expect(pattern.colorAt(new Point(-1, 0, 0))).toEqual(Black);
-  expect(pattern.colorAt(new Point(-1.1, 0, 0))).toEqual(White);
-});
-
-test("stripes with an object transformation", () => {
-  const sphere = new Sphere().setTransform(scaling(2, 2, 2));
-  const pattern = new StripePattern(White, Black);
-  expect(pattern.at(sphere, new Point(1.5, 0, 0))).toEqual(White);
-});
-
-test("stripes with a pattern transformation", () => {
-  const sphere = new Sphere();
-  const pattern = new StripePattern(White, Black).setTransform(
-    scaling(2, 2, 2)
-  );
-  expect(pattern.at(sphere, new Point(1.5, 0, 0))).toEqual(White);
-});
-
-test("stripes with both an object and a pattern transformation", () => {
-  const sphere = new Sphere().setTransform(scaling(2, 2, 2));
-  const pattern = new StripePattern(White, Black).setTransform(
-    translation(0.5, 0, 0)
-  );
-  expect(pattern.at(sphere, new Point(2.5, 0, 0))).toEqual(White);
-});
-
-class TestPattern extends Pattern {
-  constructor(transform) {
-    super(transform);
+describe("TestPattern", () => {
+  class TestPattern extends Pattern {
+    colorAt({ x, y, z }) {
+      return Color.of({ r: x, g: y, b: z });
+    }
   }
 
-  colorAt(point) {
-    const { x, y, z } = point;
-    return new Color(x, y, z);
-  }
+  let colors, pattern, sphere;
 
-  setTransform(transform) {
-    return new TestPattern(transform);
-  }
-}
+  beforeEach(() => {
+    colors = [Color.white, Color.black];
+    pattern = new TestPattern();
+    sphere = Sphere.of();
+  });
 
-test("the default pattern transformation", () => {
-  const pattern = new TestPattern();
-  expect(pattern.transform).toEqual(Matrix.identity());
+  test("the default pattern transformation", () => {
+    expect(pattern.colors).toEqual(colors);
+    expect(pattern.transform).toEqual(Matrix.identity);
+  });
+
+  test("assigning a transformation", () => {
+    pattern = pattern.setTransform(translation(1, 2, 3));
+    expect(pattern.transform).toEqual(translation(1, 2, 3));
+  });
+
+  test("a pattern with an object transformation", () => {
+    sphere = sphere.setTransform(scaling(2, 2, 2));
+    const color = pattern.at(sphere, Point.of({ x: 2, y: 3, z: 4 }));
+    expect(color).toEqual(Color.of({ r: 1, g: 1.5, b: 2 }));
+  });
+
+  test("a pattern with a pattern transformation", () => {
+    pattern = pattern.setTransform(scaling(2, 2, 2));
+    const color = pattern.at(sphere, Point.of({ x: 2, y: 3, z: 4 }));
+    expect(color).toEqual(Color.of({ r: 1, g: 1.5, b: 2 }));
+  });
+
+  test("a pattern with both an object and a pattern transformation", () => {
+    sphere = sphere.setTransform(scaling(2, 2, 2));
+    pattern = pattern.setTransform(translation(0.5, 1, 1.5));
+    const color = pattern.at(sphere, Point.of({ x: 2.5, y: 3, z: 3.5 }));
+    expect(color).toEqual(Color.of({ r: 0.75, g: 0.5, b: 0.25 }));
+  });
 });
 
-test("assigning a transformation", () => {
-  const pattern = new TestPattern().setTransform(translation(1, 2, 3));
-  expect(pattern.transform).toEqual(translation(1, 2, 3));
+describe("GradientPattern", () => {
+  test("a gradient linearly interpolates between colors", () => {
+    const pattern = GradientPattern.of([Color.white, Color.black]);
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ x: 0.25 }))).toEqual(
+      Color.of({ r: 0.75, g: 0.75, b: 0.75 })
+    );
+    expect(pattern.colorAt(Point.of({ x: 0.5 }))).toEqual(
+      Color.of({ r: 0.5, g: 0.5, b: 0.5 })
+    );
+    expect(pattern.colorAt(Point.of({ x: 0.75 }))).toEqual(
+      Color.of({ r: 0.25, g: 0.25, b: 0.25 })
+    );
+  });
 });
 
-test("a pattern with an object transformation", () => {
-  const sphere = new Sphere().setTransform(scaling(2, 2, 2));
-  const pattern = new TestPattern();
-  const color = pattern.at(sphere, new Point(2, 3, 4));
-  expect(color).toEqual(new Color(1, 1.5, 2));
+describe("RingPattern", () => {
+  test("a ring should extend in both x and z", () => {
+    const pattern = RingPattern.of([Color.white, Color.black]);
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ x: 1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ z: 1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ x: 0.708, z: 0.708 }))).toEqual(
+      Color.black
+    );
+  });
 });
 
-test("a pattern with a pattern transformation", () => {
-  const sphere = new Sphere();
-  const pattern = new TestPattern().setTransform(scaling(2, 2, 2));
-  const color = pattern.at(sphere, new Point(2, 3, 4));
-  expect(color).toEqual(new Color(1, 1.5, 2));
-});
+describe("CheckPattern", () => {
+  let colors, pattern;
 
-test("a pattern with both an object and a pattern transformation", () => {
-  const sphere = new Sphere().setTransform(scaling(2, 2, 2));
-  const pattern = new TestPattern().setTransform(translation(0.5, 1, 1.5));
-  const color = pattern.at(sphere, new Point(2.5, 3, 3.5));
-  expect(color).toEqual(new Color(0.75, 0.5, 0.25));
-});
+  beforeEach(() => {
+    colors = [Color.white, Color.black];
+    pattern = CheckPattern.of(colors);
+  });
 
-test("a gradient linearly interpolates between colors", () => {
-  const pattern = new GradientPattern(White, Black);
-  const obj = new Sphere();
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.at(obj, new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(0.25, 0, 0))).toEqual(
-    new Color(0.75, 0.75, 0.75)
-  );
-  expect(pattern.at(obj, new Point(0.25, 0, 0))).toEqual(
-    new Color(0.75, 0.75, 0.75)
-  );
-  expect(pattern.colorAt(new Point(0.5, 0, 0))).toEqual(
-    new Color(0.5, 0.5, 0.5)
-  );
-  expect(pattern.colorAt(new Point(0.75, 0, 0))).toEqual(
-    new Color(0.25, 0.25, 0.25)
-  );
-});
+  test("a check should repeat in x", () => {
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ x: 0.99 }))).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ x: 1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ x: 2 }))).toEqual(Color.white);
+  });
 
-test("a ring should extend in both x and z", () => {
-  const pattern = new RingPattern(White, Black);
-  const obj = new Sphere(new Material({ pattern }));
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.at(obj, new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(1, 0, 0))).toEqual(Black);
-  expect(pattern.at(obj, new Point(1, 0, 0))).toEqual(Black);
-  expect(pattern.colorAt(new Point(0, 0, 1))).toEqual(Black);
-  expect(pattern.at(obj, new Point(0, 0, 1))).toEqual(Black);
-  expect(pattern.colorAt(new Point(0.708, 0, 0.708))).toEqual(Black);
-  expect(pattern.at(obj, new Point(0.708, 0, 0.708))).toEqual(Black);
-});
+  test("a check should repeat in y", () => {
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ y: 0.99 }))).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ y: 1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ y: 2 }))).toEqual(Color.white);
+  });
 
-test("a check should repeat in x", () => {
-  const pattern = new CheckPattern(White, Black);
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(0.99, 0, 0))).toEqual(White);
-  expect(pattern.colorAt(new Point(1, 0, 0))).toEqual(Black);
-  expect(pattern.colorAt(new Point(2, 0, 0))).toEqual(White);
-});
-
-test("a check should repeat in y", () => {
-  const pattern = new CheckPattern(White, Black);
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 0.99, 0))).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 1, 0))).toEqual(Black);
-  expect(pattern.colorAt(new Point(0, 2, 0))).toEqual(White);
-});
-
-test("a check should repeat in z", () => {
-  const pattern = new CheckPattern(White, Black);
-  expect(pattern.colorAt(new Point())).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 0, 0.99))).toEqual(White);
-  expect(pattern.colorAt(new Point(0, 0, 1))).toEqual(Black);
-  expect(pattern.colorAt(new Point(0, 0, 2))).toEqual(White);
+  test("a check should repeat in z", () => {
+    expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ z: 0.99 }))).toEqual(Color.white);
+    expect(pattern.colorAt(Point.of({ z: 1 }))).toEqual(Color.black);
+    expect(pattern.colorAt(Point.of({ z: 2 }))).toEqual(Color.white);
+  });
 });

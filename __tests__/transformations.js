@@ -159,7 +159,7 @@ test("the transformation matrix for the default orientation", () => {
   const to = new Point(0, 0, -1);
   const up = new Vector(0, 1, 0);
   const t = viewTransform(from, to, up);
-  expect(t).toEqual(Matrix.identity());
+  expect(t).toEqual(Matrix.identity);
 });
 
 test("a view transformation matrix looking in a positive z direction", () => {

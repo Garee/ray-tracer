@@ -8,7 +8,7 @@ export class Camera {
     this.width = width;
     this.height = height;
     this.fov = fov;
-    this.transform = Matrix.identity();
+    this.transform = Matrix.identity;
     this.pixelSize = (this.#halfWidth() * 2) / this.width;
   }
 

@@ -1,2 +1,2 @@
-export * from "./math";
+export * from "./maths";
 export * from "./testing";

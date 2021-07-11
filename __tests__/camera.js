@@ -14,7 +14,7 @@ test("constructing a camera", () => {
   expect(camera.width).toEqual(width);
   expect(camera.height).toEqual(height);
   expect(camera.fov).toEqual(fov);
-  expect(camera.transform).toEqual(Matrix.identity());
+  expect(camera.transform).toEqual(Matrix.identity);
 });
 
 test("the pixel size for a horizontal canvas", () => {
@@ -65,6 +65,6 @@ test("rendering a world with a camera", () => {
   expect(canvas).toBeDefined();
   expectToBeCloseToTuple(
     canvas.getPixel(5, 5),
-    new Color(0.38066, 0.47583, 0.2855)
+    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 })
   );
 });

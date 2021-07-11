@@ -7,7 +7,6 @@ import {
   Vector,
   Intersection,
 } from "../src/models";
-import { White, Black } from "../src/models/color";
 import { Sphere } from "../src/models/shapes";
 import { prepareComputations } from "../src/models/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
@@ -24,7 +23,7 @@ test("the default world", () => {
   const w = World.default();
   expect(w.contains(s1)).toBe(true);
   expect(w.contains(s2)).toBe(true);
-  expect(w.lights[0]).toEqual(new Light(new Point(-10, 10, -10), White));
+  expect(w.lights[0]).toEqual(new Light(new Point(-10, 10, -10), Color.white));
 });
 
 test("intersect a world with a ray", () => {
@@ -42,11 +41,14 @@ test("shading an intersection", () => {
   const comps = prepareComputations(int, ray);
   const color = w.shadeHit(comps);
   expect(color).toBeDefined();
-  expectToBeCloseToTuple(color, new Color(0.38066, 0.47583, 0.2855));
+  expectToBeCloseToTuple(
+    color,
+    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 })
+  );
 });
 
 test("shading an intersection from the inside", () => {
-  const light = new Light(new Point(0, 0.25, 0), White);
+  const light = new Light(new Point(0, 0.25, 0), Color.white);
   const w = World.default(light);
   const ray = new Ray(new Point(), new Vector(0, 0, 1));
   const shape = new Sphere();
@@ -54,20 +56,26 @@ test("shading an intersection from the inside", () => {
   const comps = prepareComputations(int, ray);
   const color = w.shadeHit(comps);
   expect(color).toBeDefined();
-  expectToBeCloseToTuple(color, new Color(0.90498, 0.90498, 0.90498));
+  expectToBeCloseToTuple(
+    color,
+    Color.of({ r: 0.90498, g: 0.90498, b: 0.90498 })
+  );
 });
 
 test("the color when a ray misses", () => {
   const w = World.default();
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 1, 0));
-  expect(w.colorAt(ray)).toEqual(Black);
+  expect(w.colorAt(ray)).toEqual(Color.black);
 });
 
 test("the color when a ray hits", () => {
   const w = World.default();
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
   expect(ray).toBeDefined();
-  expectToBeCloseToTuple(w.colorAt(ray), new Color(0.38066, 0.47583, 0.2855));
+  expectToBeCloseToTuple(
+    w.colorAt(ray),
+    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 })
+  );
 });
 
 test("the color with an intersection behind the ray", () => {
@@ -102,7 +110,7 @@ test("there is no shadow when an object is behind the point", () => {
 });
 
 test("shadeHit is given an intersection in shadow", () => {
-  const light = new Light(new Point(0, 0, -10), White);
+  const light = new Light(new Point(0, 0, -10), Color.white);
   const s1 = new Sphere();
   const s2 = new Sphere().setTransform(translation(0, 0, 10));
   const world = World.default(light).addObject(s1).addObject(s2);
@@ -110,5 +118,5 @@ test("shadeHit is given an intersection in shadow", () => {
   const int = new Intersection(4, s2);
   const comps = prepareComputations(int, ray);
   const color = world.shadeHit(comps);
-  expect(color).toEqual(new Color(0.1, 0.1, 0.1));
+  expect(color).toEqual(Color.of({ r: 0.1, g: 0.1, b: 0.1 }));
 });
