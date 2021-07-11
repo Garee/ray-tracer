@@ -7,5 +7,6 @@ export class Material {
     this.diffuse = props?.diffuse ?? 0.9;
     this.specular = props?.specular ?? 0.9;
     this.shininess = props?.shininess ?? 200;
+    this.pattern = props?.pattern;
   }
 }

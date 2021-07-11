@@ -10,14 +10,19 @@ export class Light {
 // The Phong Reflection Model
 export function lighting(
   material,
+  object,
   light,
   point,
   eye,
   normal,
   inShadow = false
 ) {
+  let materialColor = material.color;
+  if (material.pattern) {
+    materialColor = material.pattern.at(object, point);
+  }
   // Combine the surface color with the light's colour.
-  const color = material.color.multiply(light.intensity);
+  const color = materialColor.multiply(light.intensity);
   // The ambient light contribution.
   const ambient = color.multiply(material.ambient);
   // The direction to the light source.

@@ -53,7 +53,7 @@ export class World {
     const { obj, point, overPoint, eye, normal } = computations;
     const colors = this.lights.map((light) => {
       const isShadowed = this.isShadowed(overPoint);
-      return lighting(obj.material, light, point, eye, normal, isShadowed);
+      return lighting(obj.material, obj, light, point, eye, normal, isShadowed);
     });
     return colors.reduce((acc, color) => {
       const { x, y, z } = acc.add(color);
