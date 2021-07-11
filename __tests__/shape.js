@@ -1,13 +1,12 @@
-import { Shape, Sphere } from "../src/models/shapes";
+import { Sphere } from "../src/models/shapes";
 import { Matrix, Material, Point, Vector, Ray } from "../src/models";
 import { rotationZ, scaling, translation } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
-let shape, sphere;
+let shape;
 
 beforeEach(() => {
-  shape = Shape.of();
-  sphere = Sphere.of();
+  shape = Sphere.of();
 });
 
 test("the default transformation", () => {
@@ -29,7 +28,7 @@ test("assigning a material", () => {
 });
 
 test("intersecting a scaled shape with a ray", () => {
-  shape = sphere.setTransform(scaling(2, 2, 2));
+  shape = shape.setTransform(scaling(2, 2, 2));
   const ray = Ray.of({
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
@@ -40,7 +39,7 @@ test("intersecting a scaled shape with a ray", () => {
 });
 
 test("intersecting a translated shape with a ray", () => {
-  shape = sphere.setTransform(translation(5, 0, 0));
+  shape = shape.setTransform(translation(5, 0, 0));
   const ray = Ray.of({
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
@@ -51,14 +50,14 @@ test("intersecting a translated shape with a ray", () => {
 });
 
 test("computing the normal on a translated shape", () => {
-  shape = sphere.setTransform(translation(0, 1, 0));
+  shape = shape.setTransform(translation(0, 1, 0));
   const n = shape.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
   expect(n).toBeDefined();
   expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
 });
 
 test("computing the normal on a transformed shape", () => {
-  shape = sphere.setTransform(
+  shape = shape.setTransform(
     scaling(1, 0.5, 1).multiply(rotationZ(Math.PI / 5))
   );
   const n = shape.normalAt(

@@ -3,6 +3,10 @@ export class Intersection {
     this.t = t;
     this.obj = obj;
   }
+
+  static of({ t, obj } = {}) {
+    return new Intersection(t, obj);
+  }
 }
 
 export function hit(intersections) {

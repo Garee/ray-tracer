@@ -12,17 +12,15 @@ export class Plane extends Shape {
     return new Plane(material, transform);
   }
 
-  intersect(ray) {
-    return super.intersect(ray, (r) => {
-      if (Math.abs(r.direction.y) < Epsilon) {
-        return [];
-      }
-      const t = -r.origin.y / r.direction.y;
-      return [new Intersection(t, this)];
-    });
+  _intersect(ray) {
+    if (Math.abs(ray.direction.y) < Epsilon) {
+      return [];
+    }
+    const t = -ray.origin.y / ray.direction.y;
+    return [Intersection.of({ t, obj: this })];
   }
 
-  normalAt(point) {
-    return super.normalAt(point, () => Vector.of({ y: 1 }));
+  _normalAt() {
+    return Vector.of({ y: 1 });
   }
 }

@@ -33,7 +33,7 @@ test("a ray intersecting a plane from above", () => {
     direction: Vector.of({ y: -1 }),
   });
   const ints = plane.intersect(ray);
-  expect(ints).toEqual([new Intersection(1, plane)]);
+  expect(ints).toEqual([Intersection.of({ t: 1, obj: plane })]);
 });
 
 test("a ray intersecting a plane from below", () => {
@@ -42,5 +42,5 @@ test("a ray intersecting a plane from below", () => {
     direction: Vector.of({ y: 1 }),
   });
   const ints = plane.intersect(ray);
-  expect(ints).toEqual([new Intersection(1, plane)]);
+  expect(ints).toEqual([Intersection.of({ t: 1, obj: plane })]);
 });

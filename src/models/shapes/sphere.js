@@ -12,25 +12,26 @@ export class Sphere extends Shape {
     return new Sphere(material, transform);
   }
 
-  intersect(ray) {
-    return super.intersect(ray, (r) => {
-      const toRay = r.origin.subtract(this.center);
-      const a = r.direction.dot(r.direction);
-      const b = 2 * r.direction.dot(toRay);
-      const c = toRay.dot(toRay) - 1;
-      const d = discriminant(a, b, c);
+  _intersect(ray) {
+    const toRay = ray.origin.subtract(this.center);
+    const a = ray.direction.dot(ray.direction);
+    const b = 2 * ray.direction.dot(toRay);
+    const c = toRay.dot(toRay) - 1;
+    const d = discriminant(a, b, c);
 
-      if (d < 0) {
-        return [];
-      }
+    if (d < 0) {
+      return [];
+    }
 
-      const t1 = (-b - Math.sqrt(d)) / (2 * a);
-      const t2 = (-b + Math.sqrt(d)) / (2 * a);
-      return [new Intersection(t1, this), new Intersection(t2, this)];
-    });
+    const t1 = (-b - Math.sqrt(d)) / (2 * a);
+    const t2 = (-b + Math.sqrt(d)) / (2 * a);
+    return [
+      Intersection.of({ t: t1, obj: this }),
+      Intersection.of({ t: t2, obj: this }),
+    ];
   }
 
-  normalAt(point) {
-    return super.normalAt(point, (objPoint) => objPoint.subtract(this.center));
+  _normalAt(point) {
+    return point.subtract(this.center);
   }
 }

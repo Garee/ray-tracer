@@ -4,13 +4,13 @@ import { Matrix } from "../matrix";
 
 export class Shape {
   constructor(material = new Material(), transform = Matrix.identity) {
+    if (new.target === Shape) {
+      throw new Error(`The abstract class 'Shape' cannot be instantiated.`);
+    }
+
     this.center = Point.origin;
     this.material = material;
     this.transform = transform;
-  }
-
-  static of({ material = new Material(), transform = Matrix.identity } = {}) {
-    return new Shape(material, transform);
   }
 
   setTransform(transform) {
@@ -25,17 +25,25 @@ export class Shape {
     return ray.transform(this.transform.inverse());
   }
 
-  intersect(ray, using) {
-    return using(this.getTransformedRay(ray));
+  intersect(ray) {
+    return this._intersect(this.getTransformedRay(ray));
   }
 
-  normalAt(point, using) {
+  normalAt(point) {
     const objPoint = this.transform.inverse().multiply(point);
-    const objNormal = using(objPoint);
+    const objNormal = this._normalAt(objPoint);
     const worldNormal = this.transform
       .inverse()
       .transpose()
       .multiply(objNormal);
     return worldNormal.normalize();
+  }
+
+  _intersect() {
+    throw new Error(`Missing implementation in subclass.`);
+  }
+
+  _normalAt() {
+    throw new Error(`Missing implementation in subclass.`);
   }
 }
