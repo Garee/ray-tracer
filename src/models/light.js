@@ -1,9 +1,13 @@
 import { Color } from "./color";
-
+import { Point } from "./point";
 export class Light {
   constructor(position, intensity) {
     this.position = position;
     this.intensity = intensity;
+  }
+
+  static of({ position = Point.origin, intensity = Color.white } = {}) {
+    return new Light(position, intensity);
   }
 }
 

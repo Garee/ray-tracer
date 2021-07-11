@@ -1,52 +1,61 @@
 export class Tuple {
-  constructor(x, y, z, w = 0) {
+  constructor(x = 0, y = 0, z = 0, w = 0) {
     this.x = x;
     this.y = y;
     this.z = z;
     this.w = w;
   }
 
-  add(t) {
-    const x = this.x + t.x;
-    const y = this.y + t.y;
-    const z = this.z + t.z;
-    const w = this.w + t.w;
+  static of({ x = 0, y = 0, z = 0, w = 0 } = {}) {
     return new Tuple(x, y, z, w);
   }
 
-  subtract(t) {
-    const x = this.x - t.x;
-    const y = this.y - t.y;
-    const z = this.z - t.z;
-    const w = this.w - t.w;
-    return new Tuple(x, y, z, w);
+  add({ x, y, z, w }) {
+    return Tuple.of({
+      x: this.x + x,
+      y: this.y + y,
+      z: this.z + z,
+      w: this.w + w,
+    });
+  }
+
+  subtract({ x, y, z, w }) {
+    return Tuple.of({
+      x: this.x - x,
+      y: this.y - y,
+      z: this.z - z,
+      w: this.w - w,
+    });
   }
 
   negate() {
-    const t = new Tuple(0, 0, 0, this.w);
-    return t.subtract(this);
+    return Tuple.of({ w: this.w }).subtract(this);
   }
 
   multiply(scalar) {
-    const x = this.x * scalar;
-    const y = this.y * scalar;
-    const z = this.z * scalar;
-    return new Tuple(x, y, z, this.w);
+    return Tuple.of({
+      x: this.x * scalar,
+      y: this.y * scalar,
+      z: this.z * scalar,
+      w: this.w,
+    });
   }
 
   divide(scalar) {
-    const x = this.x / scalar;
-    const y = this.y / scalar;
-    const z = this.z / scalar;
-    return new Tuple(x, y, z, this.w);
+    return Tuple.of({
+      x: this.x / scalar,
+      y: this.y / scalar,
+      z: this.z / scalar,
+      w: this.w,
+    });
   }
 
   isPoint() {
-    return !!this.w;
+    return this.w === 1;
   }
 
   isVector() {
-    return !this.w;
+    return this.w === 0;
   }
 
   magnitude() {
@@ -60,28 +69,27 @@ export class Tuple {
     const x = this.x / this.magnitude();
     const y = this.y / this.magnitude();
     const z = this.z / this.magnitude();
-    return new Tuple(x, y, z, this.w);
+    return Tuple.of({ x, y, z, w: this.w });
   }
 
-  dot(t) {
-    const x = this.x * t.x;
-    const y = this.y * t.y;
-    const z = this.z * t.z;
-    return x + y + z;
+  dot({ x, y, z }) {
+    return this.x * x + this.y * y + this.z * z;
   }
 
-  cross(t) {
-    const x = this.y * t.z - this.z * t.y;
-    const y = this.z * t.x - this.x * t.z;
-    const z = this.x * t.y - this.y * t.x;
-    return new Tuple(x, y, z, this.w);
+  cross({ x, y, z }) {
+    return Tuple.of({
+      x: this.y * z - this.z * y,
+      y: this.z * x - this.x * z,
+      z: this.x * y - this.y * x,
+      w: this.w,
+    });
   }
 
   reflect(normal) {
     return this.subtract(normal.multiply(this.dot(normal) * 2));
   }
 
-  toArray() {
+  get array() {
     return [[this.x], [this.y], [this.z], [this.w]];
   }
 }

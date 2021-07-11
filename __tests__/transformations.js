@@ -189,7 +189,7 @@ test("an arbitrary view transformation", () => {
     [-0.35857, 0.59761, -0.71714, 0],
     [0, 0, 0, 1],
   ]);
-  t.toArray().forEach((row, i) => {
+  t.array.forEach((row, i) => {
     row.forEach((col, j) => expect(col).toBeCloseTo(m.get(i, j)));
   });
 });

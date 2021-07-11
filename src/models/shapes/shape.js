@@ -21,12 +21,12 @@ export class Shape {
     return new this.constructor(material, this.transform);
   }
 
-  getTransformedRay(ray) {
-    return ray.transform(this.transform.inverse());
-  }
-
   intersect(ray) {
     return this._intersect(this.getTransformedRay(ray));
+  }
+
+  getTransformedRay(ray) {
+    return ray.transform(this.transform.inverse());
   }
 
   normalAt(point) {

@@ -1,4 +1,3 @@
-import { determinantSimple, identity } from "../src/models/matrix";
 import { Matrix, Tuple } from "../src/models";
 
 test("construct and inspect a 4x4 matrix", () => {
@@ -133,16 +132,16 @@ test("matrix transposition", () => {
 });
 
 test("tranposition of an identity matrix", () => {
-  const i = new Matrix(identity(4));
+  const i = Matrix.identity;
   expect(i.transpose()).toEqual(i);
 });
 
 test("calculating the determinant of a 2x2 matrix", () => {
-  const m = [
+  const m = new Matrix([
     [1, 5],
     [-3, 2],
-  ];
-  expect(determinantSimple(m)).toEqual(17);
+  ]);
+  expect(m.determinant()).toEqual(17);
 });
 
 test("submatrix of a 3x3 matrix is a 2x2 matrix", () => {
@@ -182,7 +181,7 @@ test("minor of a 3x3 matrix", () => {
     [6, -1, 5],
   ]);
   const b = m.submatrix(1, 0);
-  const det = determinantSimple(b.toArray());
+  const det = b.determinant();
   expect(det).toEqual(25);
   expect(m.minor(1, 0)).toEqual(det);
 });
@@ -275,11 +274,9 @@ test("calculating the inverse of another matrix", () => {
     [0.35897, 0.35897, 0.4359, 0.92308],
     [-0.69231, -0.69231, -0.76923, -1.92308],
   ];
-  m.inverse()
-    .toArray()
-    .forEach((row, i) => {
-      row.forEach((col, j) => expect(col).toBeCloseTo(n[i][j]));
-    });
+  m.inverse().array.forEach((row, i) => {
+    row.forEach((col, j) => expect(col).toBeCloseTo(n[i][j]));
+  });
 });
 
 test("calculating the inverse of a third matrix", () => {
@@ -295,11 +292,9 @@ test("calculating the inverse of a third matrix", () => {
     [-0.02901, -0.1463, -0.10926, 0.12963],
     [0.17778, 0.06667, -0.26667, 0.33333],
   ];
-  m.inverse()
-    .toArray()
-    .forEach((row, i) => {
-      row.forEach((col, j) => expect(col).toBeCloseTo(n[i][j]));
-    });
+  m.inverse().array.forEach((row, i) => {
+    row.forEach((col, j) => expect(col).toBeCloseTo(n[i][j]));
+  });
 });
 
 test("multiply a product by its inverse", () => {
@@ -316,9 +311,7 @@ test("multiply a product by its inverse", () => {
     [6, -2, 0, 5],
   ]);
   const o = m.multiply(n);
-  o.multiply(n.inverse())
-    .toArray()
-    .forEach((r, i) => {
-      r.forEach((c, j) => expect(c).toBeCloseTo(m.get(i, j)));
-    });
+  o.multiply(n.inverse()).array.forEach((r, i) => {
+    r.forEach((c, j) => expect(c).toBeCloseTo(m.get(i, j)));
+  });
 });

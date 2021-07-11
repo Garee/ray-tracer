@@ -1,63 +1,63 @@
 import { Tuple } from "./tuple";
 
 export class Matrix {
-  mdarray = [];
-
-  static identity = new Matrix(identity(4));
-
-  constructor(mdarray) {
-    this.mdarray = mdarray;
+  constructor(array = []) {
+    this.array = array;
   }
 
+  static from(array) {
+    return new Matrix(array);
+  }
+
+  static n = 4;
+
+  static identity = Matrix.from(identity(Matrix.n));
+
   get(x, y) {
-    return this.mdarray[x][y];
+    return this.array[x][y];
   }
 
   multiply(m) {
     if (m instanceof Tuple) {
-      const n = multiply(this.mdarray, m.toArray());
-      return new Tuple(n[0][0], n[1][0], n[2][0], m.w);
+      const n = multiply(this.array, m.array);
+      return Tuple.of({ x: n[0][0], y: n[1][0], z: n[2][0], w: m.w });
     }
 
-    const mdarray = multiply(this.mdarray, m.toArray());
-    return new Matrix(mdarray);
+    const array = multiply(this.array, m.array);
+    return Matrix.from(array);
   }
 
   identity() {
-    const [rows] = dim(this.mdarray);
-    return new Matrix(identity(rows));
+    const [rows] = dim(this.array);
+    return Matrix.from(identity(rows));
   }
 
   transpose() {
-    return new Matrix(transpose(this.mdarray));
+    return Matrix.from(transpose(this.array));
   }
 
   submatrix(row, col) {
-    return new Matrix(submatrix(this.mdarray, row, col));
+    return Matrix.from(submatrix(this.array, row, col));
   }
 
   minor(row, col) {
-    return minor(this.mdarray, row, col);
+    return minor(this.array, row, col);
   }
 
   cofactor(row, col) {
-    return cofactor(this.mdarray, row, col);
+    return cofactor(this.array, row, col);
   }
 
   determinant() {
-    return determinant(this.mdarray);
+    return determinant(this.array);
   }
 
   invertable() {
-    return invertable(this.mdarray);
+    return invertable(this.array);
   }
 
   inverse() {
-    return new Matrix(inverse(this.mdarray));
-  }
-
-  toArray() {
-    return this.mdarray;
+    return Matrix.from(inverse(this.array));
   }
 }
 
@@ -67,7 +67,7 @@ export function multiply(m, n) {
 
   if (mcol !== nrow) {
     throw new Error(
-      "Cannot multiply matrices (m,n) when columns(m) !== rows(n)"
+      `Cannot multiply matrices m and n when columns(m) !== rows(n)`
     );
   }
 
@@ -83,13 +83,13 @@ export function multiply(m, n) {
   return result;
 }
 
-export function dim(m) {
+function dim(m) {
   const rows = m[0] instanceof Array ? m.length : 1;
   const columns = m[0] instanceof Array ? m[0].length : m.length;
   return [rows, columns];
 }
 
-export function zeros(rows, cols) {
+function zeros(rows, cols) {
   const m = new Array(rows);
   for (let r = 0; r < rows; r++) {
     m[r] = new Array(cols).fill(0);
@@ -97,7 +97,7 @@ export function zeros(rows, cols) {
   return m;
 }
 
-export function identity(n) {
+function identity(n) {
   const z = zeros(n, n);
   for (let i = 0; i < n; i++) {
     z[i][i] = 1;
@@ -105,7 +105,7 @@ export function identity(n) {
   return z;
 }
 
-export function transpose(m) {
+function transpose(m) {
   const [rows, cols] = dim(m);
   const z = zeros(rows, cols);
   for (let r = 0; r < rows; r++) {
@@ -116,7 +116,7 @@ export function transpose(m) {
   return z;
 }
 
-export function determinantSimple(m) {
+function determinantSimple(m) {
   const a = m[0][0];
   const b = m[0][1];
   const c = m[1][0];
@@ -124,7 +124,7 @@ export function determinantSimple(m) {
   return a * d - b * c;
 }
 
-export function determinant(m) {
+function determinant(m) {
   const [rows, cols] = dim(m);
   if (rows == 2) {
     return determinantSimple(m);
@@ -137,7 +137,7 @@ export function determinant(m) {
   return det;
 }
 
-export function submatrix(m, row, col) {
+function submatrix(m, row, col) {
   const s = m.map((r) => {
     const rr = [...r];
     rr.splice(col, 1);
@@ -147,22 +147,22 @@ export function submatrix(m, row, col) {
   return s;
 }
 
-export function minor(m, row, col) {
+function minor(m, row, col) {
   const s = submatrix(m, row, col);
   return determinant(s);
 }
 
-export function cofactor(m, row, col) {
+function cofactor(m, row, col) {
   const negate = (row + col) % 2 === 1;
   const min = minor(m, row, col);
   return negate ? -min : min;
 }
 
-export function invertable(m) {
+function invertable(m) {
   return determinant(m) !== 0;
 }
 
-export function inverse(m) {
+function inverse(m) {
   if (!invertable(m)) {
     throw new Error("The matrix is not invertable");
   }

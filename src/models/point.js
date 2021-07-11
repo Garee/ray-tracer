@@ -13,10 +13,10 @@ export class Point extends Tuple {
 
   add(t) {
     if (t.isPoint()) {
-      throw new Error("You cannot add two Points.");
+      throw new Error(`A 'Point' cannot add a 'Point'.`);
     }
 
     const { x, y, z } = super.add(t);
-    return new Point(x, y, z, this.w);
+    return new Point(x, y, z);
   }
 }

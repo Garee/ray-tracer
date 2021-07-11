@@ -43,7 +43,7 @@ test("add two tuples", () => {
 test("add two points", () => {
   const a = new Point(3, -2, 5, 1);
   const b = new Point(-2, 3, 1, 0);
-  expect(() => a.add(b)).toThrow("You cannot add two Points.");
+  expect(() => a.add(b)).toThrow("A 'Point' cannot add a 'Point'.");
 });
 
 test("subtract two tuples", () => {

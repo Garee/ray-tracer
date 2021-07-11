@@ -15,8 +15,8 @@ export class Ray {
   }
 
   transform(transformation) {
-    const pos = transformation.multiply(this.origin);
-    const dir = transformation.multiply(this.direction);
-    return new Ray(pos, dir);
+    const origin = transformation.multiply(this.origin);
+    const direction = transformation.multiply(this.direction);
+    return Ray.of({ origin, direction });
   }
 }
