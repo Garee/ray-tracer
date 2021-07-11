@@ -3,6 +3,10 @@ import { Matrix } from "../matrix";
 
 export class Pattern {
   constructor(transform) {
+    if (new.target === Pattern) {
+      throw new Error("The abstract class 'Pattern' cannot be instantiated.");
+    }
+
     this.transform = transform ?? Matrix.identity();
   }
 
@@ -18,6 +22,6 @@ export class Pattern {
   }
 
   colorAt() {
-    throw new Error("This function must be implemented by the subclass.");
+    throw new Error("Missing implementation in subclass.");
   }
 }

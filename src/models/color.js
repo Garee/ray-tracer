@@ -5,6 +5,12 @@ export class Color extends Tuple {
     super(red, green, blue);
   }
 
+  static of(r, g, b) {
+    return new Color(r, g, b);
+  }
+
+  static white = Color.of(1, 1, 1);
+
   get red() {
     return this.x;
   }
