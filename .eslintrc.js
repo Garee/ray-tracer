@@ -7,6 +7,7 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
+    "plugin:react/recommended",
     "plugin:jest/recommended",
     "plugin:jest/style",
   ],
@@ -14,7 +15,15 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
     sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  settings: {
+    react: {
+      version: "detect",
+    },
   },
   rules: {},
-  plugins: ["@babel", "jest"],
+  plugins: ["@babel", "react", "jest"],
 };

@@ -7,7 +7,8 @@ body {
   color: white;
 }
 
-body {
+body,
+main {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
@@ -16,17 +17,10 @@ body {
   flex-direction: column;
 }
 
-canvas {
-  box-shadow: 5px 5px 20px rgba(255, 255, 255, 0.5);
-}
-
-#progress {
-  padding: 1rem;
-}
-
 form {
   display: flex;
   flex-direction: column;
+  margin-top: 1rem;
 }
 
 form label {
