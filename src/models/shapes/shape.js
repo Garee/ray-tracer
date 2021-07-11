@@ -9,12 +9,16 @@ export class Shape {
     this.transform = transform;
   }
 
+  static of({ material = new Material(), transform = Matrix.identity } = {}) {
+    return new Shape(material, transform);
+  }
+
   setTransform(transform) {
-    return new Shape(this.material, transform);
+    return new this.constructor(this.material, transform);
   }
 
   setMaterial(material) {
-    return new Shape(material, this.transform);
+    return new this.constructor(material, this.transform);
   }
 
   getTransformedRay(ray) {

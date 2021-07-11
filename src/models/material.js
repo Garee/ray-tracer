@@ -1,12 +1,23 @@
 import { Color } from "./color";
 
 export class Material {
-  constructor(props) {
-    this.color = props?.color ?? Color.white;
-    this.ambient = props?.ambient ?? 0.1;
-    this.diffuse = props?.diffuse ?? 0.9;
-    this.specular = props?.specular ?? 0.9;
-    this.shininess = props?.shininess ?? 200;
-    this.pattern = props?.pattern;
+  constructor({
+    color = Color.white,
+    ambient = 0.1,
+    diffuse = 0.9,
+    specular = 0.9,
+    shininess = 200,
+    pattern = undefined,
+  } = {}) {
+    this.color = color;
+    this.ambient = ambient;
+    this.diffuse = diffuse;
+    this.specular = specular;
+    this.shininess = shininess;
+    this.pattern = pattern;
+  }
+
+  static of(props) {
+    return new Material(props);
   }
 }

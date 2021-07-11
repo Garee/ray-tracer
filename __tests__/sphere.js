@@ -3,142 +3,151 @@ import { Shape, Sphere } from "../src/models/shapes";
 import { translation, scaling, rotationZ } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
+let sphere;
+
+beforeEach(() => {
+  sphere = new Sphere();
+});
+
 test("a ray intersects a sphere at two points", () => {
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  const sphere = new Sphere();
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   const int = sphere.intersect(ray);
   expect(int.map((i) => i.t)).toEqual([4, 6]);
 });
 
 test("a ray intersects a sphere at a tangent", () => {
-  const ray = new Ray(new Point(0, 1, -5), new Vector(0, 0, 1));
-  const sphere = new Sphere();
+  const ray = Ray.of({
+    origin: Point.of({ y: 1, z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   const int = sphere.intersect(ray);
   expect(int.map((i) => i.t)).toEqual([5, 5]);
 });
 
 test("a ray misses a sphere", () => {
-  const ray = new Ray(new Point(0, 2, -5), new Vector(0, 0, 1));
-  const sphere = new Sphere();
+  const ray = Ray.of({
+    origin: Point.of({ y: 2, z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   const int = sphere.intersect(ray);
   expect(int).toEqual([]);
 });
 
 test("a ray originates inside a sphere", () => {
-  const ray = new Ray(new Point(), new Vector(0, 0, 1));
-  const sphere = new Sphere();
+  const ray = Ray.of({ direction: Vector.of({ z: 1 }) });
   const int = sphere.intersect(ray);
   expect(int.map((i) => i.t)).toEqual([-1, 1]);
 });
 
 test("a sphere behind a ray", () => {
-  const ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
-  const sphere = new Sphere();
+  const ray = Ray.of({
+    origin: Point.of({ z: 5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   const int = sphere.intersect(ray);
   expect(int.map((i) => i.t)).toEqual([-6, -4]);
 });
 
 test("intersect sets the object on the intersection", () => {
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  const sphere = new Sphere();
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   const int = sphere.intersect(ray);
   expect(int.map((i) => i.obj)).toEqual([sphere, sphere]);
 });
 
 test("a sphere's default transformation", () => {
-  const sphere = new Sphere();
   expect(sphere.transform).toEqual(Matrix.identity);
 });
 
 test("changing a sphere's transformation", () => {
-  let sphere = new Sphere();
   const transform = translation(2, 3, 4);
   sphere = sphere.setTransform(transform);
   expect(sphere.transform).toEqual(transform);
 });
 
 test("intersecting a scaled sphere with a ray", () => {
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  let sphere = new Sphere();
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   sphere = sphere.setTransform(scaling(2, 2, 2));
   const ints = sphere.intersect(ray);
   expect(ints.map((i) => i.t)).toEqual([3, 7]);
 });
 
 test("intersecting a translated sphere with a ray", () => {
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  let sphere = new Sphere();
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   sphere = sphere.setTransform(translation(5, 0, 0));
   const ints = sphere.intersect(ray);
   expect(ints.map((i) => i.t)).toEqual([]);
 });
 
 test("the normal on a sphere at a point on the x-axis", () => {
-  const sphere = new Sphere();
-  const n = sphere.normalAt(new Point(1, 0, 0));
-  expect(n).toEqual(new Vector(1, 0, 0));
+  const n = sphere.normalAt(Point.of({ x: 1 }));
+  expect(n).toEqual(Vector.of({ x: 1 }));
 });
 
 test("the normal on a sphere at a point on the y-axis", () => {
-  const sphere = new Sphere();
-  const n = sphere.normalAt(new Point(0, 1, 0));
-  expect(n).toEqual(new Vector(0, 1, 0));
+  const n = sphere.normalAt(Point.of({ y: 1 }));
+  expect(n).toEqual(Vector.of({ y: 1 }));
 });
 
 test("the normal on a sphere at a point on the z-axis", () => {
-  const sphere = new Sphere();
-  const n = sphere.normalAt(new Point(0, 0, 1));
-  expect(n).toEqual(new Vector(0, 0, 1));
+  const n = sphere.normalAt(Point.of({ z: 1 }));
+  expect(n).toEqual(Vector.of({ z: 1 }));
 });
 
 test("the normal on a sphere at a nonaxial point", () => {
-  const sphere = new Sphere();
   const n = sphere.normalAt(
-    new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3)
+    Point.of({ x: Math.sqrt(3) / 3, y: Math.sqrt(3) / 3, z: Math.sqrt(3) / 3 })
   );
   expect(n).toEqual(
-    new Vector(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3)
+    Vector.of({ x: Math.sqrt(3) / 3, y: Math.sqrt(3) / 3, z: Math.sqrt(3) / 3 })
   );
 });
 
 test("the normal is a normalized vector", () => {
-  const sphere = new Sphere();
   const n = sphere.normalAt(
-    new Point(Math.sqrt(3) / 3, Math.sqrt(3) / 3, Math.sqrt(3) / 3)
+    Point.of({ x: Math.sqrt(3) / 3, y: Math.sqrt(3) / 3, z: Math.sqrt(3) / 3 })
   );
   expect(n).toEqual(n.normalize());
 });
 
 test("computing the normal on a translated sphere", () => {
-  let sphere = new Sphere();
   sphere = sphere.setTransform(translation(0, 1, 0));
-  const n = sphere.normalAt(new Point(0, 1.70711, -0.70711));
+  const n = sphere.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
   expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, new Vector(0, 0.70711, -0.70711));
+  expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
 });
 
 test("computing the normal on a transformed sphere", () => {
-  let sphere = new Sphere();
   const m = scaling(1, 0.5, 1).multiply(rotationZ(Math.PI / 5));
   sphere = sphere.setTransform(m);
-  const n = sphere.normalAt(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
+  const n = sphere.normalAt(
+    Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })
+  );
   expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, new Vector(0, 0.97014, -0.24254));
+  expectToBeCloseToTuple(n, Vector.of({ y: 0.97014, z: -0.24254 }));
 });
 
 test("a sphere has a default material", () => {
-  const sphere = new Sphere();
-  expect(sphere.material).toEqual(new Material());
+  expect(sphere.material).toEqual(Material.of());
 });
 
 test("a sphere may be assigned a material", () => {
-  let sphere = new Sphere();
-  const m = new Material({ ambient: 1 });
+  const m = Material.of({ ambient: 1 });
   sphere = sphere.setMaterial(m);
   expect(sphere.material).toEqual(m);
 });
 
 test("a sphere is a shape", () => {
-  const sphere = new Sphere();
   expect(sphere.__proto__ instanceof Shape).toBe(true);
 });

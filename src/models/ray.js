@@ -1,7 +1,13 @@
+import { Point } from "./point";
+
 export class Ray {
   constructor(origin, direction) {
     this.origin = origin;
     this.direction = direction;
+  }
+
+  static of({ origin = Point.origin, direction } = {}) {
+    return new Ray(origin, direction);
   }
 
   position(t) {

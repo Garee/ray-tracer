@@ -1,24 +1,20 @@
 import { Intersection } from "../intersection";
 import { Shape } from "./shape";
 import { Vector } from "../vector";
+import { Epsilon } from "../../util/maths";
 
 export class Plane extends Shape {
   constructor(material, transform) {
     super(material, transform);
   }
 
-  // TODO: Refactor to pass class down to Shape.
-  setTransform(transform) {
-    return new Plane(this.material, transform);
-  }
-
-  setMaterial(material) {
-    return new Plane(material, this.transform);
+  static of({ material, transform } = {}) {
+    return new Plane(material, transform);
   }
 
   intersect(ray) {
     return super.intersect(ray, (r) => {
-      if (Math.abs(r.direction.y) < 0.000001) {
+      if (Math.abs(r.direction.y) < Epsilon) {
         return [];
       }
       const t = -r.origin.y / r.direction.y;
@@ -27,6 +23,6 @@ export class Plane extends Shape {
   }
 
   normalAt(point) {
-    return super.normalAt(point, () => new Vector(0, 1, 0));
+    return super.normalAt(point, () => Vector.of({ y: 1 }));
   }
 }

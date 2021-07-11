@@ -8,16 +8,8 @@ export class Sphere extends Shape {
     this.radius = 1;
   }
 
-  static of(material, transform) {
+  static of({ material, transform } = {}) {
     return new Sphere(material, transform);
-  }
-
-  setTransform(transform) {
-    return new Sphere(this.material, transform);
-  }
-
-  setMaterial(material) {
-    return new Sphere(material, this.transform);
   }
 
   intersect(ray) {

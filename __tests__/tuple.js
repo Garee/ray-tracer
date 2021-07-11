@@ -71,7 +71,7 @@ test("subtract a point from a vector", () => {
   const a = new Vector(3, 2, 1);
   const b = new Point(5, 6, 7);
   expect(() => a.subtract(b)).toThrow(
-    "You cannot subtract a Point from a Vector."
+    "A 'Point' cannot be subtracted from a 'Vector'."
   );
 });
 

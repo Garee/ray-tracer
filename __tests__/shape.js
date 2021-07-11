@@ -3,54 +3,67 @@ import { Matrix, Material, Point, Vector, Ray } from "../src/models";
 import { rotationZ, scaling, translation } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
+let shape, sphere;
+
+beforeEach(() => {
+  shape = Shape.of();
+  sphere = Sphere.of();
+});
+
 test("the default transformation", () => {
-  const shape = new Shape();
   expect(shape.transform).toEqual(Matrix.identity);
 });
 
 test("assiging a transformation", () => {
-  const shape = new Shape().setTransform(translation(2, 3, 4));
+  shape = shape.setTransform(translation(2, 3, 4));
   expect(shape.transform).toEqual(translation(2, 3, 4));
 });
 
 test("the default material", () => {
-  const shape = new Shape();
-  expect(shape.material).toEqual(new Material());
+  expect(shape.material).toEqual(Material.of());
 });
 
 test("assigning a material", () => {
-  const shape = new Shape().setMaterial(new Material({ ambient: 1 }));
+  shape = shape.setMaterial(Material.of({ ambient: 1 }));
   expect(shape.material.ambient).toEqual(1);
 });
 
 test("intersecting a scaled shape with a ray", () => {
-  const shape = new Sphere().setTransform(scaling(2, 2, 2));
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
+  shape = sphere.setTransform(scaling(2, 2, 2));
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   const tRay = shape.getTransformedRay(ray);
-  expect(tRay.origin).toEqual(new Point(0, 0, -2.5));
-  expect(tRay.direction).toEqual(new Vector(0, 0, 0.5));
+  expect(tRay.origin).toEqual(Point.of({ z: -2.5 }));
+  expect(tRay.direction).toEqual(Vector.of({ z: 0.5 }));
 });
 
 test("intersecting a translated shape with a ray", () => {
-  const shape = new Sphere().setTransform(translation(5, 0, 0));
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
+  shape = sphere.setTransform(translation(5, 0, 0));
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
   const tRay = shape.getTransformedRay(ray);
-  expect(tRay.origin).toEqual(new Point(-5, 0, -5));
-  expect(tRay.direction).toEqual(new Vector(0, 0, 1));
+  expect(tRay.origin).toEqual(Point.of({ x: -5, z: -5 }));
+  expect(tRay.direction).toEqual(Vector.of({ z: 1 }));
 });
 
 test("computing the normal on a translated shape", () => {
-  const shape = new Sphere().setTransform(translation(0, 1, 0));
-  const n = shape.normalAt(new Point(0, 1.70711, -0.70711));
+  shape = sphere.setTransform(translation(0, 1, 0));
+  const n = shape.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
   expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, new Vector(0, 0.70711, -0.70711));
+  expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
 });
 
 test("computing the normal on a transformed shape", () => {
-  const shape = new Sphere().setTransform(
+  shape = sphere.setTransform(
     scaling(1, 0.5, 1).multiply(rotationZ(Math.PI / 5))
   );
-  const n = shape.normalAt(new Point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
+  const n = shape.normalAt(
+    Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })
+  );
   expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, new Vector(0, 0.97014, -0.24254));
+  expectToBeCloseToTuple(n, Vector.of({ y: 0.97014, z: -0.24254 }));
 });
