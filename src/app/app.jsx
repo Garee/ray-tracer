@@ -6,7 +6,7 @@ import { Progress } from "./progress";
 import { ResolutionForm } from "./resolution-form";
 
 export function App() {
-  const [frame, setFrame] = useState();
+  const [pixels, setPixels] = useState();
   const [progress, setProgress] = useState(0);
   const [world] = useState(createWorld());
   const [canvasWidth, setCanvasWidth] = useState(100);
@@ -21,11 +21,10 @@ export function App() {
     setProgress(((row + 1) / camera.width) * 100);
   }
 
-  useEffect(() => {
-    raytrace(world, camera, onRowRender)
-      .then(setFrame)
-      .finally(() => setRaytracing(false));
-  }, [world, camera]);
+  function onRaytraceComplete({ pixels, workers }) {
+    setPixels(pixels);
+    workers.forEach((w) => w.terminate());
+  }
 
   function onResolutionFormSubmit({ width, height }) {
     setRaytracing(true);
@@ -34,13 +33,23 @@ export function App() {
     setCamera(createCamera(width, height, fov));
   }
 
+  useEffect(() => {
+    raytrace(world, camera, onRowRender)
+      .then(onRaytraceComplete)
+      .finally(() => setRaytracing(false));
+  }, [world, camera]);
+
   return (
     <>
       {raytracing ? (
         <Progress percent={progress} />
       ) : (
         <>
-          <AppCanvas frame={frame} width={canvasWidth} height={canvasHeight} />
+          <AppCanvas
+            pixels={pixels}
+            width={canvasWidth}
+            height={canvasHeight}
+          />
           <ResolutionForm onSubmit={onResolutionFormSubmit} />
         </>
       )}

@@ -12,37 +12,14 @@ export class Camera {
     this.pixelSize = (this.#halfWidth() * 2) / this.width;
   }
 
-  render(world) {
+  render(world, onRenderRow) {
     let canvas = new Canvas(this.width, this.height);
     for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        const ray = this.rayForPixelAt(x, y);
-        const color = world.colorAt(ray);
-        canvas = canvas.writePixel(x, y, color);
-      }
+      canvas = this.renderRow(x, world, canvas);
+      onRenderRow?.(x);
     }
 
     return canvas;
-  }
-
-  renderAsync(world, onRowRender) {
-    let canvas = new Canvas(this.width, this.height);
-    return this.renderRowsAsync(world, canvas, onRowRender);
-  }
-
-  renderRowsAsync(world, canvas, onRowRender, row = 0) {
-    if (row >= this.width) {
-      return Promise.resolve(canvas);
-    }
-    onRowRender?.(row);
-    return new Promise((resolve) => {
-      canvas = this.renderRow(row, world, canvas);
-      requestAnimationFrame(() => {
-        this.renderRowsAsync(world, canvas, onRowRender, row + 1).then((c) =>
-          resolve(c)
-        );
-      });
-    });
   }
 
   renderRow(x, world, canvas) {
