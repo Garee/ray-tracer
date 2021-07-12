@@ -9,16 +9,18 @@ export function App() {
   const [pixels, setPixels] = useState();
   const [progress, setProgress] = useState(0);
   const [world] = useState(createWorld());
-  const [canvasWidth, setCanvasWidth] = useState(100);
-  const [canvasHeight, setCanvasHeight] = useState(50);
+  const [canvasWidth, setCanvasWidth] = useState(200);
+  const [canvasHeight, setCanvasHeight] = useState(100);
   const [fov] = useState(Math.PI / 3);
   const [camera, setCamera] = useState(
     createCamera(canvasWidth, canvasHeight, fov)
   );
   const [raytracing, setRaytracing] = useState(true);
 
-  function onRowRender(row) {
-    setProgress(((row + 1) / camera.width) * 100);
+  let tracedRows = 0;
+  function onRowRender() {
+    tracedRows++;
+    setProgress(Math.min((tracedRows / camera.height) * 100, 100));
   }
 
   function onRaytraceComplete({ pixels, workers }) {
@@ -36,7 +38,10 @@ export function App() {
   useEffect(() => {
     raytrace(world, camera, onRowRender)
       .then(onRaytraceComplete)
-      .finally(() => setRaytracing(false));
+      .finally(() => {
+        setProgress(0);
+        setRaytracing(false);
+      });
   }, [world, camera]);
 
   return (
@@ -50,7 +55,11 @@ export function App() {
             width={canvasWidth}
             height={canvasHeight}
           />
-          <ResolutionForm onSubmit={onResolutionFormSubmit} />
+          <ResolutionForm
+            widthPx={canvasWidth}
+            heightPx={canvasHeight}
+            onSubmit={onResolutionFormSubmit}
+          />
         </>
       )}
     </>

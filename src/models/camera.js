@@ -12,18 +12,18 @@ export class Camera {
     this.pixelSize = (this.#halfWidth() * 2) / this.width;
   }
 
-  render(world, onRenderRow) {
+  render(world, onRenderRow, from = 0, to = this.height) {
     let canvas = new Canvas(this.width, this.height);
-    for (let x = 0; x < this.width; x++) {
-      canvas = this.renderRow(x, world, canvas);
-      onRenderRow?.(x);
+    for (let y = from; y < to; y++) {
+      canvas = this.renderRow(y, world, canvas);
+      onRenderRow?.(y);
     }
 
     return canvas;
   }
 
-  renderRow(x, world, canvas) {
-    for (let y = 0; y < this.height; y++) {
+  renderRow(y, world, canvas) {
+    for (let x = 0; x < this.width; x++) {
       const ray = this.rayForPixelAt(x, y);
       const color = world.colorAt(ray);
       canvas = canvas.writePixel(x, y, color);

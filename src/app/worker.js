@@ -1,7 +1,7 @@
 import { createWorld, createCamera } from "./scene";
 
 onmessage = function (e) {
-  const { width, height, fov } = e.data;
+  const { from, to, width, height, fov } = e.data;
 
   function onRowRender(row) {
     postMessage({ row });
@@ -9,8 +9,8 @@ onmessage = function (e) {
 
   const world = createWorld();
   const camera = createCamera(width, height, fov);
-  const frame = camera.render(world, onRowRender);
+  const frame = camera.render(world, onRowRender, from, to);
   const pixels = frame.scalePixels();
 
-  postMessage({ pixels });
+  postMessage({ from, to, pixels });
 };

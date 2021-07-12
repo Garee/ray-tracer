@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-export function ResolutionForm({ onSubmit }) {
-  const [width, setWidth] = useState(100);
-  const [height, setHeight] = useState(50);
+export function ResolutionForm({ widthPx, heightPx, onSubmit }) {
+  const [width, setWidth] = useState(widthPx);
+  const [height, setHeight] = useState(heightPx);
 
   function onFormSubmit(event) {
     event.preventDefault();
@@ -16,7 +16,7 @@ export function ResolutionForm({ onSubmit }) {
         <span>Width:</span>
         <input
           type="number"
-          onChange={(e) => setWidth(e.target.value)}
+          onChange={(e) => setWidth(parseInt(e.target.value))}
           defaultValue={width}
         />
       </label>
@@ -24,7 +24,7 @@ export function ResolutionForm({ onSubmit }) {
         <span>Height:</span>
         <input
           type="number"
-          onChange={(e) => setHeight(e.target.value)}
+          onChange={(e) => setHeight(parseInt(e.target.value))}
           defaultValue={height}
         />
       </label>
@@ -34,5 +34,7 @@ export function ResolutionForm({ onSubmit }) {
 }
 
 ResolutionForm.propTypes = {
+  widthPx: PropTypes.number,
+  heightPx: PropTypes.number,
   onSubmit: PropTypes.func,
 };
