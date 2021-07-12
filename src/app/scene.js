@@ -7,8 +7,9 @@ import {
   Vector,
   Material,
 } from "../models";
+import { RadialGradientPattern } from "../models/patterns/radial-gradient";
 import { Sphere, Plane } from "../models/shapes";
-import { view, translate } from "../models/transformations";
+import { view, translate, rotateY, scale } from "../models/transformations";
 
 export function createWorld() {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
@@ -16,7 +17,10 @@ export function createWorld() {
   const sphere1 = Sphere.of()
     .setMaterial(
       Material.of({
-        color: Color.green,
+        //color: Color.green,
+        pattern: RadialGradientPattern.of([Color.blue, Color.red]).setTransform(
+          rotateY(Math.PI / 3).multiply(scale(0.25, 0.25, 0.25))
+        ),
         diffuse: 0.7,
         ambient: 0.2,
       })
