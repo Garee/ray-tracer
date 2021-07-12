@@ -14,34 +14,34 @@ export class World {
     this.objs = objs;
   }
 
-  static defaultLight = new Light(new Point(-10, 10, -10), Color.white);
-
-  static defaultObjects = [
-    new Sphere().setMaterial(
-      new Material({
-        color: Color.of({ r: 0.8, g: 1, b: 0.6 }),
-        diffuse: 0.7,
-        specular: 0.2,
-      })
-    ),
-    new Sphere().setTransform(scale(0.5, 0.5, 0.5)),
-  ];
-
   static of({
-    lights = this.defaultLight,
+    lights = [this.defaultLight],
     objects = this.defaultObjects,
   } = {}) {
     return new World(lights, objects);
   }
 
-  static default(light) {
-    const lights = light ? [light] : [World.defaultLight];
-    return new World(lights, World.defaultObjects);
-  }
+  static defaultLight = Light.of({
+    position: Point.of({ x: -10, y: 10, z: -10 }),
+    intensity: Color.white,
+  });
+
+  static defaultObjects = [
+    Sphere.of().setMaterial(
+      Material.of({
+        color: Color.of({ r: 0.8, g: 1, b: 0.6 }),
+        diffuse: 0.7,
+        specular: 0.2,
+      })
+    ),
+    Sphere.of().setTransform(scale({ x: 0.5, y: 0.5, z: 0.5 })),
+  ];
+
+  static default = World.of();
 
   addObject(obj) {
     const objs = this.objs ?? [];
-    return new World(this.lights, [...objs, obj]);
+    return World.of({ lights: this.lights, objects: [...objs, obj] });
   }
 
   contains(obj) {
@@ -83,7 +83,7 @@ export class World {
       const v = light.position.subtract(point);
       const distance = v.magnitude();
       const direction = v.normalize();
-      const ray = new Ray(point, direction);
+      const ray = Ray.of({ origin: point, direction });
       const int = hit(this.intersect(ray));
       return !!int && int.t < distance;
     });

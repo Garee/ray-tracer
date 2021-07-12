@@ -10,7 +10,7 @@ export class Canvas {
     this.pixels = pixels || this.#initPixels();
   }
 
-  static of({ width = 100, height = 50, pixels = this.#initPixels() } = {}) {
+  static of({ width = 100, height = 50, pixels } = {}) {
     return new Canvas(width, height, pixels);
   }
 
@@ -66,6 +66,10 @@ export class Canvas {
     return this.#getPpmHeader().concat(lines);
   }
 
+  scalePixels() {
+    return this.pixels.map((p) => this.#scalePixel(p));
+  }
+
   #getPpmHeader() {
     const flavour = "P3";
     const dim = `${this.width} ${this.height}`;
@@ -80,11 +84,7 @@ export class Canvas {
     return Color.of({ r, g, b });
   }
 
-  scalePixels() {
-    return this.pixels.map((p) => this.#scalePixel(p));
-  }
-
-  #initPixels(color = Color.black) {
-    return new Array(this.width * this.height).fill(color);
+  #initPixels(fill = Color.black) {
+    return new Array(this.width * this.height).fill(fill);
   }
 }

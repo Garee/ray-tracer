@@ -17,7 +17,7 @@ export class Camera {
   }
 
   render(world, onRenderRow, from = 0, to = this.height) {
-    let canvas = new Canvas(this.width, this.height);
+    let canvas = Canvas.of({ width: this.width, height: this.height });
     for (let y = from; y < to; y++) {
       canvas = this.renderRow(y, world, canvas);
       onRenderRow?.(y);
@@ -46,14 +46,20 @@ export class Camera {
     // Compute the ray's direction vector.
     const zCanvas = -1;
     const invTransform = this.transform.inverse();
-    const px = invTransform.multiply(new Point(xWorld, yWorld, zCanvas));
-    const origin = invTransform.multiply(new Point());
+    const px = invTransform.multiply(
+      Point.of({ x: xWorld, y: yWorld, z: zCanvas })
+    );
+    const origin = invTransform.multiply(Point.origin);
     const direction = px.subtract(origin).normalize();
-    return new Ray(origin, direction);
+    return Ray.of({ origin, direction });
   }
 
   setTransform(transform) {
-    const c = new Camera(this.width, this.height, this.fov);
+    const c = Camera.of({
+      width: this.width,
+      height: this.height,
+      fov: this.fov,
+    });
     c.transform = transform;
     return c;
   }

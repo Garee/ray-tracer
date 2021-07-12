@@ -65,7 +65,7 @@ test("a sphere's default transformation", () => {
 });
 
 test("changing a sphere's transformation", () => {
-  const transform = translate(2, 3, 4);
+  const transform = translate({ x: 2, y: 3, z: 4 });
   sphere = sphere.setTransform(transform);
   expect(sphere.transform).toEqual(transform);
 });
@@ -75,7 +75,7 @@ test("intersecting a scaled sphere with a ray", () => {
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
   });
-  sphere = sphere.setTransform(scale(2, 2, 2));
+  sphere = sphere.setTransform(scale({ x: 2, y: 2, z: 2 }));
   const ints = sphere.intersect(ray);
   expect(ints.map((i) => i.t)).toEqual([3, 7]);
 });
@@ -85,7 +85,7 @@ test("intersecting a translated sphere with a ray", () => {
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
   });
-  sphere = sphere.setTransform(translate(5, 0, 0));
+  sphere = sphere.setTransform(translate({ x: 5 }));
   const ints = sphere.intersect(ray);
   expect(ints.map((i) => i.t)).toEqual([]);
 });
@@ -122,14 +122,14 @@ test("the normal is a normalized vector", () => {
 });
 
 test("computing the normal on a translated sphere", () => {
-  sphere = sphere.setTransform(translate(0, 1, 0));
+  sphere = sphere.setTransform(translate({ y: 1 }));
   const n = sphere.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
   expect(n).toBeDefined();
   expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
 });
 
 test("computing the normal on a transformed sphere", () => {
-  const m = scale(1, 0.5, 1).multiply(rotateZ(Math.PI / 5));
+  const m = scale({ x: 1, y: 0.5, z: 1 }).multiply(rotateZ(90));
   sphere = sphere.setTransform(m);
   const n = sphere.normalAt(
     Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })

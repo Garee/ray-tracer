@@ -37,7 +37,7 @@ test("the hit, when an intersection occurs on the inside", () => {
 
 test("the hit should offset the point", () => {
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  const shape = new Sphere().setTransform(translate(0, 0, 1));
+  const shape = new Sphere().setTransform(translate({ z: 1 }));
   const int = new Intersection(5, shape);
   const comps = prepareComputations(int, ray);
   expect(comps.overPoint.z).toBeLessThan(-0.000001 / 2);

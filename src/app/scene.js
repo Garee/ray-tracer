@@ -19,13 +19,13 @@ export function createWorld() {
       Material.of({
         //color: Color.green,
         pattern: RadialGradientPattern.of([Color.blue, Color.red]).setTransform(
-          rotateY(Math.PI / 3).multiply(scale(0.25, 0.25, 0.25))
+          rotateY(67.5).multiply(scale({ x: 0.25, y: 0.25, z: 0.25 }))
         ),
         diffuse: 0.7,
         ambient: 0.2,
       })
     )
-    .setTransform(translate(-0.5, 1, 0.5));
+    .setTransform(translate({ x: -0.5, y: 1, z: 0.5 }));
 
   const floorPlane = Plane.of().setMaterial(
     Material.of({
@@ -38,6 +38,10 @@ export function createWorld() {
 
 export function createCamera(width, height, fov) {
   return Camera.of({ width, height, fov }).setTransform(
-    view(Point.of({ y: 1.5, z: -5 }), Point.of({ y: 1 }), Vector.of({ y: 1 }))
+    view({
+      from: Point.of({ y: 1.5, z: -5 }),
+      to: Point.of({ y: 1 }),
+      up: Vector.of({ y: 1 }),
+    })
   );
 }

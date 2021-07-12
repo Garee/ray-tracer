@@ -8,6 +8,6 @@ export function isEven(a) {
   return Math.floor(a) % 2 === 0;
 }
 
-export function toRadian(degrees) {
+export function toRadians(degrees) {
   return (degrees * Math.PI) / 180;
 }

@@ -39,7 +39,7 @@ test("constructing a ray through a corner of the canvas", () => {
 
 test("constructing a ray when the camera is transformed", () => {
   const camera = new Camera(201, 101, Math.PI / 2).setTransform(
-    rotateY(Math.PI / 4).multiply(translate(0, -2, 5))
+    rotateY(45).multiply(translate({ y: -2, z: 5 }))
   );
   const ray = camera.rayForPixelAt(100, 50);
   expect(ray.origin).toEqual(new Point(0, 2, -5));
@@ -50,12 +50,12 @@ test("constructing a ray when the camera is transformed", () => {
 });
 
 test("rendering a world with a camera", () => {
-  const world = World.default();
+  const world = World.default;
   const from = new Point(0, 0, -5);
   const to = new Point();
   const up = new Vector(0, 1, 0);
   const camera = new Camera(11, 11, Math.PI / 2).setTransform(
-    view(from, to, up)
+    view({ from, to, up })
   );
   const canvas = camera.render(world);
   expect(canvas).toBeDefined();
