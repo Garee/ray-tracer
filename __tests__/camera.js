@@ -1,9 +1,5 @@
 import { Camera, Matrix, Point, Vector, Color, World } from "../src/models";
-import {
-  rotationY,
-  translation,
-  viewTransform,
-} from "../src/models/transformations";
+import { rotateY, translate, view } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
 test("constructing a camera", () => {
@@ -43,7 +39,7 @@ test("constructing a ray through a corner of the canvas", () => {
 
 test("constructing a ray when the camera is transformed", () => {
   const camera = new Camera(201, 101, Math.PI / 2).setTransform(
-    rotationY(Math.PI / 4).multiply(translation(0, -2, 5))
+    rotateY(Math.PI / 4).multiply(translate(0, -2, 5))
   );
   const ray = camera.rayForPixelAt(100, 50);
   expect(ray.origin).toEqual(new Point(0, 2, -5));
@@ -59,7 +55,7 @@ test("rendering a world with a camera", () => {
   const to = new Point();
   const up = new Vector(0, 1, 0);
   const camera = new Camera(11, 11, Math.PI / 2).setTransform(
-    viewTransform(from, to, up)
+    view(from, to, up)
   );
   const canvas = camera.render(world);
   expect(canvas).toBeDefined();

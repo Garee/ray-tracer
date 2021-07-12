@@ -1,6 +1,6 @@
 import { Sphere } from "./shapes/sphere";
 import { Material } from "./material";
-import { scaling } from "./transformations";
+import { scale } from "./transformations";
 import { Light, lighting } from "./light";
 import { Point } from "./point";
 import { Color } from "./color";
@@ -24,8 +24,15 @@ export class World {
         specular: 0.2,
       })
     ),
-    new Sphere().setTransform(scaling(0.5, 0.5, 0.5)),
+    new Sphere().setTransform(scale(0.5, 0.5, 0.5)),
   ];
+
+  static of({
+    lights = this.defaultLight,
+    objects = this.defaultObjects,
+  } = {}) {
+    return new World(lights, objects);
+  }
 
   static default(light) {
     const lights = light ? [light] : [World.defaultLight];

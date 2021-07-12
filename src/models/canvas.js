@@ -10,6 +10,10 @@ export class Canvas {
     this.pixels = pixels || this.#initPixels();
   }
 
+  static of({ width = 100, height = 50, pixels = this.#initPixels() } = {}) {
+    return new Canvas(width, height, pixels);
+  }
+
   getPixel(x, y) {
     return this.pixels[y * this.width + x];
   }
@@ -17,12 +21,15 @@ export class Canvas {
   writePixel(x, y, color) {
     const pixels = [...this.pixels];
     pixels[y * this.width + x] = color;
-    return new Canvas(this.width, this.height, pixels);
+    return Canvas.of({ width: this.width, height: this.height, pixels });
   }
 
   fill(color) {
-    const pixels = this.#initPixels(color);
-    return new Canvas(this.width, this.height, pixels);
+    return Canvas.of({
+      width: this.width,
+      height: this.height,
+      pixels: this.#initPixels(color),
+    });
   }
 
   // TODO: Refactor this function.

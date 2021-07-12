@@ -7,3 +7,7 @@ export function discriminant(a, b, c) {
 export function isEven(a) {
   return Math.floor(a) % 2 === 0;
 }
+
+export function toRadian(degrees) {
+  return (degrees * Math.PI) / 180;
+}

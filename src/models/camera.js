@@ -12,6 +12,10 @@ export class Camera {
     this.pixelSize = (this.#halfWidth() * 2) / this.width;
   }
 
+  static of({ width = 100, height = 50, fov = Math.PI / 2 } = {}) {
+    return new Camera(width, height, fov);
+  }
+
   render(world, onRenderRow, from = 0, to = this.height) {
     let canvas = new Canvas(this.width, this.height);
     for (let y = from; y < to; y++) {

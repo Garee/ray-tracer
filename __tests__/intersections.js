@@ -2,7 +2,7 @@ import { Point, Ray, Vector, Intersection } from "../src/models";
 import { Sphere } from "../src/models/shapes";
 import { prepareComputations } from "../src/models/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
-import { translation } from "../src/models/transformations";
+import { translate } from "../src/models/transformations";
 
 test("precomputing the state of an intersection", () => {
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
@@ -37,7 +37,7 @@ test("the hit, when an intersection occurs on the inside", () => {
 
 test("the hit should offset the point", () => {
   const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  const shape = new Sphere().setTransform(translation(0, 0, 1));
+  const shape = new Sphere().setTransform(translate(0, 0, 1));
   const int = new Intersection(5, shape);
   const comps = prepareComputations(int, ray);
   expect(comps.overPoint.z).toBeLessThan(-0.000001 / 2);

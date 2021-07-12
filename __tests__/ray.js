@@ -1,5 +1,5 @@
 import { Point, Vector, Ray } from "../src/models";
-import { translation, scaling } from "../src/models/transformations";
+import { translate, scale } from "../src/models/transformations";
 
 test("creating and querying a ray", () => {
   const origin = new Point(1, 2, 3);
@@ -19,16 +19,15 @@ test("computing a point from a distance", () => {
 
 test("translating a ray", () => {
   const ray = new Ray(new Point(1, 2, 3), new Vector(0, 1, 0));
-  const move = translation(3, 4, 5);
+  const move = translate(3, 4, 5);
   expect(ray.transform(move)).toEqual(
     new Ray(new Point(4, 6, 8), new Vector(0, 1, 0))
   );
 });
 
-test("scaling a ray", () => {
+test("scale a ray", () => {
   const ray = new Ray(new Point(1, 2, 3), new Vector(0, 1, 0));
-  const scale = scaling(2, 3, 4);
-  expect(ray.transform(scale)).toEqual(
+  expect(ray.transform(scale(2, 3, 4))).toEqual(
     new Ray(new Point(2, 6, 12), new Vector(0, 3, 0))
   );
 });

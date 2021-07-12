@@ -1,6 +1,6 @@
 import { Point, Vector, Ray, Matrix, Material } from "../src/models";
 import { Shape, Sphere } from "../src/models/shapes";
-import { translation, scaling, rotationZ } from "../src/models/transformations";
+import { translate, scale, rotateZ } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
 let sphere;
@@ -65,7 +65,7 @@ test("a sphere's default transformation", () => {
 });
 
 test("changing a sphere's transformation", () => {
-  const transform = translation(2, 3, 4);
+  const transform = translate(2, 3, 4);
   sphere = sphere.setTransform(transform);
   expect(sphere.transform).toEqual(transform);
 });
@@ -75,7 +75,7 @@ test("intersecting a scaled sphere with a ray", () => {
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
   });
-  sphere = sphere.setTransform(scaling(2, 2, 2));
+  sphere = sphere.setTransform(scale(2, 2, 2));
   const ints = sphere.intersect(ray);
   expect(ints.map((i) => i.t)).toEqual([3, 7]);
 });
@@ -85,7 +85,7 @@ test("intersecting a translated sphere with a ray", () => {
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
   });
-  sphere = sphere.setTransform(translation(5, 0, 0));
+  sphere = sphere.setTransform(translate(5, 0, 0));
   const ints = sphere.intersect(ray);
   expect(ints.map((i) => i.t)).toEqual([]);
 });
@@ -122,14 +122,14 @@ test("the normal is a normalized vector", () => {
 });
 
 test("computing the normal on a translated sphere", () => {
-  sphere = sphere.setTransform(translation(0, 1, 0));
+  sphere = sphere.setTransform(translate(0, 1, 0));
   const n = sphere.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
   expect(n).toBeDefined();
   expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
 });
 
 test("computing the normal on a transformed sphere", () => {
-  const m = scaling(1, 0.5, 1).multiply(rotationZ(Math.PI / 5));
+  const m = scale(1, 0.5, 1).multiply(rotateZ(Math.PI / 5));
   sphere = sphere.setTransform(m);
   const n = sphere.normalAt(
     Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })

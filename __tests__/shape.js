@@ -1,6 +1,6 @@
 import { Sphere } from "../src/models/shapes";
 import { Matrix, Material, Point, Vector, Ray } from "../src/models";
-import { rotationZ, scaling, translation } from "../src/models/transformations";
+import { rotateZ, scale, translate } from "../src/models/transformations";
 import { expectToBeCloseToTuple } from "../src/util";
 
 let shape;
@@ -14,8 +14,8 @@ test("the default transformation", () => {
 });
 
 test("assiging a transformation", () => {
-  shape = shape.setTransform(translation(2, 3, 4));
-  expect(shape.transform).toEqual(translation(2, 3, 4));
+  shape = shape.setTransform(translate(2, 3, 4));
+  expect(shape.transform).toEqual(translate(2, 3, 4));
 });
 
 test("the default material", () => {
@@ -28,7 +28,7 @@ test("assigning a material", () => {
 });
 
 test("intersecting a scaled shape with a ray", () => {
-  shape = shape.setTransform(scaling(2, 2, 2));
+  shape = shape.setTransform(scale(2, 2, 2));
   const ray = Ray.of({
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
@@ -39,7 +39,7 @@ test("intersecting a scaled shape with a ray", () => {
 });
 
 test("intersecting a translated shape with a ray", () => {
-  shape = shape.setTransform(translation(5, 0, 0));
+  shape = shape.setTransform(translate(5, 0, 0));
   const ray = Ray.of({
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
@@ -50,16 +50,14 @@ test("intersecting a translated shape with a ray", () => {
 });
 
 test("computing the normal on a translated shape", () => {
-  shape = shape.setTransform(translation(0, 1, 0));
+  shape = shape.setTransform(translate(0, 1, 0));
   const n = shape.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
   expect(n).toBeDefined();
   expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
 });
 
 test("computing the normal on a transformed shape", () => {
-  shape = shape.setTransform(
-    scaling(1, 0.5, 1).multiply(rotationZ(Math.PI / 5))
-  );
+  shape = shape.setTransform(scale(1, 0.5, 1).multiply(rotateZ(Math.PI / 5)));
   const n = shape.normalAt(
     Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })
   );

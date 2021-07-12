@@ -10,7 +10,7 @@ import {
 import { Sphere } from "../src/models/shapes";
 import { prepareComputations } from "../src/models/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
-import { translation } from "../src/models/transformations";
+import { translate } from "../src/models/transformations";
 
 test("creating a world", () => {
   const w = new World();
@@ -112,7 +112,7 @@ test("there is no shadow when an object is behind the point", () => {
 test("shadeHit is given an intersection in shadow", () => {
   const light = new Light(new Point(0, 0, -10), Color.white);
   const s1 = new Sphere();
-  const s2 = new Sphere().setTransform(translation(0, 0, 10));
+  const s2 = new Sphere().setTransform(translate(0, 0, 10));
   const world = World.default(light).addObject(s1).addObject(s2);
   const ray = new Ray(new Point(0, 0, 5), new Vector(0, 0, 1));
   const int = new Intersection(4, s2);

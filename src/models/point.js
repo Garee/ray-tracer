@@ -17,6 +17,6 @@ export class Point extends Tuple {
     }
 
     const { x, y, z } = super.add(t);
-    return new Point(x, y, z);
+    return Point.of({ x, y, z });
   }
 }

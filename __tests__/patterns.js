@@ -7,7 +7,7 @@ import {
   StripePattern,
 } from "../src/models/patterns";
 import { Sphere } from "../src/models/shapes";
-import { scaling, translation } from "../src/models/transformations";
+import { scale, translate } from "../src/models/transformations";
 
 describe("StripePattern", () => {
   let colors, pattern, sphere;
@@ -44,18 +44,18 @@ describe("StripePattern", () => {
   });
 
   test("stripes with an object transformation", () => {
-    sphere = sphere.setTransform(scaling(2, 2, 2));
+    sphere = sphere.setTransform(scale(2, 2, 2));
     expect(pattern.at(sphere, Point.of({ x: 1.5 }))).toEqual(Color.white);
   });
 
   test("stripes with a pattern transformation", () => {
-    pattern = pattern.setTransform(scaling(2, 2, 2));
+    pattern = pattern.setTransform(scale(2, 2, 2));
     expect(pattern.at(sphere, Point.of({ x: 1.5 }))).toEqual(Color.white);
   });
 
   test("stripes with both an object and a pattern transformation", () => {
-    sphere = sphere.setTransform(scaling(2, 2, 2));
-    pattern = pattern.setTransform(translation(0.5, 0, 0));
+    sphere = sphere.setTransform(scale(2, 2, 2));
+    pattern = pattern.setTransform(translate(0.5, 0, 0));
     expect(pattern.at(sphere, Point.of({ x: 2.5 }))).toEqual(Color.white);
   });
 });
@@ -81,25 +81,25 @@ describe("TestPattern", () => {
   });
 
   test("assigning a transformation", () => {
-    pattern = pattern.setTransform(translation(1, 2, 3));
-    expect(pattern.transform).toEqual(translation(1, 2, 3));
+    pattern = pattern.setTransform(translate(1, 2, 3));
+    expect(pattern.transform).toEqual(translate(1, 2, 3));
   });
 
   test("a pattern with an object transformation", () => {
-    sphere = sphere.setTransform(scaling(2, 2, 2));
+    sphere = sphere.setTransform(scale(2, 2, 2));
     const color = pattern.at(sphere, Point.of({ x: 2, y: 3, z: 4 }));
     expect(color).toEqual(Color.of({ r: 1, g: 1.5, b: 2 }));
   });
 
   test("a pattern with a pattern transformation", () => {
-    pattern = pattern.setTransform(scaling(2, 2, 2));
+    pattern = pattern.setTransform(scale(2, 2, 2));
     const color = pattern.at(sphere, Point.of({ x: 2, y: 3, z: 4 }));
     expect(color).toEqual(Color.of({ r: 1, g: 1.5, b: 2 }));
   });
 
   test("a pattern with both an object and a pattern transformation", () => {
-    sphere = sphere.setTransform(scaling(2, 2, 2));
-    pattern = pattern.setTransform(translation(0.5, 1, 1.5));
+    sphere = sphere.setTransform(scale(2, 2, 2));
+    pattern = pattern.setTransform(translate(0.5, 1, 1.5));
     const color = pattern.at(sphere, Point.of({ x: 2.5, y: 3, z: 3.5 }));
     expect(color).toEqual(Color.of({ r: 0.75, g: 0.5, b: 0.25 }));
   });

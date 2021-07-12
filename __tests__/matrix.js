@@ -1,7 +1,7 @@
 import { Matrix, Tuple } from "../src/models";
 
 test("construct and inspect a 4x4 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 2, 3, 4],
     [5.5, 6.5, 7.5, 8.5],
     [9, 10, 11, 12],
@@ -17,7 +17,7 @@ test("construct and inspect a 4x4 matrix", () => {
 });
 
 test("construct a 2x2 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [-3, 5],
     [1, -2],
   ]);
@@ -28,7 +28,7 @@ test("construct a 2x2 matrix", () => {
 });
 
 test("construct a 3x3 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [-3, 5, 0],
     [1, -2, -7],
     [0, 1, 1],
@@ -39,13 +39,13 @@ test("construct a 3x3 matrix", () => {
 });
 
 test("matrix equality", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     [9, 8, 7, 6],
     [5, 4, 3, 2],
   ]);
-  const n = new Matrix([
+  const n = Matrix.from([
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     [9, 8, 7, 6],
@@ -55,13 +55,13 @@ test("matrix equality", () => {
 });
 
 test("matrix inequality", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     [9, 8, 7, 6],
     [5, 4, 3, 2],
   ]);
-  const n = new Matrix([
+  const n = Matrix.from([
     [2, 3, 4, 5],
     [6, 7, 8, 9],
     [8, 7, 6, 5],
@@ -71,20 +71,20 @@ test("matrix inequality", () => {
 });
 
 test("multiply two matrices", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 2, 3, 4],
     [5, 6, 7, 8],
     [9, 8, 7, 6],
     [5, 4, 3, 2],
   ]);
-  const n = new Matrix([
+  const n = Matrix.from([
     [-2, 1, 2, 3],
     [3, 2, 1, -1],
     [4, 3, 6, 5],
     [1, 2, 7, 8],
   ]);
   expect(m.multiply(n)).toEqual(
-    new Matrix([
+    Matrix.from([
       [20, 22, 50, 48],
       [44, 54, 114, 108],
       [40, 58, 110, 102],
@@ -94,7 +94,7 @@ test("multiply two matrices", () => {
 });
 
 test("multiply a matrix and a tuple", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 2, 3, 4],
     [2, 4, 4, 2],
     [8, 6, 4, 1],
@@ -105,7 +105,7 @@ test("multiply a matrix and a tuple", () => {
 });
 
 test("multiply a matrix by the identity matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [0, 1, 2, 4],
     [1, 2, 4, 8],
     [2, 4, 8, 16],
@@ -115,14 +115,14 @@ test("multiply a matrix by the identity matrix", () => {
 });
 
 test("matrix transposition", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [0, 9, 3, 0],
     [9, 8, 0, 8],
     [1, 8, 5, 3],
     [0, 0, 5, 8],
   ]);
   expect(m.transpose()).toEqual(
-    new Matrix([
+    Matrix.from([
       [0, 9, 1, 0],
       [9, 8, 8, 0],
       [3, 0, 5, 5],
@@ -137,7 +137,7 @@ test("tranposition of an identity matrix", () => {
 });
 
 test("calculating the determinant of a 2x2 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 5],
     [-3, 2],
   ]);
@@ -145,13 +145,13 @@ test("calculating the determinant of a 2x2 matrix", () => {
 });
 
 test("submatrix of a 3x3 matrix is a 2x2 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 5, 0],
     [-3, 2, 7],
     [0, 6, -3],
   ]);
   expect(m.submatrix(0, 2)).toEqual(
-    new Matrix([
+    Matrix.from([
       [-3, 2],
       [0, 6],
     ])
@@ -159,14 +159,14 @@ test("submatrix of a 3x3 matrix is a 2x2 matrix", () => {
 });
 
 test("submatrix of a 4x4 matrix is a 3x3 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [-6, 1, 1, 6],
     [-8, 5, 8, 6],
     [-1, 0, 8, 2],
     [-7, 1, -1, 1],
   ]);
   expect(m.submatrix(2, 1)).toEqual(
-    new Matrix([
+    Matrix.from([
       [-6, 1, 6],
       [-8, 8, 6],
       [-7, -1, 1],
@@ -175,7 +175,7 @@ test("submatrix of a 4x4 matrix is a 3x3 matrix", () => {
 });
 
 test("minor of a 3x3 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [3, 5, 0],
     [2, -1, -7],
     [6, -1, 5],
@@ -187,7 +187,7 @@ test("minor of a 3x3 matrix", () => {
 });
 
 test("cofactor of a 3x3 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [3, 5, 0],
     [2, -1, -7],
     [6, -1, 5],
@@ -199,7 +199,7 @@ test("cofactor of a 3x3 matrix", () => {
 });
 
 test("calculating the determinant of a 3x3 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [1, 2, 6],
     [-5, 8, -4],
     [2, 6, 4],
@@ -211,7 +211,7 @@ test("calculating the determinant of a 3x3 matrix", () => {
 });
 
 test("calculating the determinant of a 4x4 matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [-2, -8, 3, 5],
     [-3, 1, 7, 3],
     [1, 2, -9, 6],
@@ -225,7 +225,7 @@ test("calculating the determinant of a 4x4 matrix", () => {
 });
 
 test("testing invertible matrix for invertability", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [6, 4, 4, 4],
     [5, 5, 7, 6],
     [4, -9, 3, -7],
@@ -236,7 +236,7 @@ test("testing invertible matrix for invertability", () => {
 });
 
 test("testing non-invertible matrix for invertability", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [4, 2, -2, -3],
     [9, 6, 2, 6],
     [0, -5, 1, -5],
@@ -247,7 +247,7 @@ test("testing non-invertible matrix for invertability", () => {
 });
 
 test("inverse of a matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [-5, 2, 6, -8],
     [1, -5, 1, 8],
     [7, 7, -6, -7],
@@ -262,7 +262,7 @@ test("inverse of a matrix", () => {
 });
 
 test("calculating the inverse of another matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [8, -5, 9, 2],
     [7, 5, 6, 1],
     [-6, 0, 9, 6],
@@ -280,7 +280,7 @@ test("calculating the inverse of another matrix", () => {
 });
 
 test("calculating the inverse of a third matrix", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [9, 3, 0, 9],
     [-5, -2, -6, -3],
     [-4, 9, 6, 4],
@@ -298,13 +298,13 @@ test("calculating the inverse of a third matrix", () => {
 });
 
 test("multiply a product by its inverse", () => {
-  const m = new Matrix([
+  const m = Matrix.from([
     [3, -9, 7, 3],
     [3, -8, 2, -9],
     [-4, 4, 4, 1],
     [-6, 5, -1, 1],
   ]);
-  const n = new Matrix([
+  const n = Matrix.from([
     [8, 2, 2, 2],
     [3, -1, 7, 0],
     [7, 0, 5, 4],

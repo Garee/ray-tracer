@@ -8,10 +8,10 @@ import {
   Material,
 } from "../models";
 import { Sphere, Plane } from "../models/shapes";
-import { viewTransform, translation } from "../models/transformations";
+import { view, translate } from "../models/transformations";
 
 export function createWorld() {
-  const light = new Light(Point.of({ x: -10, y: 10, z: -10 }), Color.white);
+  const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
 
   const sphere1 = Sphere.of()
     .setMaterial(
@@ -21,7 +21,7 @@ export function createWorld() {
         ambient: 0.2,
       })
     )
-    .setTransform(translation(-0.5, 1, 0.5));
+    .setTransform(translate(-0.5, 1, 0.5));
 
   const floorPlane = Plane.of().setMaterial(
     Material.of({
@@ -29,15 +29,11 @@ export function createWorld() {
     })
   );
 
-  return new World([light]).addObject(floorPlane).addObject(sphere1);
+  return World.of({ lights: [light], objects: [floorPlane, sphere1] });
 }
 
 export function createCamera(width, height, fov) {
-  return new Camera(width, height, fov).setTransform(
-    viewTransform(
-      Point.of({ y: 1.5, z: -5 }),
-      Point.of({ y: 1 }),
-      Vector.of({ y: 1 })
-    )
+  return Camera.of({ width, height, fov }).setTransform(
+    view(Point.of({ y: 1.5, z: -5 }), Point.of({ y: 1 }), Vector.of({ y: 1 }))
   );
 }
