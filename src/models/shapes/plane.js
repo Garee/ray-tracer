@@ -17,7 +17,7 @@ export class Plane extends Shape {
       return [];
     }
     const t = -ray.origin.y / ray.direction.y;
-    return [Intersection.of({ t, obj: this })];
+    return [Intersection.of({ t, object: this })];
   }
 
   _normalAt() {

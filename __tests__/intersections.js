@@ -5,40 +5,49 @@ import { expectToBeCloseToTuple } from "../src/util";
 import { translate } from "../src/models/transformations";
 
 test("precomputing the state of an intersection", () => {
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  const shape = new Sphere();
-  const int = new Intersection(4, shape);
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
+  const shape = Sphere.of();
+  const int = Intersection.of({ t: 4, object: shape });
   const comps = prepareComputations(int, ray);
   expect(comps.t).toEqual(int.t);
-  expect(comps.obj).toEqual(int.obj);
-  expect(comps.point).toEqual(new Point(0, 0, -1));
-  expectToBeCloseToTuple(comps.eye, new Vector(0, 0, -1));
-  expect(comps.normal).toEqual(new Vector(0, 0, -1));
+  expect(comps.object).toEqual(int.object);
+  expect(comps.point).toEqual(Point.of({ z: -1 }));
+  expectToBeCloseToTuple(comps.eye, Vector.of({ z: -1 }));
+  expect(comps.normal).toEqual(Vector.of({ z: -1 }));
 });
 
 test("the hit, when an intersection occurs on the outside", () => {
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  const shape = new Sphere();
-  const int = new Intersection(4, shape);
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
+  const shape = Sphere.of();
+  const int = Intersection.of({ t: 4, object: shape });
   const comps = prepareComputations(int, ray);
   expect(comps.inside).toBe(false);
 });
 
 test("the hit, when an intersection occurs on the inside", () => {
-  const ray = new Ray(new Point(), new Vector(0, 0, 1));
-  const shape = new Sphere();
-  const int = new Intersection(1, shape);
+  const ray = Ray.of({ origin: Point.origin, direction: Vector.of({ z: 1 }) });
+  const shape = Sphere.of();
+  const int = Intersection.of({ t: 1, object: shape });
   const comps = prepareComputations(int, ray);
-  expect(comps.point).toEqual(new Point(0, 0, 1));
-  expectToBeCloseToTuple(comps.eye, new Vector(0, 0, -1));
+  expect(comps.point).toEqual(Point.of({ z: 1 }));
+  expectToBeCloseToTuple(comps.eye, Vector.of({ z: -1 }));
   expect(comps.inside).toBe(true);
-  expectToBeCloseToTuple(comps.normal, new Vector(0, 0, -1));
+  expectToBeCloseToTuple(comps.normal, Vector.of({ z: -1 }));
 });
 
 test("the hit should offset the point", () => {
-  const ray = new Ray(new Point(0, 0, -5), new Vector(0, 0, 1));
-  const shape = new Sphere().setTransform(translate({ z: 1 }));
-  const int = new Intersection(5, shape);
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
+  const shape = Sphere.of().setTransform(translate({ z: 1 }));
+  const int = Intersection.of({ t: 5, object: shape });
   const comps = prepareComputations(int, ray);
   expect(comps.overPoint.z).toBeLessThan(-0.000001 / 2);
   expect(comps.point.z).toBeGreaterThan(comps.overPoint.z);

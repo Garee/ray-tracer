@@ -26,8 +26,8 @@ export class Sphere extends Shape {
     const t1 = (-b - Math.sqrt(d)) / (2 * a);
     const t2 = (-b + Math.sqrt(d)) / (2 * a);
     return [
-      Intersection.of({ t: t1, obj: this }),
-      Intersection.of({ t: t2, obj: this }),
+      Intersection.of({ t: t1, object: this }),
+      Intersection.of({ t: t2, object: this }),
     ];
   }
 

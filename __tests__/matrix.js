@@ -100,8 +100,8 @@ test("multiply a matrix and a tuple", () => {
     [8, 6, 4, 1],
     [0, 0, 0, 1],
   ]);
-  const t = new Tuple(1, 2, 3, 1);
-  expect(m.multiply(t)).toEqual(new Tuple(18, 24, 33, 1));
+  const t = Tuple.of({ x: 1, y: 2, z: 3, w: 1 });
+  expect(m.multiply(t)).toEqual(Tuple.of({ x: 18, y: 24, z: 33, w: 1 }));
 });
 
 test("multiply a matrix by the identity matrix", () => {

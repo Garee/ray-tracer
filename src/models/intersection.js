@@ -1,17 +1,10 @@
 export class Intersection {
-  constructor(t, obj) {
+  constructor(t, object) {
     this.t = t;
-    this.obj = obj;
+    this.object = object;
   }
 
-  static of({ t, obj } = {}) {
-    return new Intersection(t, obj);
+  static of({ t, object } = {}) {
+    return new Intersection(t, object);
   }
-}
-
-export function hit(intersections) {
-  return intersections
-    .filter((i) => i.t >= 0)
-    .sort((a, b) => a.t - b.t)
-    .shift();
 }

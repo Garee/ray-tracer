@@ -6,7 +6,7 @@ test("constructing a camera", () => {
   const width = 160;
   const height = 120;
   const fov = Math.PI / 2;
-  const camera = new Camera(width, height, fov);
+  const camera = Camera.of({ width, height, fov });
   expect(camera.width).toEqual(width);
   expect(camera.height).toEqual(height);
   expect(camera.fov).toEqual(fov);
@@ -14,33 +14,35 @@ test("constructing a camera", () => {
 });
 
 test("the pixel size for a horizontal canvas", () => {
-  const camera = new Camera(200, 125, Math.PI / 2);
+  const camera = Camera.of({ width: 200, height: 125, fov: Math.PI / 2 });
   expect(camera.pixelSize).toBeCloseTo(0.01);
 });
 
 test("the pixel size for a vertical canvas", () => {
-  const camera = new Camera(125, 200, Math.PI / 2);
+  const camera = Camera.of({ width: 125, height: 200, fov: Math.PI / 2 });
   expect(camera.pixelSize).toBeCloseTo(0.01);
 });
 
 test("constructing a ray through the center of the canvas", () => {
-  const camera = new Camera(201, 101, Math.PI / 2);
+  const camera = Camera.of({ width: 201, height: 101, fov: Math.PI / 2 });
   const ray = camera.rayForPixelAt(100, 50);
   expect(ray.origin).toEqual(new Point());
   expectToBeCloseToTuple(ray.direction, new Vector(0, 0, -1));
 });
 
 test("constructing a ray through a corner of the canvas", () => {
-  const camera = new Camera(201, 101, Math.PI / 2);
+  const camera = Camera.of({ width: 201, height: 101, fov: Math.PI / 2 });
   const ray = camera.rayForPixelAt(0, 0);
   expect(ray.origin).toEqual(new Point());
   expectToBeCloseToTuple(ray.direction, new Vector(0.66519, 0.33259, -0.66851));
 });
 
 test("constructing a ray when the camera is transformed", () => {
-  const camera = new Camera(201, 101, Math.PI / 2).setTransform(
-    rotateY(45).multiply(translate({ y: -2, z: 5 }))
-  );
+  const camera = Camera.of({
+    width: 201,
+    height: 101,
+    fov: Math.PI / 2,
+  }).setTransform(rotateY(45).multiply(translate({ y: -2, z: 5 })));
   const ray = camera.rayForPixelAt(100, 50);
   expect(ray.origin).toEqual(new Point(0, 2, -5));
   expectToBeCloseToTuple(
@@ -51,12 +53,14 @@ test("constructing a ray when the camera is transformed", () => {
 
 test("rendering a world with a camera", () => {
   const world = World.default;
-  const from = new Point(0, 0, -5);
-  const to = new Point();
-  const up = new Vector(0, 1, 0);
-  const camera = new Camera(11, 11, Math.PI / 2).setTransform(
-    view({ from, to, up })
-  );
+  const from = Point.of({ z: -5 });
+  const to = Point.origin;
+  const up = Vector.of({ y: 1 });
+  const camera = Camera.of({
+    width: 11,
+    height: 11,
+    fov: Math.PI / 2,
+  }).setTransform(view({ from, to, up }));
   const canvas = camera.render(world);
   expect(canvas).toBeDefined();
   expectToBeCloseToTuple(

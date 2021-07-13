@@ -5,13 +5,13 @@ import { Light, lighting } from "./light";
 import { Point } from "./point";
 import { Color } from "./color";
 import { prepareComputations } from "./intersections";
-import { hit } from "./intersection";
+import { hit } from "./intersections";
 import { Ray } from "./ray";
 
 export class World {
-  constructor(lights, objs) {
+  constructor(lights, objects) {
     this.lights = lights;
-    this.objs = objs;
+    this.objects = objects;
   }
 
   static of({
@@ -40,16 +40,16 @@ export class World {
   static default = World.of();
 
   addObject(obj) {
-    const objs = this.objs ?? [];
-    return World.of({ lights: this.lights, objects: [...objs, obj] });
+    const objects = this.objects ?? [];
+    return World.of({ lights: this.lights, objects: [...objects, obj] });
   }
 
   contains(obj) {
-    return this.objs.some((o) => o === obj);
+    return this.objects.some((o) => o === obj);
   }
 
   intersect(ray) {
-    return this.objs
+    return this.objects
       .reduce((acc, obj) => {
         return [...acc, ...obj.intersect(ray)];
       }, [])
@@ -57,10 +57,18 @@ export class World {
   }
 
   shadeHit(computations) {
-    const { obj, point, overPoint, eye, normal } = computations;
+    const { object, point, overPoint, eye, normal } = computations;
     const colors = this.lights.map((light) => {
       const isShadowed = this.isShadowed(overPoint);
-      return lighting(obj.material, obj, light, point, eye, normal, isShadowed);
+      return lighting(
+        object.material,
+        object,
+        light,
+        point,
+        eye,
+        normal,
+        isShadowed
+      );
     });
     return colors.reduce((acc, color) => {
       const { x: r, y: g, z: b } = acc.add(color);

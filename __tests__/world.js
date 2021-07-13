@@ -48,8 +48,8 @@ test("shading an intersection", () => {
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
   });
-  const shape = world.objs[0];
-  const intersection = Intersection.of({ t: 4, obj: shape });
+  const shape = world.objects[0];
+  const intersection = Intersection.of({ t: 4, object: shape });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
   expect(color).toBeDefined();
@@ -66,7 +66,7 @@ test("shading an intersection from the inside", () => {
   });
   world = World.of({ lights: [light] });
   const ray = Ray.of({ origin: Point.origin, direction: Vector.of({ z: 1 }) });
-  const intersection = new Intersection(0.5, Sphere.of());
+  const intersection = Intersection.of({ t: 0.5, object: Sphere.of() });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
   expect(color).toBeDefined();
@@ -97,9 +97,9 @@ test("the color when a ray hits", () => {
 });
 
 test("the color with an intersection behind the ray", () => {
-  const outer = world.objs[0];
+  const outer = world.objects[0];
   outer.material.ambient = 1;
-  const inner = world.objs[1];
+  const inner = world.objects[1];
   inner.material.ambient = 1;
   const ray = Ray.of({
     origin: Point.of({ z: 0.75 }),
@@ -127,13 +127,13 @@ test("there is no shadow when an object is behind the point", () => {
 
 test("shadeHit is given an intersection in shadow", () => {
   const light = Light.of({ position: Point.of({ z: -10 }) });
-  const shape = new Sphere().setTransform(translate({ z: 10 }));
+  const shape = Sphere.of().setTransform(translate({ z: 10 }));
   const world = World.of({ lights: [light], objects: [Sphere.of(), shape] });
   const ray = Ray.of({
     origin: Point.of({ z: 5 }),
     direction: Vector.of({ z: 1 }),
   });
-  const intersection = Intersection.of({ t: 4, obj: shape });
+  const intersection = Intersection.of({ t: 4, object: shape });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
   expect(color).toEqual(Color.of({ r: 0.1, g: 0.1, b: 0.1 }));

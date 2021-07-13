@@ -57,7 +57,7 @@ test("intersect sets the object on the intersection", () => {
     direction: Vector.of({ z: 1 }),
   });
   const int = sphere.intersect(ray);
-  expect(int.map((i) => i.obj)).toEqual([sphere, sphere]);
+  expect(int.map((i) => i.object)).toEqual([sphere, sphere]);
 });
 
 test("a sphere's default transformation", () => {
