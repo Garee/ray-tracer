@@ -16,21 +16,25 @@ export class Camera {
     return new Camera(width, height, fov);
   }
 
+  get aspectRatio() {
+    return this.width / this.height;
+  }
+
+  setTransform(transform) {
+    const c = Camera.of({
+      width: this.width,
+      height: this.height,
+      fov: toDegrees(this.fov),
+    });
+    c.transform = transform;
+    return c;
+  }
+
   render(world, onRenderRow, from = 0, to = this.height) {
     let canvas = Canvas.of({ width: this.width, height: this.height });
     for (let y = from; y < to; y++) {
-      canvas = this.renderRow(y, world, canvas);
+      canvas = this.#renderRow(y, world, canvas);
       onRenderRow?.(y);
-    }
-
-    return canvas;
-  }
-
-  renderRow(y, world, canvas) {
-    for (let x = 0; x < this.width; x++) {
-      const ray = this.rayForPixelAt(x, y);
-      const color = world.colorAt(ray);
-      canvas = canvas.writePixel(x, y, color);
     }
 
     return canvas;
@@ -54,18 +58,14 @@ export class Camera {
     return Ray.of({ origin, direction });
   }
 
-  setTransform(transform) {
-    const c = Camera.of({
-      width: this.width,
-      height: this.height,
-      fov: toDegrees(this.fov),
-    });
-    c.transform = transform;
-    return c;
-  }
+  #renderRow(y, world, canvas) {
+    for (let x = 0; x < this.width; x++) {
+      const ray = this.rayForPixelAt(x, y);
+      const color = world.colorAt(ray);
+      canvas = canvas.writePixel({ x, y, color });
+    }
 
-  aspectRatio() {
-    return this.width / this.height;
+    return canvas;
   }
 
   #halfView() {
@@ -73,20 +73,14 @@ export class Camera {
   }
 
   #halfWidth() {
-    const aspectRatio = this.aspectRatio();
-    if (aspectRatio >= 1) {
-      return this.#halfView();
-    }
-
-    return this.#halfView() * aspectRatio;
+    return this.aspectRatio >= 1
+      ? this.#halfView()
+      : this.#halfView() * this.aspectRatio;
   }
 
   #halfHeight() {
-    const aspectRatio = this.aspectRatio();
-    if (aspectRatio >= 1) {
-      return this.#halfView() / aspectRatio;
-    }
-
-    return this.#halfView();
+    return this.aspectRatio >= 1
+      ? this.#halfView() / this.aspectRatio
+      : this.#halfView();
   }
 }

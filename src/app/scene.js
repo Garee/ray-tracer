@@ -18,9 +18,12 @@ export function createWorld() {
     .setMaterial(
       Material.of({
         //color: Color.green,
-        pattern: RadialGradientPattern.of([Color.blue, Color.red]).setTransform(
-          rotateY(67.5).multiply(scale({ x: 0.25, y: 0.25, z: 0.25 }))
-        ),
+        pattern: RadialGradientPattern.of({
+          colors: [Color.blue, Color.red],
+          transform: rotateY(67.5).multiply(
+            scale({ x: 0.25, y: 0.25, z: 0.25 })
+          ),
+        }),
         diffuse: 0.7,
         ambient: 0.2,
       })

@@ -7,12 +7,12 @@ export function AppCanvas({ width, height, pixels }) {
     const ctx = el.getContext("2d");
 
     const imageData = ctx.createImageData(width, height);
-    pixels.forEach((p, i) => {
+    pixels.forEach(({ red, green, blue, alpha }, i) => {
       const idx = i * 4;
-      imageData.data[idx] = p.x;
-      imageData.data[idx + 1] = p.y;
-      imageData.data[idx + 2] = p.z;
-      imageData.data[idx + 3] = 255;
+      imageData.data[idx] = red;
+      imageData.data[idx + 1] = green;
+      imageData.data[idx + 2] = blue;
+      imageData.data[idx + 3] = alpha;
     });
 
     ctx.putImageData(imageData, 0, 0);

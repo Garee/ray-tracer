@@ -6,7 +6,7 @@ export class CheckPattern extends Pattern {
     super(colors, transform);
   }
 
-  static of(colors, transform) {
+  static of({ colors, transform } = {}) {
     return new CheckPattern(colors, transform);
   }
 

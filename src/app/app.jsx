@@ -11,7 +11,7 @@ export function App() {
   const [world] = useState(createWorld());
   const [canvasWidth, setCanvasWidth] = useState(200);
   const [canvasHeight, setCanvasHeight] = useState(100);
-  const [fov] = useState(67.5);
+  const [fov, setFov] = useState(67.5);
   const [camera, setCamera] = useState(
     createCamera(canvasWidth, canvasHeight, fov)
   );
@@ -28,10 +28,11 @@ export function App() {
     workers.forEach((w) => w.terminate());
   }
 
-  function onResolutionFormSubmit({ width, height }) {
+  function onResolutionFormSubmit({ width, height, fov }) {
     setRaytracing(true);
     setCanvasWidth(width);
     setCanvasHeight(height);
+    setFov(fov);
     setCamera(createCamera(width, height, fov));
   }
 
@@ -58,6 +59,7 @@ export function App() {
           <ResolutionForm
             widthPx={canvasWidth}
             heightPx={canvasHeight}
+            fovDegrees={fov}
             onSubmit={onResolutionFormSubmit}
           />
         </>

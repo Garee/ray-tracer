@@ -14,7 +14,7 @@ describe("StripePattern", () => {
 
   beforeEach(() => {
     colors = [Color.white, Color.black];
-    pattern = StripePattern.of(colors);
+    pattern = StripePattern.of({ colors });
     sphere = Sphere.of();
   });
 
@@ -107,7 +107,7 @@ describe("TestPattern", () => {
 
 describe("GradientPattern", () => {
   test("a gradient linearly interpolates between colors", () => {
-    const pattern = GradientPattern.of([Color.white, Color.black]);
+    const pattern = GradientPattern.of({ colors: [Color.white, Color.black] });
     expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
     expect(pattern.colorAt(Point.of({ x: 0.25 }))).toEqual(
       Color.of({ r: 0.75, g: 0.75, b: 0.75 })
@@ -123,7 +123,7 @@ describe("GradientPattern", () => {
 
 describe("RingPattern", () => {
   test("a ring should extend in both x and z", () => {
-    const pattern = RingPattern.of([Color.white, Color.black]);
+    const pattern = RingPattern.of({ colors: [Color.white, Color.black] });
     expect(pattern.colorAt(Point.origin)).toEqual(Color.white);
     expect(pattern.colorAt(Point.of({ x: 1 }))).toEqual(Color.black);
     expect(pattern.colorAt(Point.of({ z: 1 }))).toEqual(Color.black);
@@ -138,7 +138,7 @@ describe("CheckPattern", () => {
 
   beforeEach(() => {
     colors = [Color.white, Color.black];
-    pattern = CheckPattern.of(colors);
+    pattern = CheckPattern.of({ colors });
   });
 
   test("a check should repeat in x", () => {

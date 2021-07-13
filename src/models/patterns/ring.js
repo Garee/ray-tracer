@@ -6,7 +6,7 @@ export class RingPattern extends Pattern {
     super(colors, transform);
   }
 
-  static of(colors, transform) {
+  static of({ colors, transform } = {}) {
     return new RingPattern(colors, transform);
   }
 

@@ -10,7 +10,7 @@ onmessage = function (e) {
   const world = createWorld();
   const camera = createCamera(width, height, fov);
   const frame = camera.render(world, onRowRender, from, to);
-  const pixels = frame.scalePixels();
+  const pixels = frame.toRgba();
 
   postMessage({ from, to, pixels });
 };

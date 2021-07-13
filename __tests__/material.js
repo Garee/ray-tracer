@@ -103,7 +103,7 @@ test("lighting with the surface in shadow", () => {
 
 test("lighting with a pattern applied", () => {
   const m = Material.of({
-    pattern: StripePattern.of([Color.white, Color.black]),
+    pattern: StripePattern.of({ colors: [Color.white, Color.black] }),
     ambient: 1,
     diffuse: 0,
     specular: 0,

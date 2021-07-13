@@ -6,7 +6,7 @@ export class RadialGradientPattern extends Pattern {
     super(colors, transform);
   }
 
-  static of(colors, transform) {
+  static of({ colors, transform } = {}) {
     return new RadialGradientPattern(colors, transform);
   }
 

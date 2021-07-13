@@ -5,7 +5,7 @@ export class GradientPattern extends Pattern {
     super(colors, transform);
   }
 
-  static of(colors, transform) {
+  static of({ colors, transform } = {}) {
     return new GradientPattern(colors, transform);
   }
 

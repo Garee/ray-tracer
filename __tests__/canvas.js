@@ -9,8 +9,8 @@ test("create a canvas", () => {
 
 test("write pixels to a canvas", () => {
   let c = Canvas.of({ width: 10, height: 20 });
-  c = c.writePixel(2, 3, Color.red);
-  const px = c.getPixel(2, 3);
+  c = c.writePixel({ x: 2, y: 3, color: Color.red });
+  const px = c.getPixel({ x: 2, y: 3 });
   expect(px).toEqual(Color.red);
 });
 
@@ -23,9 +23,9 @@ test("create a PPM header from a cavas", () => {
 
 test("create a PPM file from a canvas", () => {
   let c = Canvas.of({ width: 5, height: 3 })
-    .writePixel(0, 0, Color.of({ r: 1.5 }))
-    .writePixel(2, 1, Color.of({ g: 0.5 }))
-    .writePixel(4, 2, Color.of({ r: -0.5, b: 1 }));
+    .writePixel({ x: 0, y: 0, color: Color.of({ r: 1.5 }) })
+    .writePixel({ x: 2, y: 1, color: Color.of({ g: 0.5 }) })
+    .writePixel({ x: 4, y: 2, color: Color.of({ r: -0.5, b: 1 }) });
   const ppm = c.toPpm();
   expect(ppm.slice(3, ppm.length - 1)).toEqual([
     "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0",

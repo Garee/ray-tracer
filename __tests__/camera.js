@@ -65,7 +65,7 @@ test("rendering a world with a camera", () => {
   const canvas = camera.render(world);
   expect(canvas).toBeDefined();
   expectToBeCloseToTuple(
-    canvas.getPixel(5, 5),
+    canvas.getPixel({ x: 5, y: 5 }),
     Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 })
   );
 });

@@ -14,17 +14,17 @@ export class Canvas {
     return new Canvas(width, height, pixels);
   }
 
-  getPixel(x, y) {
+  getPixel({ x, y }) {
     return this.pixels[y * this.width + x];
   }
 
-  writePixel(x, y, color) {
+  writePixel({ x, y, color }) {
     const pixels = [...this.pixels];
     pixels[y * this.width + x] = color;
     return Canvas.of({ width: this.width, height: this.height, pixels });
   }
 
-  fill(color) {
+  fill(color = Color.black) {
     return Canvas.of({
       width: this.width,
       height: this.height,
@@ -34,9 +34,7 @@ export class Canvas {
 
   // TODO: Refactor this function.
   toPpm() {
-    const rgbStrs = this.scalePixels().map(
-      (p) => `${p.red} ${p.green} ${p.blue}`
-    );
+    const rgbStrs = this.toRgba().map((p) => `${p.red} ${p.green} ${p.blue}`);
 
     const data = [];
     for (let row = 0; row < this.height; row++) {
@@ -66,8 +64,16 @@ export class Canvas {
     return this.#getPpmHeader().concat(lines);
   }
 
-  scalePixels() {
-    return this.pixels.map((p) => this.#scalePixel(p));
+  toRgba() {
+    return this.pixels.map((p) => this.#toRgba(p));
+  }
+
+  #toRgba(px) {
+    const max = this.#maxColor;
+    const red = Math.max(Math.min(Math.round(px.red * max), max), 0);
+    const green = Math.max(Math.min(Math.round(px.green * max), max), 0);
+    const blue = Math.max(Math.min(Math.round(px.blue * max), max), 0);
+    return { red, green, blue, alpha: max };
   }
 
   #getPpmHeader() {
@@ -75,13 +81,6 @@ export class Canvas {
     const dim = `${this.width} ${this.height}`;
     const maxColor = `${this.#maxColor}`;
     return [flavour, dim, maxColor];
-  }
-
-  #scalePixel(px, max = this.#maxColor) {
-    const r = Math.max(Math.min(Math.round(px.red * max), this.#maxColor), 0);
-    const g = Math.max(Math.min(Math.round(px.green * max), this.#maxColor), 0);
-    const b = Math.max(Math.min(Math.round(px.blue * max), this.#maxColor), 0);
-    return Color.of({ r, g, b });
   }
 
   #initPixels(fill = Color.black) {

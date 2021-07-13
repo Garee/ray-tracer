@@ -6,7 +6,7 @@ export class StripePattern extends Pattern {
     super(colors, transform);
   }
 
-  static of(colors, transform) {
+  static of({ colors, transform } = {}) {
     return new StripePattern(colors, transform);
   }
 
