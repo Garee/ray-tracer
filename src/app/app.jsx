@@ -11,7 +11,7 @@ export function App() {
   const [world] = useState(createWorld());
   const [canvasWidth, setCanvasWidth] = useState(200);
   const [canvasHeight, setCanvasHeight] = useState(100);
-  const [fov] = useState(Math.PI / 3);
+  const [fov] = useState(67.5);
   const [camera, setCamera] = useState(
     createCamera(canvasWidth, canvasHeight, fov)
   );

@@ -2,17 +2,17 @@ import { Canvas } from "./canvas";
 import { Matrix } from "./matrix";
 import { Point } from "./point";
 import { Ray } from "./ray";
-
+import { toDegrees, toRadians } from "../util/maths";
 export class Camera {
   constructor(width, height, fov) {
     this.width = width;
     this.height = height;
-    this.fov = fov;
+    this.fov = toRadians(fov);
     this.transform = Matrix.identity;
     this.pixelSize = (this.#halfWidth() * 2) / this.width;
   }
 
-  static of({ width = 100, height = 50, fov = Math.PI / 2 } = {}) {
+  static of({ width = 100, height = 50, fov = 90 } = {}) {
     return new Camera(width, height, fov);
   }
 
@@ -58,7 +58,7 @@ export class Camera {
     const c = Camera.of({
       width: this.width,
       height: this.height,
-      fov: this.fov,
+      fov: toDegrees(this.fov),
     });
     c.transform = transform;
     return c;

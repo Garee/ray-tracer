@@ -1,3 +1,5 @@
+import { toDegrees } from "../util/maths";
+
 export function raytrace(world, camera, onRowRender) {
   console.time("Raytracing");
   if (!window.Worker) {
@@ -26,7 +28,7 @@ export function raytrace(world, camera, onRowRender) {
         to: toRow,
         width: camera.width,
         height: camera.height,
-        fov: camera.fov,
+        fov: toDegrees(camera.fov),
       });
 
       worker.onmessage = ({ data }) => {
