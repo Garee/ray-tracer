@@ -7,7 +7,7 @@ export class Material {
     diffuse = 0.9,
     specular = 0.9,
     shininess = 200,
-    pattern,
+    pattern = undefined,
     reflective = 0.0,
   } = {}) {
     this.color = color;

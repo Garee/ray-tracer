@@ -61,7 +61,7 @@ export class World {
 
   // Return the color via reflection when the struck surface is reflective.
   reflectedColor({ object, overPoint, reflect }, remaining = this.#maxBounces) {
-    if (remaining <= 0 || object.material.reflective <= 0) {
+    if (remaining <= 0 || object.material.reflective === 0) {
       return Color.black;
     }
 

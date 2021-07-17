@@ -3,7 +3,7 @@ import { Point } from "../point";
 import { Matrix } from "../matrix";
 
 export class Shape {
-  constructor(material = new Material(), transform = Matrix.identity) {
+  constructor(material = Material.of(), transform = Matrix.identity) {
     if (new.target === Shape) {
       throw new Error(`The abstract class 'Shape' cannot be instantiated.`);
     }
