@@ -6,15 +6,16 @@ import {
   Ray,
   Vector,
   Intersection,
+  Material,
 } from "../src/models";
-import { Sphere } from "../src/models/shapes";
+import { Plane, Sphere } from "../src/models/shapes";
 import { prepareComputations } from "../src/models/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
 import { translate } from "../src/models/transformations";
 
 let world;
 beforeEach(() => {
-  world = World.default;
+  world = World.default();
 });
 
 test("creating a world", () => {
@@ -22,10 +23,11 @@ test("creating a world", () => {
 });
 
 test("the default world", () => {
-  const s1 = World.defaultObjects[0];
-  const s2 = World.defaultObjects[1];
-  expect(world.contains(s1)).toBe(true);
-  expect(world.contains(s2)).toBe(true);
+  const objects = World.defaultObjects();
+  const s1 = objects[0];
+  const s2 = objects[1];
+  expect(world.objects[0]).toEqual(s1);
+  expect(world.objects[1]).toEqual(s2);
   expect(world.lights[0]).toEqual(
     Light.of({
       position: Point.of({ x: -10, y: 10, z: -10 }),
@@ -137,4 +139,104 @@ test("shadeHit is given an intersection in shadow", () => {
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
   expect(color).toEqual(Color.of({ r: 0.1, g: 0.1, b: 0.1 }));
+});
+
+test("the reflected color for a nonreflective material", () => {
+  world.objects[1] = world.objects[1].setMaterial({
+    ...world.objects[1].material,
+    ambient: 1,
+  });
+  const ray = Ray.of({ direction: Vector.of({ z: 1 }) });
+  const intersection = Intersection.of({ t: 1, object: world.objects[1] });
+  const comps = prepareComputations(intersection, ray);
+  const color = world.reflectedColor(comps);
+  expect(color).toEqual(Color.black);
+});
+
+test("the reflected color for a reflective material", () => {
+  const shape = Plane.of({
+    material: Material.of({
+      reflective: 0.5,
+    }),
+    transform: translate({ x: 0, y: -1, z: 0 }),
+  });
+  world = world.addObject(shape);
+  const ray = Ray.of({
+    origin: Point.of({ x: 0, y: 0, z: -3 }),
+    direction: Vector.of({ x: 0, y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
+  });
+  const intersection = Intersection.of({ t: Math.sqrt(2), object: shape });
+  const comps = prepareComputations(intersection, ray);
+  const color = world.reflectedColor(comps);
+  expect(color).toBeDefined();
+  expectToBeCloseToTuple(
+    color,
+    Color.of({ r: 0.19032, g: 0.2379, b: 0.14274 }),
+    4
+  );
+});
+
+test("shadeHit() with a reflective material", () => {
+  const shape = Plane.of({
+    material: Material.of({
+      reflective: 0.5,
+    }),
+    transform: translate({ y: -1 }),
+  });
+  world = world.addObject(shape);
+  const ray = Ray.of({
+    origin: Point.of({ z: -3 }),
+    direction: Vector.of({ y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
+  });
+  const intersection = Intersection.of({ t: Math.sqrt(2), object: shape });
+  const comps = prepareComputations(intersection, ray);
+  const color = world.shadeHit(comps);
+  expect(color).toBeDefined();
+  expectToBeCloseToTuple(
+    color,
+    Color.of({ r: 0.87677, g: 0.92436, b: 0.82918 }),
+    4
+  );
+});
+
+test("colorAt() with mutually reflective surfaces", () => {
+  const light = Light.of({
+    position: Point.origin,
+    intensity: Color.white,
+  });
+  const lower = Plane.of({
+    material: Material.of({
+      reflective: 1,
+    }),
+    transform: translate({ y: -1 }),
+  });
+  const upper = Plane.of({
+    material: Material.of({
+      reflective: 1,
+    }),
+    transform: translate({ y: 1 }),
+  });
+  world = World.of({ lights: [light], objects: [lower, upper] });
+  const ray = Ray.of({ direction: Vector.of({ y: 1 }) });
+  // This will time out if there is infinite recursion.
+  const color = world.colorAt(ray);
+  expect(color).toBeDefined();
+});
+
+test("the reflected color at the maximum recursion depth", () => {
+  const shape = Plane.of({
+    material: Material.of({
+      reflective: 0.5,
+    }),
+    transform: translate({ y: -1 }),
+  });
+  world = world.addObject(shape);
+  const ray = Ray.of({
+    origin: Point.of({ z: -3 }),
+    direction: Vector.of({ y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
+  });
+  const intersection = Intersection.of({ t: Math.sqrt(2), object: shape });
+  const comps = prepareComputations(intersection, ray);
+  const color = world.reflectedColor(comps, 0);
+  expect(color).toEqual(Color.black);
 });

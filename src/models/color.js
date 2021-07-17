@@ -33,7 +33,8 @@ export class Color extends Tuple {
     }
 
     // Scalar
-    return super.multiply(c);
+    const { x: r, y: g, z: b } = super.multiply(c);
+    return Color.of({ r, g, b });
   }
 
   #multiplyColor(c) {

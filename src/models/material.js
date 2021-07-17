@@ -7,7 +7,8 @@ export class Material {
     diffuse = 0.9,
     specular = 0.9,
     shininess = 200,
-    pattern = undefined,
+    pattern,
+    reflective = 0.0,
   } = {}) {
     this.color = color;
     this.ambient = ambient;
@@ -15,6 +16,7 @@ export class Material {
     this.specular = specular;
     this.shininess = shininess;
     this.pattern = pattern;
+    this.reflective = reflective;
   }
 
   static of(props) {

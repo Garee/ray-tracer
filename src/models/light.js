@@ -13,7 +13,7 @@ export class Light {
 
 // The Phong Reflection Model
 export function lighting(
-  material,
+  material, // TODO: Remove this as it's available in object.
   object,
   light,
   point,

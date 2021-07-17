@@ -53,7 +53,7 @@ test("constructing a ray when the camera is transformed", () => {
 });
 
 test("rendering a world with a camera", () => {
-  const world = World.default;
+  const world = World.default();
   const from = Point.of({ z: -5 });
   const to = Point.origin;
   const up = Vector.of({ y: 1 });

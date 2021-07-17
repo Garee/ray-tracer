@@ -1,16 +1,19 @@
+import { Epsilon } from "../util";
+
 export function prepareComputations(intersection, ray) {
   const { t, object } = intersection;
   const point = ray.position(intersection.t);
   const eye = ray.direction.multiply(-1);
 
   // Does the normal point away from the eye vector?
-  let normal = intersection.object.normalAt(point);
+  let normal = object.normalAt(point);
   const inside = normal.dot(eye) < 0;
   if (inside) {
     normal = normal.multiply(-1); // Yes.
   }
 
-  const overPoint = point.add(normal.multiply(0.000001));
+  const overPoint = point.add(normal.multiply(Epsilon));
+  const reflect = ray.direction.reflect(normal);
 
   return {
     t,
@@ -20,6 +23,7 @@ export function prepareComputations(intersection, ray) {
     eye,
     normal,
     inside,
+    reflect,
   };
 }
 

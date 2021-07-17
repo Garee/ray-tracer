@@ -1,7 +1,7 @@
 import { Point, Ray, Vector, Intersection } from "../src/models";
-import { Sphere } from "../src/models/shapes";
+import { Plane, Sphere } from "../src/models/shapes";
 import { prepareComputations } from "../src/models/intersections";
-import { expectToBeCloseToTuple } from "../src/util";
+import { Epsilon, expectToBeCloseToTuple } from "../src/util";
 import { translate } from "../src/models/transformations";
 
 test("precomputing the state of an intersection", () => {
@@ -49,6 +49,19 @@ test("the hit should offset the point", () => {
   const shape = Sphere.of().setTransform(translate({ z: 1 }));
   const int = Intersection.of({ t: 5, object: shape });
   const comps = prepareComputations(int, ray);
-  expect(comps.overPoint.z).toBeLessThan(-0.000001 / 2);
+  expect(comps.overPoint.z).toBeLessThan(-Epsilon / 2);
   expect(comps.point.z).toBeGreaterThan(comps.overPoint.z);
+});
+
+test("precomputing the reflection vector", () => {
+  const shape = Plane.of();
+  const ray = Ray.of({
+    origin: Point.of({ y: 1, z: -1 }),
+    direction: Vector.of({ y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
+  });
+  const intersection = Intersection.of({ t: Math.sqrt(2), object: shape });
+  const comps = prepareComputations(intersection, ray);
+  expect(comps.reflect).toEqual(
+    Vector.of({ y: Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 })
+  );
 });
