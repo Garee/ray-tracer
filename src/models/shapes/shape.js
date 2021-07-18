@@ -15,11 +15,11 @@ export class Shape {
   }
 
   setTransform(transform) {
-    return new this.constructor(this.material, transform);
+    return new this.constructor(this.material, transform, this.parent);
   }
 
   setMaterial(material) {
-    return new this.constructor(material, this.transform);
+    return new this.constructor(material, this.transform, this.parent);
   }
 
   setParent(parent) {

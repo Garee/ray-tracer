@@ -7,31 +7,22 @@ import {
   Vector,
   Material,
 } from "../models";
-import { GradientPattern } from "../models/patterns";
-import { Plane, Cube, Sphere, Group } from "../models/shapes";
-import { view, translate, rotateY, scale } from "../models/transformations";
+import { Plane, Sphere, Group, Cylinder } from "../models/shapes";
+import {
+  view,
+  translate,
+  rotateX,
+  rotateY,
+  rotateZ,
+  scale,
+} from "../models/transformations";
 
 export function createWorld() {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
 
-  const cube = Cube.of({
-    material: Material.of({
-      pattern: GradientPattern.of({ colors: [Color.purple, Color.blue] }),
-      diffuse: 0.7,
-      ambient: 0.2,
-    }),
-    transform: translate({ x: -0.5, y: 1, z: 0.5 }).multiply(rotateY(45)),
-  });
-
-  const sphere = Sphere.of({
-    material: Material.of({ color: Color.green }),
-    transform: translate({ y: 1, x: 2 }),
-  });
-
-  const group = Group.of({
-    objects: [cube, sphere],
-    transform: scale({ x: 0.5, y: 0.5, z: 0.5 }),
-  });
+  const hexagon = createHexagon().setTransform(
+    translate({ y: 1 }).multiply(rotateX(-45))
+  );
 
   const floorPlane = Plane.of().setMaterial(
     Material.of({
@@ -40,7 +31,7 @@ export function createWorld() {
     })
   );
 
-  return World.of({ lights: [light], objects: [floorPlane, group] });
+  return World.of({ lights: [light], objects: [floorPlane, hexagon] });
 }
 
 export function createCamera(width, height, fov) {
@@ -51,4 +42,38 @@ export function createCamera(width, height, fov) {
       up: Vector.of({ y: 1 }),
     })
   );
+}
+
+function createHexagonCorner() {
+  return Sphere.of({
+    material: Material.of({ color: Color.blue }),
+    transform: translate({ z: -1 }).multiply(
+      scale({ x: 0.25, y: 0.25, z: 0.25 })
+    ),
+  });
+}
+
+function createHexagonEdge() {
+  return Cylinder.of({
+    min: 0,
+    max: 1,
+    material: Material.of({ color: Color.blue }),
+    transform: translate({ z: -1 })
+      .multiply(rotateY(-30))
+      .multiply(rotateZ(-90))
+      .multiply(scale({ x: 0.25, y: 1, z: 0.25 })),
+  });
+}
+
+function createHexagonSide() {
+  return Group.of({
+    objects: [createHexagonCorner(), createHexagonEdge()],
+  });
+}
+
+function createHexagon() {
+  const sides = new Array(6).fill(undefined).map((_, i) => {
+    return createHexagonSide().setTransform(rotateY(i * 60));
+  });
+  return Group.of({ objects: sides });
 }

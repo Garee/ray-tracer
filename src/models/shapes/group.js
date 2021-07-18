@@ -27,6 +27,24 @@ export class Group extends Shape {
     return this.objects.has(object);
   }
 
+  setMaterial(material) {
+    return Group.of({
+      material: material,
+      transform: this.transform,
+      objects: this.objects,
+      parent: this.parent,
+    });
+  }
+
+  setTransform(transform) {
+    return Group.of({
+      material: this.material,
+      transform: transform,
+      objects: this.objects,
+      parent: this.parent,
+    });
+  }
+
   _intersect(ray) {
     const intersections = Array.from(this.objects.values()).reduce(
       (acc, obj) => {
