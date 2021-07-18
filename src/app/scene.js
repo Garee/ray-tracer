@@ -7,21 +7,22 @@ import {
   Vector,
   Material,
 } from "../models";
-import { Plane, Cube } from "../models/shapes";
-import { view, translate, rotateY } from "../models/transformations";
+import { Plane, Cone } from "../models/shapes";
+import { view, translate } from "../models/transformations";
 
 export function createWorld() {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
 
-  const cube = Cube.of()
-    .setMaterial(
-      Material.of({
-        color: Color.yellow,
-        diffuse: 0.7,
-        ambient: 0.2,
-      })
-    )
-    .setTransform(translate({ x: -0.5, y: 1, z: 0.5 }).multiply(rotateY(45)));
+  const cube = Cone.of({
+    min: -1,
+    max: 0,
+    material: Material.of({
+      color: Color.purple,
+      diffuse: 0.7,
+      ambient: 0.2,
+    }),
+    transform: translate({ x: -0.5, y: 1, z: 0.5 }),
+  });
 
   const floorPlane = Plane.of().setMaterial(
     Material.of({
