@@ -15,7 +15,7 @@ export class Pattern {
   }
 
   at(obj, point) {
-    const objPoint = obj.transform.inverse().multiply(point);
+    const objPoint = obj.worldToObject(point);
     const patternPoint = this.transform.inverse().multiply(objPoint);
     const { x: r, y: g, z: b } = this.colorAt(patternPoint);
     return Color.of({ r, g, b });

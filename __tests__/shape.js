@@ -66,3 +66,7 @@ test("computing the normal on a transformed shape", () => {
   expect(n).toBeDefined();
   expectToBeCloseToTuple(n, Vector.of({ y: 0.97014, z: -0.24254 }));
 });
+
+test("a shape has a parent attribute", () => {
+  expect(shape.parent).toBeUndefined();
+});
