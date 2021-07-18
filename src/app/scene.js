@@ -7,38 +7,21 @@ import {
   Vector,
   Material,
 } from "../models";
-import { Sphere, Plane } from "../models/shapes";
-import { view, translate, scale } from "../models/transformations";
+import { Plane, Cube } from "../models/shapes";
+import { view, translate, rotateY } from "../models/transformations";
 
 export function createWorld() {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
 
-  const sphere1 = Sphere.of()
+  const cube = Cube.of()
     .setMaterial(
       Material.of({
-        color: Color.green,
+        color: Color.yellow,
         diffuse: 0.7,
         ambient: 0.2,
       })
     )
-    .setTransform(translate({ x: -0.5, y: 1, z: 0.5 }));
-
-  const sphere2 = Sphere.of()
-    .setMaterial(
-      Material.of({
-        color: Color.of({ r: 20 }),
-        diffuse: 0.01,
-        ambient: 0.01,
-        transparency: 0.9,
-        reflective: 0.9,
-        refractive: 1,
-      })
-    )
-    .setTransform(
-      translate({ x: 0.75, y: 0.75, z: -0.3 }).multiply(
-        scale({ x: 0.75, y: 0.75, z: 0.75 })
-      )
-    );
+    .setTransform(translate({ x: -0.5, y: 1, z: 0.5 }).multiply(rotateY(45)));
 
   const floorPlane = Plane.of().setMaterial(
     Material.of({
@@ -47,7 +30,7 @@ export function createWorld() {
     })
   );
 
-  return World.of({ lights: [light], objects: [floorPlane, sphere1, sphere2] });
+  return World.of({ lights: [light], objects: [floorPlane, cube] });
 }
 
 export function createCamera(width, height, fov) {

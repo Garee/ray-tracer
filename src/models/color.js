@@ -14,6 +14,9 @@ export class Color extends Tuple {
   static red = Color.of({ r: 1 });
   static green = Color.of({ g: 1 });
   static blue = Color.of({ b: 1 });
+  static yellow = Color.of({ r: 1, g: 1 });
+  static purple = Color.of({ r: 1, b: 1 });
+  static cyan = Color.of({ g: 1, b: 1 });
 
   get red() {
     return this.x;
