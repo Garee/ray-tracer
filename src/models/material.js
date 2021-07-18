@@ -9,6 +9,8 @@ export class Material {
     shininess = 200,
     pattern = undefined,
     reflective = 0.0,
+    transparency = 0.0,
+    refractive = 1.0,
   } = {}) {
     this.color = color;
     this.ambient = ambient;
@@ -17,6 +19,8 @@ export class Material {
     this.shininess = shininess;
     this.pattern = pattern;
     this.reflective = reflective;
+    this.transparency = transparency;
+    this.refractive = refractive;
   }
 
   static of(props) {

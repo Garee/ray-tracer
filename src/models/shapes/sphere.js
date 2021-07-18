@@ -1,6 +1,7 @@
 import { Shape } from "./shape";
 import { discriminant } from "../../util/maths";
 import { Intersection } from "../intersection";
+import { Material } from "../material";
 
 export class Sphere extends Shape {
   constructor(material, transform) {
@@ -10,6 +11,16 @@ export class Sphere extends Shape {
 
   static of({ material, transform } = {}) {
     return new Sphere(material, transform);
+  }
+
+  static glassy({ refractive = 1.5 } = {}) {
+    return Sphere.of({
+      material: Material.of({
+        ...this.material,
+        transparency: 1.0,
+        refractive,
+      }),
+    });
   }
 
   _intersect(ray) {

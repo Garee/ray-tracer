@@ -18,6 +18,7 @@ export function ResolutionForm({ widthPx, heightPx, fovDegrees, onSubmit }) {
         <input
           type="number"
           onChange={(e) => setWidth(parseInt(e.target.value))}
+          min="50"
           defaultValue={width}
         />
       </label>
@@ -25,6 +26,7 @@ export function ResolutionForm({ widthPx, heightPx, fovDegrees, onSubmit }) {
         <span>Height:</span>
         <input
           type="number"
+          min="50"
           onChange={(e) => setHeight(parseInt(e.target.value))}
           defaultValue={height}
         />

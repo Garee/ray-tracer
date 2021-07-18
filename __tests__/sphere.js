@@ -151,3 +151,10 @@ test("a sphere may be assigned a material", () => {
 test("a sphere is a shape", () => {
   expect(sphere.__proto__ instanceof Shape).toBe(true);
 });
+
+test("a helper for producing a sphere with a glassy material", () => {
+  const sphere = Sphere.glassy();
+  expect(sphere.transform).toEqual(Matrix.identity);
+  expect(sphere.material.transparency).toEqual(1.0);
+  expect(sphere.material.refractive).toEqual(1.5);
+});

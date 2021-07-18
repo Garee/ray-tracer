@@ -12,6 +12,7 @@ import { Plane, Sphere } from "../src/models/shapes";
 import { prepareComputations } from "../src/models/intersections";
 import { expectToBeCloseToTuple } from "../src/util";
 import { translate } from "../src/models/transformations";
+import { TestPattern } from "../src/util/testing";
 
 let world;
 beforeEach(() => {
@@ -50,8 +51,8 @@ test("shading an intersection", () => {
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
   });
-  const shape = world.objects[0];
-  const intersection = Intersection.of({ t: 4, object: shape });
+  const object = world.objects[0];
+  const intersection = Intersection.of({ t: 4, object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
   expect(color).toBeDefined();
@@ -129,13 +130,13 @@ test("there is no shadow when an object is behind the point", () => {
 
 test("shadeHit is given an intersection in shadow", () => {
   const light = Light.of({ position: Point.of({ z: -10 }) });
-  const shape = Sphere.of().setTransform(translate({ z: 10 }));
-  const world = World.of({ lights: [light], objects: [Sphere.of(), shape] });
+  const object = Sphere.of().setTransform(translate({ z: 10 }));
+  const world = World.of({ lights: [light], objects: [Sphere.of(), object] });
   const ray = Ray.of({
     origin: Point.of({ z: 5 }),
     direction: Vector.of({ z: 1 }),
   });
-  const intersection = Intersection.of({ t: 4, object: shape });
+  const intersection = Intersection.of({ t: 4, object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
   expect(color).toEqual(Color.of({ r: 0.1, g: 0.1, b: 0.1 }));
@@ -154,18 +155,18 @@ test("the reflected color for a nonreflective material", () => {
 });
 
 test("the reflected color for a reflective material", () => {
-  const shape = Plane.of({
+  const object = Plane.of({
     material: Material.of({
       reflective: 0.5,
     }),
     transform: translate({ x: 0, y: -1, z: 0 }),
   });
-  world = world.addObject(shape);
+  world = world.addObject(object);
   const ray = Ray.of({
     origin: Point.of({ x: 0, y: 0, z: -3 }),
     direction: Vector.of({ x: 0, y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
   });
-  const intersection = Intersection.of({ t: Math.sqrt(2), object: shape });
+  const intersection = Intersection.of({ t: Math.sqrt(2), object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.reflectedColor(comps);
   expect(color).toBeDefined();
@@ -177,18 +178,18 @@ test("the reflected color for a reflective material", () => {
 });
 
 test("shadeHit() with a reflective material", () => {
-  const shape = Plane.of({
+  const object = Plane.of({
     material: Material.of({
       reflective: 0.5,
     }),
     transform: translate({ y: -1 }),
   });
-  world = world.addObject(shape);
+  world = world.addObject(object);
   const ray = Ray.of({
     origin: Point.of({ z: -3 }),
     direction: Vector.of({ y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
   });
-  const intersection = Intersection.of({ t: Math.sqrt(2), object: shape });
+  const intersection = Intersection.of({ t: Math.sqrt(2), object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
   expect(color).toBeDefined();
@@ -224,19 +225,163 @@ test("colorAt() with mutually reflective surfaces", () => {
 });
 
 test("the reflected color at the maximum recursion depth", () => {
-  const shape = Plane.of({
+  const object = Plane.of({
     material: Material.of({
       reflective: 0.5,
     }),
     transform: translate({ y: -1 }),
   });
-  world = world.addObject(shape);
+  world = world.addObject(object);
   const ray = Ray.of({
     origin: Point.of({ z: -3 }),
     direction: Vector.of({ y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
   });
-  const intersection = Intersection.of({ t: Math.sqrt(2), object: shape });
+  const intersection = Intersection.of({ t: Math.sqrt(2), object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.reflectedColor(comps, 0);
   expect(color).toEqual(Color.black);
+});
+
+test("the refracted color with an opaque surface", () => {
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
+  const intersections = [
+    Intersection.of({ t: 4, object: world.objects[0] }),
+    Intersection.of({ t: 6, object: world.objects[0] }),
+  ];
+  const comps = prepareComputations(intersections[0], ray, intersections);
+  const color = world.refractedColor(comps);
+  expect(color).toEqual(Color.black);
+});
+
+test("the refracted color at the maximum recursive depth", () => {
+  world.objects[0] = world.objects[0].setMaterial(
+    Material.of({
+      transparency: 1.0,
+      refractive: 1.5,
+    })
+  );
+  const ray = Ray.of({
+    origin: Point.of({ z: -5 }),
+    direction: Vector.of({ z: 1 }),
+  });
+  const intersections = [
+    Intersection.of({ t: 4, object: world.objects[0] }),
+    Intersection.of({ t: 6, object: world.objects[0] }),
+  ];
+  const comps = prepareComputations(intersections[0], ray, intersections);
+  const color = world.reflectedColor(comps, 0);
+  expect(color).toEqual(Color.black);
+});
+
+test("the refracted color under total internal reflection", () => {
+  world.objects[0] = world.objects[0].setMaterial(
+    Material.of({
+      transparency: 1.0,
+      refractive: 1.5,
+    })
+  );
+  const ray = Ray.of({
+    origin: Point.of({ z: Math.sqrt(2) / 2 }),
+    direction: Vector.of({ y: 1 }),
+  });
+  const intersections = [
+    Intersection.of({ t: Math.sqrt(2) / 2, object: world.objects[0] }),
+    Intersection.of({ t: Math.sqrt(2) / 2, object: world.objects[0] }),
+  ];
+  const comps = prepareComputations(intersections[1], ray, intersections);
+  const color = world.reflectedColor(comps);
+  expect(color).toEqual(Color.black);
+});
+
+test("the refracted color with a refracted ray", () => {
+  world.objects[0] = world.objects[0].setMaterial(
+    Material.of({
+      ambient: 1.0,
+      pattern: new TestPattern(),
+    })
+  );
+  world.objects[1] = world.objects[1].setMaterial(
+    Material.of({
+      transparency: 1.0,
+      refractive: 1.5,
+    })
+  );
+  const ray = Ray.of({
+    origin: Point.of({ z: 0.1 }),
+    direction: Vector.of({ y: 1 }),
+  });
+  const intersections = [
+    Intersection.of({ t: -0.9899, object: world.objects[0] }),
+    Intersection.of({ t: -0.4899, object: world.objects[1] }),
+    Intersection.of({ t: 0.4899, object: world.objects[1] }),
+    Intersection.of({ t: 0.9899, object: world.objects[0] }),
+  ];
+  const comps = prepareComputations(intersections[2], ray, intersections);
+  const color = world.refractedColor(comps);
+  expect(color).toBeDefined();
+  expectToBeCloseToTuple(color, Color.of({ r: 0, g: 0.99888, b: 0.04725 }));
+});
+
+test("shadeHit() with a transparent material", () => {
+  const floor = Plane.of({
+    material: Material.of({
+      transparency: 0.5,
+      refractive: 1.5,
+    }),
+    transform: translate({ y: -1 }),
+  });
+  const ball = Sphere.of({
+    material: Material.of({
+      color: Color.red,
+      ambient: 0.5,
+    }),
+    transform: translate({ y: -3.5, z: -0.5 }),
+  });
+  world = world.addObject(floor).addObject(ball);
+  const ray = Ray.of({
+    origin: Point.of({ z: -3 }),
+    direction: Vector.of({ y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
+  });
+  const intersections = [Intersection.of({ t: Math.sqrt(2), object: floor })];
+  const comps = prepareComputations(intersections[0], ray, intersections);
+  const color = world.shadeHit(comps);
+  expect(color).toBeDefined();
+  expectToBeCloseToTuple(
+    color,
+    Color.of({ r: 0.93642, g: 0.68642, b: 0.68642 })
+  );
+});
+
+test("shadeHit with a reflective, transparent material", () => {
+  const floor = Plane.of({
+    material: Material.of({
+      transparency: 0.5,
+      refractive: 1.5,
+      reflective: 0.5,
+    }),
+    transform: translate({ y: -1 }),
+  });
+  const ball = Sphere.of({
+    material: Material.of({
+      color: Color.red,
+      ambient: 0.5,
+    }),
+    transform: translate({ y: -3.5, z: -0.5 }),
+  });
+  world = world.addObject(floor).addObject(ball);
+  const ray = Ray.of({
+    origin: Point.of({ z: -3 }),
+    direction: Vector.of({ y: -Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }),
+  });
+  const intersections = [Intersection.of({ t: Math.sqrt(2), object: floor })];
+  const comps = prepareComputations(intersections[0], ray, intersections);
+  const color = world.shadeHit(comps);
+  expect(color).toBeDefined();
+  expectToBeCloseToTuple(
+    color,
+    Color.of({ r: 0.93391, g: 0.69643, b: 0.69243 })
+  );
 });

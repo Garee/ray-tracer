@@ -7,9 +7,8 @@ import {
   Vector,
   Material,
 } from "../models";
-import { GradientPattern } from "../models/patterns/gradient";
 import { Sphere, Plane } from "../models/shapes";
-import { view, translate, rotateY, scale } from "../models/transformations";
+import { view, translate, scale } from "../models/transformations";
 
 export function createWorld() {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
@@ -27,18 +26,16 @@ export function createWorld() {
   const sphere2 = Sphere.of()
     .setMaterial(
       Material.of({
-        pattern: GradientPattern.of({
-          colors: [Color.blue, Color.red],
-          transform: rotateY(67.5).multiply(
-            scale({ x: 0.25, y: 0.25, z: 0.25 })
-          ),
-        }),
-        diffuse: 0.5,
-        ambient: 0.3,
+        color: Color.of({ r: 20 }),
+        diffuse: 0.01,
+        ambient: 0.01,
+        transparency: 0.9,
+        reflective: 0.9,
+        refractive: 1,
       })
     )
     .setTransform(
-      translate({ x: 0.75, y: 0.75, z: -0.1 }).multiply(
+      translate({ x: 0.75, y: 0.75, z: -0.3 }).multiply(
         scale({ x: 0.75, y: 0.75, z: 0.75 })
       )
     );
@@ -46,7 +43,7 @@ export function createWorld() {
   const floorPlane = Plane.of().setMaterial(
     Material.of({
       color: Color.white,
-      reflective: 0.5,
+      reflective: 1,
     })
   );
 

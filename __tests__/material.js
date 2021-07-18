@@ -18,6 +18,8 @@ test("the default material", () => {
       specular: 0.9,
       shininess: 200,
       reflective: 0.0,
+      transparency: 0.0,
+      refractive: 1.0,
     })
   );
 });

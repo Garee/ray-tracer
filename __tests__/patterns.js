@@ -1,6 +1,5 @@
 import { Color, Point, Matrix } from "../src/models";
 import {
-  Pattern,
   GradientPattern,
   RingPattern,
   CheckPattern,
@@ -8,6 +7,7 @@ import {
 } from "../src/models/patterns";
 import { Sphere } from "../src/models/shapes";
 import { scale, translate } from "../src/models/transformations";
+import { TestPattern } from "../src/util/testing";
 
 describe("StripePattern", () => {
   let colors, pattern, sphere;
@@ -61,12 +61,6 @@ describe("StripePattern", () => {
 });
 
 describe("TestPattern", () => {
-  class TestPattern extends Pattern {
-    colorAt({ x, y, z }) {
-      return Color.of({ r: x, g: y, b: z });
-    }
-  }
-
   let colors, pattern, sphere;
 
   beforeEach(() => {

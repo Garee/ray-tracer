@@ -4,7 +4,11 @@ import { scale } from "./transformations";
 import { Light, lighting } from "./light";
 import { Point } from "./point";
 import { Color } from "./color";
-import { prepareComputations } from "./intersections";
+import {
+  prepareComputations,
+  totalInternalReflection,
+  schlick,
+} from "./intersections";
 import { hit } from "./intersections";
 import { Ray } from "./ray";
 
@@ -70,12 +74,36 @@ export class World {
     return color.multiply(object.material.reflective);
   }
 
+  refractedColor(
+    { object, eye, normal, n1, n2, underPoint },
+    remaining = this.#maxBounces
+  ) {
+    const [isTIR, cosI, sin2t, ratio] = totalInternalReflection({
+      n1,
+      n2,
+      eye,
+      normal,
+    });
+    if (remaining <= 0 || object.material.transparency === 0 || isTIR) {
+      return Color.black;
+    }
+
+    const cosT = Math.sqrt(1 - sin2t);
+    const direction = normal
+      .multiply(ratio * cosI - cosT)
+      .subtract(eye.multiply(ratio));
+    const ray = Ray.of({ origin: underPoint, direction });
+    const color = this.colorAt(ray, remaining - 1);
+    return color.multiply(object.material.transparency);
+  }
+
   shadeHit(comps, remaining = this.#maxBounces) {
     const { object, point, overPoint, eye, normal } = comps;
+    const { material } = object;
     const colors = this.lights.map((light) => {
       const isShadowed = this.isShadowed(overPoint);
       const surface = lighting(
-        object.material,
+        material,
         object,
         light,
         point,
@@ -83,8 +111,18 @@ export class World {
         normal,
         isShadowed
       );
+
       const reflected = this.reflectedColor(comps, remaining);
-      return surface.add(reflected);
+      const refracted = this.refractedColor(comps, remaining);
+
+      if (material.reflective > 0 && material.transparency > 0) {
+        const reflectance = schlick(comps);
+        return surface
+          .add(reflected.multiply(reflectance))
+          .add(refracted.multiply(1 - reflectance));
+      }
+
+      return surface.add(reflected).add(refracted);
     });
     return colors.reduce((acc, color) => {
       const { x: r, y: g, z: b } = acc.add(color);
@@ -98,7 +136,7 @@ export class World {
       return Color.black;
     }
 
-    const comps = prepareComputations(intersection, ray);
+    const comps = prepareComputations(intersection, ray, [intersection]);
     return this.shadeHit(comps, remaining);
   }
 
