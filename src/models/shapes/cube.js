@@ -5,7 +5,6 @@ import { Vector } from "../vector";
 export class Cube extends Shape {
   constructor(material, transform) {
     super(material, transform);
-    this.radius = 1;
   }
 
   static of({ material, transform } = {}) {

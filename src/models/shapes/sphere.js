@@ -23,10 +23,10 @@ export class Sphere extends Shape {
     });
   }
 
-  _intersect(ray) {
-    const toRay = ray.origin.subtract(this.center);
-    const a = ray.direction.dot(ray.direction);
-    const b = 2 * ray.direction.dot(toRay);
+  _intersect({ origin, direction }) {
+    const toRay = origin.subtract(this.center);
+    const a = direction.dot(direction);
+    const b = 2 * direction.dot(toRay);
     const c = toRay.dot(toRay) - 1;
     const d = discriminant(a, b, c);
 
