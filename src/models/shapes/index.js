@@ -5,3 +5,4 @@ export * from "./cube";
 export * from "./cylinder";
 export * from "./cone";
 export * from "./group";
+export * from "./triangle";
