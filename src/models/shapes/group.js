@@ -3,7 +3,7 @@ import { Shape } from "./shape";
 export class Group extends Shape {
   constructor(material, transform, objects = new Set()) {
     super(material, transform);
-    this.objects = objects;
+    this.objects = new Set(objects);
     this.objects?.forEach((o) => (o.parent = this));
   }
 
