@@ -18,11 +18,24 @@ test("vertex records", () => {
 });
 
 test("parsing triangle faces", () => {
-  const { vertices, triangles } = ObjParser.of(
+  const { vertices, triangles, root } = ObjParser.of(
     __dirname + "/OBJ/scenario-3.obj"
   );
   const [v1, v2, v3, v4] = vertices;
   const [t1, t2] = triangles;
-  expect(t1).toEqual(Triangle.of({ p1: v1, p2: v2, p3: v3 }));
-  expect(t2).toEqual(Triangle.of({ p1: v1, p2: v3, p3: v4 }));
+  expect([t1.p1, t1.p2, t1.p3]).toEqual([v1, v2, v3]);
+  expect([t2.p1, t2.p2, t2.p3]).toEqual([v1, v3, v4]);
+  expect(root.objects).toEqual(triangles);
+});
+
+test("triangulating polygons", () => {
+  const { vertices, triangles, root } = ObjParser.of(
+    __dirname + "/OBJ/scenario-4.obj"
+  );
+  const [v1, v2, v3, v4, v5] = vertices;
+  const [t1, t2, t3] = triangles;
+  expect([t1.p1, t1.p2, t1.p3]).toEqual([v1, v2, v3]);
+  expect([t2.p1, t2.p2, t2.p3]).toEqual([v1, v3, v4]);
+  expect([t3.p1, t3.p2, t3.p3]).toEqual([v1, v4, v5]);
+  expect(root.objects).toEqual(triangles);
 });
