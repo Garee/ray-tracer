@@ -6,6 +6,7 @@ const isProduction = process.env.NODE_ENV === "production";
 function copyFiles() {
   fs.copyFileSync("src/app/index.html", "dist/index.html");
   fs.copyFileSync("assets/favicon.ico", "dist/favicon.ico");
+  fs.copyFileSync("assets/obj/diamond.obj", "dist/diamond.obj");
 }
 
 const options = {

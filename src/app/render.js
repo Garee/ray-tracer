@@ -1,16 +1,18 @@
 import { toDegrees } from "../util/maths";
 
-export function raytrace(world, camera, onRowRender) {
+export async function raytrace(world, camera, onRowRender) {
   console.time("Raytracing");
   if (!window.Worker) {
     console.info(`Web workers are not supported by this browser.`);
     return camera.render(world, onRowRender);
   }
 
+  const raw = await fetch("dodecahedron.obj").then((res) => res.text());
+
   const batches = [];
 
   return new Promise((resolve) => {
-    const nworkers = navigator.hardwareConcurrency || 4;
+    const nworkers = 12;
     console.debug(`Spawning ${nworkers} web workers.`);
 
     const workers = new Array(nworkers).fill().map((_, i) => {
@@ -29,6 +31,7 @@ export function raytrace(world, camera, onRowRender) {
         width: camera.width,
         height: camera.height,
         fov: toDegrees(camera.fov),
+        raw,
       });
 
       worker.onmessage = ({ data }) => {

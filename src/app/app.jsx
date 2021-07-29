@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createWorld, createCamera } from "./scene";
+import { createCamera } from "./scene";
 import { raytrace } from "./render";
 import { AppCanvas } from "./canvas";
 import { Progress } from "./progress";
@@ -8,7 +8,7 @@ import { ResolutionForm } from "./resolution-form";
 export function App() {
   const [pixels, setPixels] = useState();
   const [progress, setProgress] = useState(0);
-  const [world] = useState(createWorld());
+  const [world] = useState();
   const [canvasWidth, setCanvasWidth] = useState(200);
   const [canvasHeight, setCanvasHeight] = useState(100);
   const [fov, setFov] = useState(67.5);

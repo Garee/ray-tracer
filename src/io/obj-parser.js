@@ -1,16 +1,16 @@
-import * as fs from "fs";
 import { Point } from "../models";
 import { Triangle, Group } from "../models/shapes";
 
 export class ObjParser {
-  constructor(fpath) {
-    this.file = fs.readFileSync(fpath);
+  constructor(raw) {
+    this.raw = raw;
     this.objects = this.#parse();
     this.groups = this.#populateGroups();
+    this.root = this.toGroup();
   }
 
-  static of(fpath) {
-    return new ObjParser(fpath);
+  static of(raw) {
+    return new ObjParser(raw);
   }
 
   get vertices() {
@@ -22,7 +22,11 @@ export class ObjParser {
   }
 
   toGroup() {
-    return Group.of({ objects: this.groups });
+    if (this.groups.length > 0) {
+      return Group.of({ objects: this.groups });
+    }
+
+    return Group.of({ objects: this.triangles });
   }
 
   #populateGroups() {
@@ -61,9 +65,13 @@ export class ObjParser {
   }
 
   #parse() {
-    const lines = this.file.toString().split(/\r?\n/);
+    const lines = this.raw.split(/\r?\n/);
     return lines.reduce((acc, line) => {
-      const [cmd, ...args] = line.split(" ");
+      if (!line) {
+        return acc;
+      }
+
+      const [cmd, ...args] = line.replace(/\s+/g, " ").split(" ");
       const nargs = args.map((a) => Number(a));
       const [x, y, z] = nargs;
       switch (cmd.toLowerCase()) {

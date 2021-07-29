@@ -7,73 +7,45 @@ import {
   Vector,
   Material,
 } from "../models";
-import { Plane, Sphere, Group, Cylinder } from "../models/shapes";
-import {
-  view,
-  translate,
-  rotateX,
-  rotateY,
-  rotateZ,
-  scale,
-} from "../models/transformations";
+import { CheckPattern } from "../models/patterns";
+import { Plane, Cube } from "../models/shapes";
+import { view, translate, scale } from "../models/transformations";
 
-export function createWorld() {
+export function createWorld(objects) {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
 
-  const hexagon = createHexagon().setTransform(
-    translate({ y: 1 }).multiply(rotateX(-45))
-  );
+  const background = Cube.of({
+    material: Material.of({
+      color: Color.blue,
+    }),
+    transform: scale({ x: 20, y: 20, z: 4 }).multiply(translate({ z: 2 })),
+  });
 
-  const floorPlane = Plane.of().setMaterial(
-    Material.of({
-      color: Color.white,
-      reflective: 0.75,
-    })
-  );
+  const floorPlane = Plane.of({
+    material: Material.of({
+      pattern: CheckPattern.of({
+        colors: [Color.black, Color.of({ r: 0.1, g: 0.1, b: 0.1 })],
+      }),
+      color: Color.of({ r: 0.1, g: 0.1, b: 0.1 }),
+      reflective: 0.2,
+    }),
+    transform: translate({ y: -1 }),
+  });
 
-  return World.of({ lights: [light], objects: [floorPlane, hexagon] });
+  const diamond = objects[0].setMaterial(Material.of({ color: Color.red }));
+
+  return World.of({
+    lights: [light],
+    objects: [floorPlane, background, diamond],
+  });
 }
 
 export function createCamera(width, height, fov) {
   return Camera.of({ width, height, fov }).setTransform(
     view({
-      from: Point.of({ y: 1.5, z: -5 }),
-      to: Point.of({ y: 1 }),
-      up: Vector.of({ y: 1 }),
+      from: Point.of({ x: 1, y: 0, z: -6 }),
+      to: Point.of({ y: 0.1 }),
+      up: Vector.of({ y: 0.1 }),
     })
   );
-}
-
-function createHexagonCorner() {
-  return Sphere.of({
-    material: Material.of({ color: Color.blue }),
-    transform: translate({ z: -1 }).multiply(
-      scale({ x: 0.25, y: 0.25, z: 0.25 })
-    ),
-  });
-}
-
-function createHexagonEdge() {
-  return Cylinder.of({
-    min: 0,
-    max: 1,
-    material: Material.of({ color: Color.blue }),
-    transform: translate({ z: -1 })
-      .multiply(rotateY(-30))
-      .multiply(rotateZ(-90))
-      .multiply(scale({ x: 0.25, y: 1, z: 0.25 })),
-  });
-}
-
-function createHexagonSide() {
-  return Group.of({
-    objects: [createHexagonCorner(), createHexagonEdge()],
-  });
-}
-
-function createHexagon() {
-  const sides = new Array(6).fill(undefined).map((_, i) => {
-    return createHexagonSide().setTransform(rotateY(i * 60));
-  });
-  return Group.of({ objects: sides });
 }

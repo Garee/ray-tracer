@@ -1,21 +1,21 @@
 import { Shape } from "./shape";
 
 export class Group extends Shape {
-  constructor(material, transform, objects = new Set()) {
-    super(material, transform);
+  constructor(material, transform, parent, objects = new Set()) {
+    super(material, transform, parent);
+    objects?.forEach((o) => (o.parent = this));
     this.objects = new Set(objects);
-    this.objects?.forEach((o) => (o.parent = this));
   }
 
-  static of({ material, transform, objects } = {}) {
-    return new Group(material, transform, objects);
+  static of({ material, transform, parent, objects } = {}) {
+    return new Group(material, transform, parent, objects);
   }
 
   addObject(object) {
     return Group.of({
       material: this.material,
       transform: this.transform,
-      objects: new Set([...this.objects, object]),
+      objects: [...this.objects, object],
     });
   }
 
