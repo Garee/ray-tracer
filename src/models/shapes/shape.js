@@ -1,6 +1,7 @@
 import { Material } from "../material";
 import { Point } from "../point";
 import { Matrix } from "../matrix";
+import { Intersection } from "../intersection";
 
 export class Shape {
   constructor(material = Material.of(), transform = Matrix.identity, parent) {
@@ -34,9 +35,9 @@ export class Shape {
     return ray.transform(this.transform.inverse());
   }
 
-  normalAt(point) {
+  normalAt(point, hit) {
     const objPoint = this.worldToObject(point);
-    const objNormal = this._normalAt(objPoint);
+    const objNormal = this._normalAt(objPoint, hit);
     return this.normalToWorld(objNormal);
   }
 
@@ -56,6 +57,10 @@ export class Shape {
     }
 
     return normal;
+  }
+
+  intersectWithUV(t, u, v) {
+    return Intersection.of({ t, u, v, object: this });
   }
 
   _intersect() {

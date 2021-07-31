@@ -1,5 +1,5 @@
 import { Point, Ray, Vector, Intersection } from "../src/models";
-import { Plane, Sphere } from "../src/models/shapes";
+import { Plane, Sphere, Triangle } from "../src/models/shapes";
 import { prepareComputations, schlick } from "../src/models/intersections";
 import { Epsilon, expectToBeCloseToTuple } from "../src/util";
 import { translate, scale } from "../src/models/transformations";
@@ -154,4 +154,15 @@ test("the schlick approximation with small angle and n2 > n1", () => {
   const comps = prepareComputations(intersections[0], ray, intersections);
   const reflectance = schlick(comps);
   expect(reflectance).toBeCloseTo(0.48873);
+});
+
+test("an intersection can encapsulate u and v", () => {
+  const shape = Triangle.of({
+    p1: Point.of({ y: 1 }),
+    p2: Point.of({ x: -1 }),
+    p3: Point.of({ x: 1 }),
+  });
+  const { u, v } = shape.intersectWithUV(3.5, 0.2, 0.4);
+  expect(u).toEqual(0.2);
+  expect(v).toEqual(0.4);
 });

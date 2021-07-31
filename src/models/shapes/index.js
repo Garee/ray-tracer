@@ -6,3 +6,4 @@ export * from "./cylinder";
 export * from "./cone";
 export * from "./group";
 export * from "./triangle";
+export * from "./smooth-triangle";

@@ -6,7 +6,7 @@ export function prepareComputations(intersection, ray, intersections = []) {
   const eye = ray.direction.multiply(-1);
 
   // Does the normal point away from the eye vector?
-  let normal = object.normalAt(point);
+  let normal = object.normalAt(point, intersection);
   const inside = normal.dot(eye) < 0;
   if (inside) {
     normal = normal.multiply(-1); // Yes.
