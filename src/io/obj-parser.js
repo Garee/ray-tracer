@@ -1,5 +1,5 @@
-import { Point } from "../models";
-import { Triangle, Group } from "../models/shapes";
+import { Point, Vector } from "../models";
+import { SmoothTriangle, Triangle, Group } from "../models/shapes";
 
 export class ObjParser {
   constructor(raw) {
@@ -15,6 +15,10 @@ export class ObjParser {
 
   get vertices() {
     return this.#filterObjects(this.objects, "vertex");
+  }
+
+  get normals() {
+    return this.#filterObjects(this.objects, "normal");
   }
 
   get triangles() {
@@ -48,7 +52,7 @@ export class ObjParser {
     return acc.filter((a) => a.type === type).map((o) => o.object);
   }
 
-  #triangulate(acc, vindices) {
+  #createTriangles(acc, vindices) {
     const vertices = this.#filterObjects(acc, "vertex").filter((_, i) =>
       vindices.includes(i + 1)
     );
@@ -64,6 +68,45 @@ export class ObjParser {
     return triangles;
   }
 
+  #createSmoothTriangles(acc, args) {
+    const vindices = args.map((arg) => {
+      return Number(arg.slice(0, arg.indexOf("/")));
+    });
+
+    const nindices = args.map((arg) => {
+      return Number(arg.slice(arg.lastIndexOf("/") + 1)) - 1;
+    });
+
+    const vertices = this.#filterObjects(acc, "vertex").filter((_, i) =>
+      vindices.includes(i + 1)
+    );
+
+    const normals = this.#filterObjects(acc, "normal");
+
+    const triangles = [];
+    for (let i = 1; i < vertices.length - 1; i++) {
+      const triangle = SmoothTriangle.of({
+        p1: vertices[0],
+        p2: vertices[i],
+        p3: vertices[i + 1],
+        n1: normals[nindices[0]],
+        n2: normals[nindices[1]],
+        n3: normals[nindices[2]],
+      });
+      triangles.push({ type: "triangle", object: triangle });
+    }
+    return triangles;
+  }
+
+  #triangulate(acc, args) {
+    if (args[0].indexOf("/") !== -1) {
+      return this.#createSmoothTriangles(acc, args);
+    }
+
+    const vindices = args.map((a) => Number(a));
+    return this.#createTriangles(acc, vindices);
+  }
+
   #parse() {
     const lines = this.raw.split(/\r?\n/);
     return lines.reduce((acc, line) => {
@@ -72,8 +115,7 @@ export class ObjParser {
       }
 
       const [cmd, ...args] = line.replace(/\s+/g, " ").split(" ");
-      const nargs = args.map((a) => Number(a));
-      const [x, y, z] = nargs;
+      const [x, y, z] = args.map((a) => Number(a));
       switch (cmd.toLowerCase()) {
         case "v": // Vertex
           return acc.concat([
@@ -82,8 +124,15 @@ export class ObjParser {
               object: Point.of({ x, y, z }),
             },
           ]);
+        case "vn": // Vertex Normal
+          return acc.concat([
+            {
+              type: "normal",
+              object: Vector.of({ x, y, z }),
+            },
+          ]);
         case "f": // Face
-          return acc.concat(this.#triangulate(acc, nargs));
+          return acc.concat(this.#triangulate(acc, args));
         case "g": // Group
           return acc.concat({ type: "group", object: Group.of() });
         default:

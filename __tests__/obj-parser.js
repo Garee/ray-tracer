@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { ObjParser } from "../src/io";
-import { Point } from "../src/models";
+import { Point, Vector } from "../src/models";
 
 test("ignoring unrecognised lines", () => {
   const { vertices } = from(__dirname + "/OBJ/scenario-1.obj");
@@ -53,6 +53,25 @@ test("converting an OBJ file to a group", () => {
   const root = parser.toGroup();
   expect(root.contains(g1)).toBe(true);
   expect(root.contains(g2)).toBe(true);
+});
+
+test("vertex normal records", () => {
+  const parser = from(__dirname + "/OBJ/scenario-7.obj");
+  const [n1, n2, n3] = parser.normals;
+  expect(n1).toEqual(Vector.of({ z: 1 }));
+  expect(n2).toEqual(Vector.of({ x: 0.707, z: -0.707 }));
+  expect(n3).toEqual(Vector.of({ x: 1, y: 2, z: 3 }));
+});
+
+test("faces with normals", () => {
+  const parser = from(__dirname + "/OBJ/scenario-8.obj");
+  const [v1, v2, v3] = parser.vertices;
+  const [n1, n2, n3] = parser.normals;
+  const root = parser.toGroup();
+  const [t1, t2] = root.objects;
+  expect([t1.p1, t1.p2, t1.p3]).toEqual([v1, v2, v3]);
+  expect([t1.n1, t1.n2, t1.n3]).toEqual([n3, n1, n2]);
+  expect(t1).toEqual(t2);
 });
 
 function from(fpath) {
