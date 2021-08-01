@@ -1,7 +1,9 @@
+import { Shape } from "./shapes";
 import { intersectionAllowed } from "./intersections";
 
-export class CsgOp {
+export class CsgOp extends Shape {
   constructor(type, left, right) {
+    super();
     this.type = type;
     this.left = left;
     this.right = right;
@@ -39,7 +41,7 @@ export class CsgOp {
     return this.left === s || this.right === s;
   }
 
-  intersect(ray) {
+  _intersect(ray) {
     const lIntersections = this.left.intersect(ray);
     const rIntersections = this.right.intersect(ray);
     const intersections = lIntersections.concat(rIntersections);

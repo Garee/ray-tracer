@@ -7,12 +7,10 @@ export async function raytrace(world, camera, onRowRender) {
     return camera.render(world, onRowRender);
   }
 
-  const raw = await fetch("dodecahedron.obj").then((res) => res.text());
-
   const batches = [];
 
   return new Promise((resolve) => {
-    const nworkers = 12;
+    const nworkers = navigator.hardwareConcurrency || 4;
     console.debug(`Spawning ${nworkers} web workers.`);
 
     const workers = new Array(nworkers).fill().map((_, i) => {
@@ -31,7 +29,6 @@ export async function raytrace(world, camera, onRowRender) {
         width: camera.width,
         height: camera.height,
         fov: toDegrees(camera.fov),
-        raw,
       });
 
       worker.onmessage = ({ data }) => {
