@@ -1,6 +1,6 @@
 # Ray Tracer
 
-A Ray Tracer implementation using JavaScript and WebGL.
+A Ray Tracer implementation using JavaScript and Canvas.
 
 ## What's That?
 
@@ -15,6 +15,26 @@ The program uses the algorithm with these steps:
 3. If the surface is reflective, cast a new ray in the direction of reflection and recursively determine the reflected colour.
 4. If the surface is transparent, do the same in the direction of refraction.
 5. Combine all colours that contribute to a point and return that as the colour of the pixel.
+
+## Features
+
+- Primitive shapes including Cubes, Spheres and Triangles.
+- Material transparency, reflection and refraction.
+- Material patterns such as stripes and gradients.
+- Support for set operations: union, difference and intersect.
+- Normal interpolation for "smooth" models created using triangles.
+- A .obj file parser.
+
+## Future Improvements
+
+- [ ] Area lights and soft shadows.
+- [ ] Spotlights
+- [ ] Focal Blur
+- [ ] Motion Blur
+- [ ] Anti-aliasing
+- [ ] Texture Maps
+- [ ] Normal Perturbation
+- [ ] Torus Primitives
 
 ## Acknowledgements
 
