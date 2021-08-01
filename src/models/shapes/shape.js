@@ -63,6 +63,10 @@ export class Shape {
     return Intersection.of({ t, u, v, object: this });
   }
 
+  includes(s) {
+    return this === s;
+  }
+
   _intersect() {
     throw new Error(`Missing implementation in subclass.`);
   }

@@ -27,6 +27,16 @@ export class Group extends Shape {
     return this.objects.has(object);
   }
 
+  includes(object) {
+    this.objects.forEach((obj) => {
+      if (obj.includes(object)) {
+        return true;
+      }
+    });
+
+    return false;
+  }
+
   setMaterial(material) {
     return Group.of({
       material: material,

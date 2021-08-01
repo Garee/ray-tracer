@@ -1,4 +1,5 @@
 import { Epsilon } from "../util";
+import { OpType } from "./csg-op";
 
 export function prepareComputations(intersection, ray, intersections = []) {
   const { t, object } = intersection;
@@ -91,4 +92,17 @@ export function totalInternalReflection({ n1, n2, eye, normal }) {
   const cosI = eye.dot(normal);
   const sin2t = ratio ** 2 * (1 - cosI ** 2);
   return [n1 > n2 && sin2t > 1, cosI, sin2t, ratio];
+}
+
+export function intersectionAllowed(op, lhit, inl, inr) {
+  switch (op) {
+    case OpType.Union:
+      return (lhit && !inr) || (!lhit && !inl);
+    case OpType.Intersect:
+      return (lhit && inr) || (!lhit && inl);
+    case OpType.Difference:
+      return (lhit && !inr) || (!lhit && inl);
+    default:
+      return false;
+  }
 }
