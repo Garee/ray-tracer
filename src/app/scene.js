@@ -15,46 +15,32 @@ import { CheckPattern } from "../models/patterns";
 export function createWorld() {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
 
-  const cube = Cube.of({
-    material: Material.of({
-      color: Color.red,
-    }),
-    transform: scale({ x: 1.1, y: 1.1, z: 1.1 }),
-  });
-
   const sphere = Sphere.of({
     material: Material.of({
-      color: Color.yellow,
+      color: Color.blue,
     }),
-    transform: scale({ x: 1.5, y: 1.5, z: 1.5 }).multiply(
-      translate({ x: 0.5, y: 0.5 })
-    ),
   });
-
-  const obj = CsgOp.of({ type: OpType.Difference, left: cube, right: sphere });
 
   const floor = Plane.of({
     material: Material.of({
-      pattern: CheckPattern.of({
-        colors: [Color.white, Color.of({ r: 0.1, g: 0.1, b: 0.1 })],
-      }),
-      color: Color.of({ r: 0.1, g: 0.1, b: 0.1 }),
-      reflective: 0.2,
+      color: Color.white,
+      reflective: 0.7,
+      diffuse: 0.9,
     }),
     transform: translate({ y: -1 }),
   });
 
   return World.of({
     lights: [light],
-    objects: [floor, obj],
+    objects: [floor, sphere],
   });
 }
 
 export function createCamera(width, height, fov) {
   return Camera.of({ width, height, fov }).setTransform(
     view({
-      from: Point.of({ x: 3, y: 0, z: -6 }),
-      to: Point.of({ y: 0.1 }),
+      from: Point.of({ z: -4 }),
+      to: Point.origin,
       up: Vector.of({ y: 0.1 }),
     })
   );

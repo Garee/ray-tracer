@@ -2,6 +2,10 @@
 
 A Ray Tracer implementation using JavaScript and Canvas.
 
+<p align="center">
+  <img src="./assets/sphere.png" alt="A blue raytraced Sphere." />
+<p>
+
 ## What's That?
 
 A 3D renderer that casts rays of light around a scene. It follows their paths as they bounce around light sources to determine the final colour of each pixel.
