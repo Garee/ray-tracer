@@ -29,6 +29,20 @@ The program uses the algorithm with these steps:
 - Normal interpolation for "smooth" models created using triangles.
 - A .obj file parser.
 
+## Getting Started
+
+Install dependencies:
+
+`npm install`
+
+Compile and start the development server:
+
+`npm run dev`
+
+Create an optimised build:
+
+`npm run build:prod`
+
 ## Future Improvements
 
 - [ ] Area lights and soft shadows.
