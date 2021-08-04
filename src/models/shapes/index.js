@@ -7,3 +7,4 @@ export * from "./cone";
 export * from "./group";
 export * from "./triangle";
 export * from "./smooth-triangle";
+export * from "./csg-op";

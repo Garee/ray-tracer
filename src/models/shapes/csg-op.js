@@ -1,5 +1,5 @@
-import { Shape } from "./shapes";
-import { intersectionAllowed } from "./intersections";
+import { Shape } from ".";
+import { intersectionAllowed } from "../intersections";
 
 export class CsgOp extends Shape {
   constructor(type, left, right) {

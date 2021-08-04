@@ -1,5 +1,4 @@
-import { Sphere, Cube } from "../src/models/shapes";
-import { CsgOp, OpType } from "../src/models/csg-op";
+import { Sphere, Cube, CsgOp, OpType } from "../src/models/shapes";
 import { intersectionAllowed } from "../src/models/intersections";
 import { Intersection, Point, Vector, Ray } from "../src/models";
 import { translate } from "../src/models/transformations";

@@ -1,5 +1,5 @@
 import { Epsilon } from "../util";
-import { OpType } from "./csg-op";
+import { OpType } from "./shapes";
 
 export function prepareComputations(intersection, ray, intersections = []) {
   const { t, object } = intersection;
