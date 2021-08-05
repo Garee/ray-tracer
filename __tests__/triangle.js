@@ -1,6 +1,5 @@
 import { Point, Vector, Ray } from "../src/models";
 import { Triangle } from "../src/models/shapes";
-import { expectToBeCloseToTuple } from "../src/util";
 
 let triangle;
 beforeEach(() => {
@@ -17,7 +16,7 @@ test("constructing a triangle", () => {
   expect(triangle.p3).toEqual(Point.of({ x: 1 }));
   expect(triangle.e1).toEqual(Vector.of({ x: -1, y: -1 }));
   expect(triangle.e2).toEqual(Vector.of({ x: 1, y: -1 }));
-  expectToBeCloseToTuple(triangle.normal, Vector.of({ z: -1 }));
+  expect(triangle.normal.fixed).toEqual(Vector.of({ z: -1 }).fixed);
 });
 
 test("finding a normal on a triangle", () => {

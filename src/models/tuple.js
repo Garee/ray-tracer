@@ -92,4 +92,8 @@ export class Tuple {
   get array() {
     return [[this.x], [this.y], [this.z], [this.w]];
   }
+
+  get fixed() {
+    return this.array.map((x) => x[0].toFixed(3));
+  }
 }

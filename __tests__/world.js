@@ -9,10 +9,15 @@ import {
   Material,
 } from "../src/models";
 import { Plane, Sphere } from "../src/models/shapes";
+import { Pattern } from "../src/models/patterns";
 import { prepareComputations } from "../src/models/intersections";
-import { expectToBeCloseToTuple } from "../src/util";
 import { translate } from "../src/models/transformations";
-import { TestPattern } from "../src/util/testing";
+
+class TestPattern extends Pattern {
+  colorAt({ x, y, z }) {
+    return Color.of({ r: x, g: y, b: z });
+  }
+}
 
 let world;
 beforeEach(() => {
@@ -55,10 +60,8 @@ test("shading an intersection", () => {
   const intersection = Intersection.of({ t: 4, object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
-  expect(color).toBeDefined();
-  expectToBeCloseToTuple(
-    color,
-    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 })
+  expect(color.fixed).toEqual(
+    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 }).fixed
   );
 });
 
@@ -72,10 +75,8 @@ test("shading an intersection from the inside", () => {
   const intersection = Intersection.of({ t: 0.5, object: Sphere.of() });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
-  expect(color).toBeDefined();
-  expectToBeCloseToTuple(
-    color,
-    Color.of({ r: 0.90498, g: 0.90498, b: 0.90498 })
+  expect(color.fixed).toEqual(
+    Color.of({ r: 0.90498, g: 0.90498, b: 0.90498 }).fixed
   );
 });
 
@@ -92,10 +93,8 @@ test("the color when a ray hits", () => {
     origin: Point.of({ z: -5 }),
     direction: Vector.of({ z: 1 }),
   });
-  expect(ray).toBeDefined();
-  expectToBeCloseToTuple(
-    world.colorAt(ray),
-    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 })
+  expect(world.colorAt(ray).fixed).toEqual(
+    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 }).fixed
   );
 });
 
@@ -108,8 +107,7 @@ test("the color with an intersection behind the ray", () => {
     origin: Point.of({ z: 0.75 }),
     direction: Vector.of({ z: -1 }),
   });
-  expect(ray).toBeDefined();
-  expectToBeCloseToTuple(world.colorAt(ray), inner.material.color);
+  expect(world.colorAt(ray).fixed).toEqual(inner.material.color.fixed);
 });
 
 test("there is no shadow when nothing is collinear with point and light", () => {
@@ -169,11 +167,8 @@ test("the reflected color for a reflective material", () => {
   const intersection = Intersection.of({ t: Math.sqrt(2), object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.reflectedColor(comps);
-  expect(color).toBeDefined();
-  expectToBeCloseToTuple(
-    color,
-    Color.of({ r: 0.19032, g: 0.2379, b: 0.14274 }),
-    4
+  expect(color.fixed).toEqual(
+    Color.of({ r: 0.19032, g: 0.2379, b: 0.14274 }).fixed
   );
 });
 
@@ -192,11 +187,8 @@ test("shadeHit() with a reflective material", () => {
   const intersection = Intersection.of({ t: Math.sqrt(2), object: object });
   const comps = prepareComputations(intersection, ray);
   const color = world.shadeHit(comps);
-  expect(color).toBeDefined();
-  expectToBeCloseToTuple(
-    color,
-    Color.of({ r: 0.87677, g: 0.92436, b: 0.82918 }),
-    4
+  expect(color.fixed).toEqual(
+    Color.of({ r: 0.87677, g: 0.92436, b: 0.82918 }).fixed
   );
 });
 
@@ -321,8 +313,7 @@ test("the refracted color with a refracted ray", () => {
   ];
   const comps = prepareComputations(intersections[2], ray, intersections);
   const color = world.refractedColor(comps);
-  expect(color).toBeDefined();
-  expectToBeCloseToTuple(color, Color.of({ r: 0, g: 0.99888, b: 0.04725 }));
+  expect(color.fixed).toEqual(Color.of({ r: 0, g: 0.99888, b: 0.04725 }).fixed);
 });
 
 test("shadeHit() with a transparent material", () => {
@@ -348,10 +339,8 @@ test("shadeHit() with a transparent material", () => {
   const intersections = [Intersection.of({ t: Math.sqrt(2), object: floor })];
   const comps = prepareComputations(intersections[0], ray, intersections);
   const color = world.shadeHit(comps);
-  expect(color).toBeDefined();
-  expectToBeCloseToTuple(
-    color,
-    Color.of({ r: 0.93642, g: 0.68642, b: 0.68642 })
+  expect(color.fixed).toEqual(
+    Color.of({ r: 0.93642, g: 0.68642, b: 0.68642 }).fixed
   );
 });
 
@@ -379,9 +368,7 @@ test("shadeHit with a reflective, transparent material", () => {
   const intersections = [Intersection.of({ t: Math.sqrt(2), object: floor })];
   const comps = prepareComputations(intersections[0], ray, intersections);
   const color = world.shadeHit(comps);
-  expect(color).toBeDefined();
-  expectToBeCloseToTuple(
-    color,
-    Color.of({ r: 0.93391, g: 0.69643, b: 0.69243 })
+  expect(color.fixed).toEqual(
+    Color.of({ r: 0.93391, g: 0.69643, b: 0.69243 }).fixed
   );
 });

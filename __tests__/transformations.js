@@ -7,7 +7,6 @@ import {
   shear,
   view,
 } from "../src/models/transformations";
-import { expectToBeCloseToTuple } from "../src/util";
 import { Point, Vector, Matrix } from "../src/models";
 
 test("multiplying by a translate matrix", () => {
@@ -62,21 +61,17 @@ test("rotating a point around the x-axis", () => {
   const point = Point.of({ y: 1 });
   const hq = rotateX(45);
   const fq = rotateX(90);
-  expect(hq).toBeDefined();
-  expectToBeCloseToTuple(
-    hq.multiply(point),
-    Point.of({ y: Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 })
+  expect(hq.multiply(point).fixed).toEqual(
+    Point.of({ y: Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }).fixed
   );
-  expectToBeCloseToTuple(fq.multiply(point), Point.of({ z: 1 }));
+  expect(fq.multiply(point).fixed).toEqual(Point.of({ z: 1 }).fixed);
 });
 
 test("the inverse of an x-rotation rotates in the opposite direction", () => {
   const point = Point.of({ y: 1 });
   const hq = rotateX(45);
-  expect(hq).toBeDefined();
-  expectToBeCloseToTuple(
-    hq.inverse().multiply(point),
-    Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })
+  expect(hq.inverse().multiply(point).fixed).toEqual(
+    Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 }).fixed
   );
 });
 
@@ -84,24 +79,20 @@ test("rotation around the y-axis", () => {
   const point = Point.of({ z: 1 });
   const hq = rotateY(45);
   const fq = rotateY(90);
-  expect(hq).toBeDefined();
-  expectToBeCloseToTuple(
-    hq.multiply(point),
-    Point.of({ x: Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 })
+  expect(hq.multiply(point).fixed).toEqual(
+    Point.of({ x: Math.sqrt(2) / 2, z: Math.sqrt(2) / 2 }).fixed
   );
-  expectToBeCloseToTuple(fq.multiply(point), Point.of({ x: 1 }));
+  expect(fq.multiply(point).fixed).toEqual(Point.of({ x: 1 }).fixed);
 });
 
 test("rotation around the z-axis", () => {
   const point = Point.of({ y: 1 });
   const hq = rotateZ(45);
   const fq = rotateZ(90);
-  expect(hq).toBeDefined();
-  expectToBeCloseToTuple(
-    hq.multiply(point),
-    Point.of({ x: -Math.sqrt(2) / 2, y: Math.sqrt(2) / 2 })
+  expect(hq.multiply(point).fixed).toEqual(
+    Point.of({ x: -Math.sqrt(2) / 2, y: Math.sqrt(2) / 2 }).fixed
   );
-  expectToBeCloseToTuple(fq.multiply(point), Point.of({ x: -1 }));
+  expect(fq.multiply(point).fixed).toEqual(Point.of({ x: -1 }).fixed);
 });
 
 test("a shear transformation moves x in proportion to y", () => {

@@ -1,6 +1,5 @@
 import { Camera, Matrix, Point, Vector, Color, World } from "../src/models";
 import { rotateY, translate, view } from "../src/models/transformations";
-import { expectToBeCloseToTuple } from "../src/util/testing";
 import { toRadians } from "../src/util/maths";
 
 test("constructing a camera", () => {
@@ -28,14 +27,16 @@ test("constructing a ray through the center of the canvas", () => {
   const camera = Camera.of({ width: 201, height: 101, fov: 90 });
   const ray = camera.rayForPixelAt(100, 50);
   expect(ray.origin).toEqual(new Point());
-  expectToBeCloseToTuple(ray.direction, new Vector(0, 0, -1));
+  const expected = new Vector(0, 0, -1);
+  expect(ray.direction.fixed).toEqual(expected.fixed);
 });
 
 test("constructing a ray through a corner of the canvas", () => {
   const camera = Camera.of({ width: 201, height: 101, fov: 90 });
   const ray = camera.rayForPixelAt(0, 0);
   expect(ray.origin).toEqual(new Point());
-  expectToBeCloseToTuple(ray.direction, new Vector(0.66519, 0.33259, -0.66851));
+  const expected = new Vector(0.66519, 0.33259, -0.66851);
+  expect(ray.direction.fixed).toEqual(expected.fixed);
 });
 
 test("constructing a ray when the camera is transformed", () => {
@@ -46,10 +47,8 @@ test("constructing a ray when the camera is transformed", () => {
   }).setTransform(rotateY(45).multiply(translate({ y: -2, z: 5 })));
   const ray = camera.rayForPixelAt(100, 50);
   expect(ray.origin).toEqual(new Point(0, 2, -5));
-  expectToBeCloseToTuple(
-    ray.direction,
-    new Vector(Math.sqrt(2) / 2, 0, -Math.sqrt(2) / 2)
-  );
+  const expected = new Vector(Math.sqrt(2) / 2, 0, -Math.sqrt(2) / 2);
+  expect(ray.direction.fixed).toEqual(expected.fixed);
 });
 
 test("rendering a world with a camera", () => {
@@ -64,8 +63,7 @@ test("rendering a world with a camera", () => {
   }).setTransform(view({ from, to, up }));
   const canvas = camera.render(world);
   expect(canvas).toBeDefined();
-  expectToBeCloseToTuple(
-    canvas.getPixel({ x: 5, y: 5 }),
-    Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 })
-  );
+  const color = canvas.getPixel({ x: 5, y: 5 });
+  const expected = Color.of({ r: 0.38066, g: 0.47583, b: 0.2855 });
+  expect(color.fixed).toEqual(expected.fixed);
 });

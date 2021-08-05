@@ -1,7 +1,6 @@
 import { Sphere } from "../src/models/shapes";
 import { Matrix, Material, Point, Vector, Ray } from "../src/models";
 import { rotateZ, scale, translate } from "../src/models/transformations";
-import { expectToBeCloseToTuple } from "../src/util";
 
 let shape;
 
@@ -52,8 +51,7 @@ test("intersecting a translated shape with a ray", () => {
 test("computing the normal on a translated shape", () => {
   shape = shape.setTransform(translate({ y: 1 }));
   const n = shape.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
-  expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
+  expect(n.fixed).toEqual(Vector.of({ y: 0.70711, z: -0.70711 }).fixed);
 });
 
 test("computing the normal on a transformed shape", () => {
@@ -63,8 +61,7 @@ test("computing the normal on a transformed shape", () => {
   const n = shape.normalAt(
     Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })
   );
-  expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, Vector.of({ y: 0.97014, z: -0.24254 }));
+  expect(n.fixed).toEqual(Vector.of({ y: 0.97014, z: -0.24254 }).fixed);
 });
 
 test("a shape has a parent attribute", () => {

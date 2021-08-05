@@ -1,6 +1,5 @@
 import { StripePattern } from "../src/models/patterns";
 import { Color, Light, lighting, Material, Point, Vector } from "../src/models";
-import { expectToBeCloseToTuple } from "../src/util";
 import { Sphere } from "../src/models/shapes";
 
 let m, p;
@@ -56,11 +55,9 @@ test("lighting with eye opposite surface, light offset 45deg", () => {
     intensity: Color.white,
   });
   const obj = Sphere.of();
-  expect(light).toBeDefined();
-  expectToBeCloseToTuple(
-    lighting(m, obj, light, p, eye, normal),
-    Color.of({ r: 0.7364, g: 0.7364, b: 0.7364 })
-  );
+  const color = lighting(m, obj, light, p, eye, normal);
+  const expected = Color.of({ r: 0.7364, g: 0.7364, b: 0.7364 });
+  expect(color.fixed).toEqual(expected.fixed);
 });
 
 test("lighting with eye in the path of the reflection vector", () => {
@@ -71,11 +68,9 @@ test("lighting with eye in the path of the reflection vector", () => {
     intensity: Color.white,
   });
   const obj = Sphere.of();
-  expect(light).toBeDefined();
-  expectToBeCloseToTuple(
-    lighting(m, obj, light, p, eye, normal),
-    Color.of({ r: 1.6364, g: 1.6364, b: 1.6364 })
-  );
+  const color = lighting(m, obj, light, p, eye, normal);
+  const expected = Color.of({ r: 1.6364, g: 1.6364, b: 1.6364 });
+  expect(color.fixed).toEqual(expected.fixed);
 });
 
 test("lighting with the light behind the surface", () => {

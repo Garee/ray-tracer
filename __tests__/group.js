@@ -1,7 +1,6 @@
 import { Group, Sphere } from "../src/models/shapes";
 import { Matrix, Point, Vector, Ray } from "../src/models";
 import { translate, scale, rotateY } from "../src/models/transformations";
-import { expectToBeCloseToTuple } from "../src/util";
 
 let group;
 beforeEach(() => {
@@ -71,10 +70,9 @@ test("converting a point from world to object space", () => {
     transform: rotateY(90),
   });
   expect(g1).toBeDefined();
-  expectToBeCloseToTuple(
-    sphere.worldToObject(Point.of({ x: -2, z: -10 })),
-    Point.of({ z: -1 })
-  );
+  const objPoint = sphere.worldToObject(Point.of({ x: -2, z: -10 }));
+  const expected = Point.of({ z: -1 });
+  expect(objPoint.fixed).toEqual(expected.fixed);
 });
 
 test("converting a normal from object to world space", () => {
@@ -90,16 +88,15 @@ test("converting a normal from object to world space", () => {
     transform: rotateY(90),
   });
   expect(g1).toBeDefined();
-  expectToBeCloseToTuple(
-    sphere.normalToWorld(
-      Vector.of({
-        x: Math.sqrt(3) / 3,
-        y: Math.sqrt(3) / 3,
-        z: Math.sqrt(3) / 3,
-      })
-    ),
-    Vector.of({ x: 0.2857, y: 0.4286, z: -0.8571 })
+  const worldNormal = sphere.normalToWorld(
+    Vector.of({
+      x: Math.sqrt(3) / 3,
+      y: Math.sqrt(3) / 3,
+      z: Math.sqrt(3) / 3,
+    })
   );
+  const expected = Vector.of({ x: 0.2857, y: 0.4286, z: -0.8571 });
+  expect(worldNormal.fixed).toEqual(expected.fixed);
 });
 
 test("finding the normal on a child object", () => {
@@ -115,15 +112,13 @@ test("finding the normal on a child object", () => {
     transform: rotateY(90),
   });
   expect(g1).toBeDefined();
-  expectToBeCloseToTuple(
-    sphere.normalAt(
-      Point.of({
-        x: 1.7321,
-        y: 1.1547,
-        z: -5.5774,
-      })
-    ),
-    Vector.of({ x: 0.2857, y: 0.4286, z: -0.8571 }),
-    3
+  const normal = sphere.normalAt(
+    Point.of({
+      x: 1.7321,
+      y: 1.1547,
+      z: -5.5774,
+    })
   );
+  const expected = Vector.of({ x: 0.2857, y: 0.4286, z: -0.8571 });
+  expect(normal.fixed).toEqual(expected.fixed);
 });

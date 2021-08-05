@@ -1,7 +1,7 @@
 import { Point, Ray, Vector, Intersection } from "../src/models";
 import { Plane, Sphere, Triangle } from "../src/models/shapes";
 import { prepareComputations, schlick } from "../src/models/intersections";
-import { Epsilon, expectToBeCloseToTuple } from "../src/util";
+import { Epsilon } from "../src/util";
 import { translate, scale } from "../src/models/transformations";
 
 test("precomputing the state of an intersection", () => {
@@ -15,7 +15,7 @@ test("precomputing the state of an intersection", () => {
   expect(comps.t).toEqual(int.t);
   expect(comps.object).toEqual(int.object);
   expect(comps.point).toEqual(Point.of({ z: -1 }));
-  expectToBeCloseToTuple(comps.eye, Vector.of({ z: -1 }));
+  expect(comps.eye.fixed).toEqual(Vector.of({ z: -1 }).fixed);
   expect(comps.normal).toEqual(Vector.of({ z: -1 }));
 });
 
@@ -36,9 +36,9 @@ test("the hit, when an intersection occurs on the inside", () => {
   const int = Intersection.of({ t: 1, object: shape });
   const comps = prepareComputations(int, ray);
   expect(comps.point).toEqual(Point.of({ z: 1 }));
-  expectToBeCloseToTuple(comps.eye, Vector.of({ z: -1 }));
+  expect(comps.eye.fixed).toEqual(Vector.of({ z: -1 }).fixed);
   expect(comps.inside).toBe(true);
-  expectToBeCloseToTuple(comps.normal, Vector.of({ z: -1 }));
+  expect(comps.normal.fixed).toEqual(Vector.of({ z: -1 }).fixed);
 });
 
 test("the hit should offset the point", () => {

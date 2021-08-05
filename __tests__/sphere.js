@@ -1,7 +1,6 @@
 import { Point, Vector, Ray, Matrix, Material } from "../src/models";
 import { Shape, Sphere } from "../src/models/shapes";
 import { translate, scale, rotateZ } from "../src/models/transformations";
-import { expectToBeCloseToTuple } from "../src/util";
 
 let sphere;
 
@@ -124,8 +123,7 @@ test("the normal is a normalized vector", () => {
 test("computing the normal on a translated sphere", () => {
   sphere = sphere.setTransform(translate({ y: 1 }));
   const n = sphere.normalAt(Point.of({ y: 1.70711, z: -0.70711 }));
-  expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, Vector.of({ y: 0.70711, z: -0.70711 }));
+  expect(n.fixed).toEqual(Vector.of({ y: 0.70711, z: -0.70711 }).fixed);
 });
 
 test("computing the normal on a transformed sphere", () => {
@@ -134,8 +132,7 @@ test("computing the normal on a transformed sphere", () => {
   const n = sphere.normalAt(
     Point.of({ y: Math.sqrt(2) / 2, z: -Math.sqrt(2) / 2 })
   );
-  expect(n).toBeDefined();
-  expectToBeCloseToTuple(n, Vector.of({ y: 0.97014, z: -0.24254 }));
+  expect(n.fixed).toEqual(Vector.of({ y: 0.97014, z: -0.24254 }).fixed);
 });
 
 test("a sphere has a default material", () => {

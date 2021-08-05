@@ -1,5 +1,4 @@
 import { Tuple, Point, Vector, Color } from "../src/models";
-import { expectToBeCloseToTuple } from "../src/util";
 
 test("a tuple with w=1.0 is a point", () => {
   const a = Tuple.of({ x: 4.3, y: -4.2, z: 3.1, w: 1 });
@@ -177,8 +176,7 @@ test("subtract two colors", () => {
   const a = Color.of({ r: 0.9, g: 0.6, b: 0.75 });
   const b = Color.of({ r: 0.7, g: 0.1, b: 0.25 });
   const c = a.subtract(b);
-  expect(c).toBeDefined();
-  expectToBeCloseToTuple(c, Color.of({ r: 0.2, g: 0.5, b: 0.5 }));
+  expect(c.fixed).toEqual(Color.of({ r: 0.2, g: 0.5, b: 0.5 }).fixed);
 });
 
 test("multiply a color by a scalar", () => {
@@ -191,20 +189,17 @@ test("multiply two colors", () => {
   const a = Color.of({ r: 1, g: 0.2, b: 0.4 });
   const b = Color.of({ r: 0.9, g: 1, b: 0.1 });
   const c = a.multiply(b);
-  expect(c).toBeDefined();
-  expectToBeCloseToTuple(c, Color.of({ r: 0.9, g: 0.2, b: 0.04 }));
+  expect(c.fixed).toEqual(Color.of({ r: 0.9, g: 0.2, b: 0.04 }).fixed);
 });
 
 test("reflecting a vector approaching at 45deg", () => {
   const v = Vector.of({ x: 1, y: -1 });
   const n = Vector.of({ y: 1 });
-  expect(n).toBeDefined();
-  expectToBeCloseToTuple(v.reflect(n), Vector.of({ x: 1, y: 1 }));
+  expect(v.reflect(n).fixed).toEqual(Vector.of({ x: 1, y: 1 }).fixed);
 });
 
 test("reflecting a vector off a slanted surface", () => {
   const v = Vector.of({ y: -1 });
   const n = Vector.of({ x: Math.sqrt(2) / 2, y: Math.sqrt(2) / 2 });
-  expect(n).toBeDefined();
-  expectToBeCloseToTuple(v.reflect(n), Vector.of({ x: 1 }));
+  expect(v.reflect(n).fixed).toEqual(Vector.of({ x: 1 }).fixed);
 });

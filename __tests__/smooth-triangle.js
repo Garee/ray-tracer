@@ -1,7 +1,6 @@
 import { Point, Ray, Vector } from "../src/models";
 import { prepareComputations } from "../src/models/intersections";
 import { SmoothTriangle } from "../src/models/shapes";
-import { expectToBeCloseToTuple } from "../src/util";
 
 let triangle;
 beforeEach(() => {
@@ -37,8 +36,7 @@ test("an intersection with a smooth triangle stores u and v", () => {
 test("a smooth triangle uses u and v to interpolate the normal", () => {
   const intersection = triangle.intersectWithUV(1, 0.45, 0.25);
   const normal = triangle.normalAt(Point.origin, intersection);
-  expect(normal).toBeDefined();
-  expectToBeCloseToTuple(normal, Vector.of({ x: -0.5547, y: 0.83205 }));
+  expect(normal.fixed).toEqual(Vector.of({ x: -0.5547, y: 0.83205 }).fixed);
 });
 
 test("preparing the normal on a smooth triangle", () => {
@@ -48,6 +46,7 @@ test("preparing the normal on a smooth triangle", () => {
     direction: Vector.of({ z: 1 }),
   });
   const comps = prepareComputations(intersection, ray, [intersection]);
-  expect(comps.normal).toBeDefined();
-  expectToBeCloseToTuple(comps.normal, Vector.of({ x: -0.5547, y: 0.83205 }));
+  expect(comps.normal.fixed).toEqual(
+    Vector.of({ x: -0.5547, y: 0.83205 }).fixed
+  );
 });
