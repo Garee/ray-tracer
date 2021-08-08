@@ -7,10 +7,8 @@ import {
   Vector,
   Material,
 } from "../models";
-import { OpType, CsgOp } from "../models/csg-op";
-import { Cube, Sphere, Plane } from "../models/shapes";
-import { translate, scale, view } from "../models/transformations";
-import { CheckPattern } from "../models/patterns";
+import { Sphere, Plane } from "../models/shapes";
+import { translate, view } from "../models/transformations";
 
 export function createWorld() {
   const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });

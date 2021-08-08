@@ -11,7 +11,7 @@
     "start": "npm run sync",
     "test": "jest --watch",
     "format": "prettier --write *.js src/**/*.{js,jsx,html,css}",
-    "lint": "eslint *.js src/**/*.{js,jsx} __tests__/**/*.{js,jsx}"
+    "lint": "eslint --fix *.js src/**/*.{js,jsx} __tests__/**/*.{js,jsx}"
   },
   "keywords": [
     "ray",
