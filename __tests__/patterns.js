@@ -8,6 +8,7 @@ import {
 } from "../src/models/patterns";
 import { Sphere } from "../src/models/shapes";
 import { scale, translate } from "../src/models/transformations";
+
 class TestPattern extends Pattern {
   colorAt({ x, y, z }) {
     return Color.of({ r: x, g: y, b: z });
