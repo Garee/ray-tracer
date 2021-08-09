@@ -1,45 +1,60 @@
-import {
-  Color,
-  Point,
-  Light,
-  World,
-  Camera,
-  Vector,
-  Material,
-} from "../models";
-import { Sphere, Plane } from "../models/shapes";
-import { translate, view } from "../models/transformations";
-
-export function createWorld() {
-  const light = Light.of({ position: Point.of({ x: -10, y: 10, z: -10 }) });
-
-  const sphere = Sphere.of({
-    material: Material.of({
-      color: Color.blue,
-    }),
-  });
-
-  const floor = Plane.of({
-    material: Material.of({
-      color: Color.white,
-      reflective: 0.7,
-      diffuse: 0.9,
-    }),
-    transform: translate({ y: -1 }),
-  });
-
-  return World.of({
-    lights: [light],
-    objects: [floor, sphere],
-  });
-}
-
-export function createCamera(width, height, fov) {
-  return Camera.of({ width, height, fov }).setTransform(
-    view({
-      from: Point.of({ z: -4 }),
-      to: Point.origin,
-      up: Vector.of({ y: 0.1 }),
-    })
-  );
-}
+export const defaultScene = {
+  camera: {
+    width: 200,
+    height: 100,
+    fov: 67.5,
+    transform: {
+      view: {
+        from: {
+          z: -4,
+        },
+        to: {},
+        up: {
+          y: 0.1,
+        },
+      },
+    },
+  },
+  world: [
+    {
+      type: "light",
+      position: {
+        x: -10,
+        y: 10,
+        z: -10,
+      },
+    },
+    {
+      type: "sphere",
+      material: {
+        color: "blue",
+        pattern: {
+          type: "stripe",
+          colors: ["blue", "red"],
+          transform: {
+            scale: {
+              x: 0.2,
+              y: 0.2,
+              z: 0.2,
+            },
+            rotateZ: 67.5,
+          },
+        },
+      },
+    },
+    {
+      type: "plane",
+      material: {
+        color: "white",
+        reflective: 0.7,
+        diffuse: 0.9,
+      },
+      transform: {
+        translate: {
+          y: -1,
+        },
+      },
+    },
+  ],
+  workers: 12,
+};

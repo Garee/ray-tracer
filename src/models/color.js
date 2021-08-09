@@ -9,6 +9,14 @@ export class Color extends Tuple {
     return new Color(r, g, b);
   }
 
+  static hex(hex) {
+    hex = hex.replace("#", "");
+    const r = parseInt("0x" + hex.slice(0, 2)) / 255;
+    const g = parseInt("0x" + hex.slice(2, 4)) / 255;
+    const b = parseInt("0x" + hex.slice(4, 6)) / 255;
+    return Color.of({ r, g, b });
+  }
+
   static black = Color.of();
   static white = Color.of({ r: 1, g: 1, b: 1 });
   static red = Color.of({ r: 1 });

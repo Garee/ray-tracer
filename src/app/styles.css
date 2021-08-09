@@ -12,9 +12,9 @@ main {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 }
 
 form {
@@ -25,16 +25,14 @@ form {
 
 form label {
   display: flex;
-  justify-content: space-between;
-  margin: 0.5rem 0;
-  width: 170px;
+  flex-direction: column;
 }
 
-form input {
-  width: 100px;
+form textarea {
+  width: 400px;
+  height: 200px;
 }
 
 form button {
-  width: min-content;
   align-self: flex-end;
 }

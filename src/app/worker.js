@@ -1,14 +1,13 @@
-import { createWorld, createCamera } from "./scene";
+import { SceneParser } from "./scene-parser";
 
 onmessage = function (e) {
-  const { from, to, width, height, fov } = e.data;
+  const { scene, from, to } = e.data;
 
   function onRowRender(row) {
     postMessage({ row });
   }
 
-  const world = createWorld();
-  const camera = createCamera(width, height, fov);
+  const [camera, world] = SceneParser.parse(scene);
   const frame = camera.render(world, onRowRender, from, to);
   const pixels = frame.toRgba();
 

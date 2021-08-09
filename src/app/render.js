@@ -1,16 +1,18 @@
-import { toDegrees } from "../util/maths";
+import { SceneParser } from "./scene-parser";
 
-export async function raytrace(world, camera, onRowRender) {
+export async function raytrace(scene, onRowRender) {
   console.time("Raytracing");
+
   if (!window.Worker) {
     console.info(`Web workers are not supported by this browser.`);
+    const [camera, world] = SceneParser.parse(scene);
     return camera.render(world, onRowRender);
   }
 
+  const { camera } = scene;
   const batches = [];
-
   return new Promise((resolve) => {
-    const nworkers = navigator.hardwareConcurrency || 4;
+    const nworkers = scene.workers || navigator.hardwareConcurrency || 4;
     console.debug(`Spawning ${nworkers} web workers.`);
 
     const workers = new Array(nworkers).fill().map((_, i) => {
@@ -24,11 +26,9 @@ export async function raytrace(world, camera, onRowRender) {
       const fromRow = toRow - rowBatchSize;
 
       worker.postMessage({
+        scene,
         from: fromRow,
         to: toRow,
-        width: camera.width,
-        height: camera.height,
-        fov: toDegrees(camera.fov),
       });
 
       worker.onmessage = ({ data }) => {
