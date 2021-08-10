@@ -3,7 +3,7 @@
 A Ray Tracer implementation using JavaScript and Canvas.
 
 <p align="center">
-  <img src="./assets/sphere.png" alt="A blue raytraced Sphere." />
+  <img src="./assets/cover.png" alt="A collection of raytraced shapes." />
 <p>
 
 ## What's That?
@@ -53,6 +53,12 @@ Create an optimised build:
 - [ ] Texture Maps
 - [ ] Normal Perturbation
 - [ ] Torus Primitives
+
+## Example Renders
+
+<p align="center">
+  <img src="./assets/sphere.png" alt="A blue raytraced Sphere." />
+<p>
 
 ## Acknowledgements
 

@@ -144,7 +144,10 @@ export class SceneParser {
   }
 
   static parseLight(light) {
-    return Light.of({ position: Point.of(light.position) });
+    if (light.color) {
+      light.color = SceneParser.parseColor(light.color);
+    }
+    return Light.of({ position: Point.of(light.position), color: light.color });
   }
 
   static parseShape(shape) {
@@ -157,6 +160,9 @@ export class SceneParser {
 
     if (shape.transform) {
       shape.transform = SceneParser.getTransform(shape.transform);
+      if (type === "plane") {
+        console.log(shape.transform);
+      }
     }
 
     return constructor(shape);
@@ -189,7 +195,8 @@ export class SceneParser {
   static getTransform(props) {
     let transform = Matrix.identity;
 
-    for (const [type, args] of Object.entries(props)) {
+    for (let [type, args] of Object.entries(props)) {
+      type = type.replace(/[0-9]/g, "");
       const transformFn = transformFns[type];
       const transformArgs = transformFnArgs[type]
         ? transformFnArgs[type](args)
