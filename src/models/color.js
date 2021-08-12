@@ -135,6 +135,30 @@ export class Color extends Tuple {
   }
 
   /**
+   * Convert the color to an RGB representation with component range 0-255.
+   *
+   * @returns {Color} The converted color.
+   */
+  toRgb() {
+    const r = Math.max(Math.min(Math.round(this.red * 255), 255), 0);
+    const g = Math.max(Math.min(Math.round(this.green * 255), 255), 0);
+    const b = Math.max(Math.min(Math.round(this.blue * 255), 255), 0);
+    return Color.of({ r, g, b });
+  }
+
+  /**
+   * Convert the color to an RGBA representation with component and alpha range 0-255.
+   *
+   * @typedef {{red: number, green: number, blue: number, alpha: number}} Rgba
+   * @param {number} [alpha=255] - The alpha value to use.
+   * @returns {Rgba} An object with the red, green, blue and alpha components.
+   */
+  toRgba(alpha = 255) {
+    const { red, green, blue } = this.toRgb();
+    return { red, green, blue, alpha };
+  }
+
+  /**
    * @private
    * Multiply the color by another color.
    *
