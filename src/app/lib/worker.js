@@ -1,4 +1,4 @@
-import { SceneParser } from "./scene-parser";
+import { SceneParser } from "../io/scene-parser";
 
 onmessage = function (e) {
   const { scene, from, to } = e.data;

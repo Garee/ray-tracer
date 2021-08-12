@@ -7,7 +7,7 @@ import {
   Matrix,
   Material,
   Color,
-} from "../../src/models";
+} from "../../models";
 import {
   view,
   translate,
@@ -16,7 +16,7 @@ import {
   rotateY,
   rotateZ,
   shear,
-} from "../../src/models/transformations";
+} from "../../models/transformations";
 import {
   Sphere,
   Plane,
@@ -27,14 +27,14 @@ import {
   SmoothTriangle,
   Triangle,
   CsgOp,
-} from "../models/shapes";
+} from "../../models/shapes";
 import {
   CheckPattern,
   GradientPattern,
   RadialGradientPattern,
   RingPattern,
   StripePattern,
-} from "../../src/models/patterns";
+} from "../../models/patterns";
 
 const transformFns = {
   view: view,

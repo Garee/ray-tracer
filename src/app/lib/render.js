@@ -1,4 +1,4 @@
-import { SceneParser } from "./scene-parser";
+import { SceneParser } from "../io/scene-parser";
 
 export async function raytrace(scene, onRowRender) {
   console.time("Raytracing");
@@ -19,7 +19,7 @@ export async function raytrace(scene, onRowRender) {
       const n = i + 1;
       console.debug(`Spawning worker ${n}.`);
 
-      const worker = new Worker("worker.js");
+      const worker = new Worker("lib/worker.js");
 
       const rowBatchSize = Math.ceil(camera.height / nworkers);
       const toRow = rowBatchSize * n;

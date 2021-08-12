@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { defaultScene } from "./scene";
-import { raytrace } from "./render";
+import { defaultScene } from "../io/scene";
+import { raytrace } from "../lib/render";
 import { AppCanvas } from "./canvas";
 import { Progress } from "./progress";
 import { SceneForm } from "./scene-form";

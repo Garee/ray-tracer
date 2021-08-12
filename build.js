@@ -13,7 +13,7 @@ function copyFiles() {
 }
 
 const options = {
-  entryPoints: ["src/app/index.jsx", "src/app/worker.js"],
+  entryPoints: ["src/app/index.jsx", "src/app/lib/worker.js"],
   outdir: "dist",
   bundle: true,
   sourcemap: !isProduction,
