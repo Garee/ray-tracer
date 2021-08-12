@@ -1,0 +1,19 @@
+form.scene-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+form.scene-form label {
+  display: flex;
+  flex-direction: column;
+}
+
+form.scene-form textarea {
+  width: 400px;
+  height: 200px;
+}
+
+form.scene-form button {
+  align-self: flex-end;
+}

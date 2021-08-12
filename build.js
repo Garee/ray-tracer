@@ -4,12 +4,16 @@ const esbuild = require("esbuild");
 const isProduction = process.env.NODE_ENV === "production";
 
 function copyFiles() {
-  fs.copyFileSync("src/app/index.html", "dist/index.html");
-  fs.copyFileSync("assets/favicon.ico", "dist/favicon.ico");
+  const files = [
+    { from: "src/app/index.html", to: "dist/index.html" },
+    { from: "assets/favicon.ico", to: "dist/favicon.ico" },
+  ];
+
+  files.forEach(({ from, to }) => fs.copyFileSync(from, to));
 }
 
 const options = {
-  entryPoints: ["src/app/index.jsx", "src/app/worker.js", "src/app/styles.css"],
+  entryPoints: ["src/app/index.jsx", "src/app/worker.js"],
   outdir: "dist",
   bundle: true,
   sourcemap: !isProduction,

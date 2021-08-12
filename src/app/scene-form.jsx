@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import "./scene-form.css";
 
 export function SceneForm({ scene, onSubmit }) {
   const [value, setValue] = useState(JSON.stringify(scene, null, 2));
@@ -10,7 +11,7 @@ export function SceneForm({ scene, onSubmit }) {
   }
 
   return (
-    <form onSubmit={onFormSubmit}>
+    <form onSubmit={onFormSubmit} className="scene-form">
       <label>
         <span>Scene:</span>
         <textarea

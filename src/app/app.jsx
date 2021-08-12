@@ -4,6 +4,7 @@ import { raytrace } from "./render";
 import { AppCanvas } from "./canvas";
 import { Progress } from "./progress";
 import { SceneForm } from "./scene-form";
+import "./app.css";
 
 export function App() {
   const [scene, setScene] = useState(defaultScene);

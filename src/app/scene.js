@@ -1,7 +1,7 @@
 export const defaultScene = {
   camera: {
-    width: 800,
-    height: 600,
+    width: 100,
+    height: 100,
     fov: 45,
     transform: {
       view: {

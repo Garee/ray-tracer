@@ -16,23 +16,3 @@ main {
   align-items: center;
   justify-content: center;
 }
-
-form {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1rem;
-}
-
-form label {
-  display: flex;
-  flex-direction: column;
-}
-
-form textarea {
-  width: 400px;
-  height: 200px;
-}
-
-form button {
-  align-self: flex-end;
-}
