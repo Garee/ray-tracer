@@ -22,10 +22,10 @@ export class Tuple {
   /**
    * Create a new Tuple.
    *
-   * @param {number} x - The x coordinate.
-   * @param {number} y - The y coordinate.
-   * @param {number} z - The z coordinate.
-   * @param {number} w - The tuple classifier where a Point=1 and Vector=0.
+   * @param {number} [x=0] - The x coordinate.
+   * @param {number} [y=0] - The y coordinate.
+   * @param {number} [z=0] - The z coordinate.
+   * @param {number} [w=0] - The tuple classifier where a Point=1 and Vector=0.
    */
   constructor(x = 0, y = 0, z = 0, w = 0) {
     this.x = x;

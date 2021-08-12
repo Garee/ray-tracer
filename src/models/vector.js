@@ -8,9 +8,9 @@ export class Vector extends Tuple {
   /**
    * Create a new 3D Vector.
    *
-   * @param {number} x - The x coordinate.
-   * @param {number} y - The y coordinate.
-   * @param {number} z - The z coordinate.
+   * @param {number} [x=0] - The x coordinate.
+   * @param {number} [y=0] - The y coordinate.
+   * @param {number} [z=0] - The z coordinate.
    */
   constructor(x = 0, y = 0, z = 0) {
     super(x, y, z, 0);
