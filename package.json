@@ -10,6 +10,7 @@
     "sync": "browser-sync start --server --watch --serveStatic dist",
     "start": "npm run sync",
     "test": "jest --watch",
+    "test:ci": "jest",
     "format": "prettier --write *.js src/**/*.{js,jsx,html,css}",
     "lint": "eslint --fix *.js src/**/*.{js,jsx} __tests__/**/*.{js,jsx}"
   },
