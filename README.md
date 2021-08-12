@@ -1,5 +1,7 @@
 # Ray Tracer
 
+[![Build Status](https://travis-ci.com/Garee/ray-tracer.svg?branch=master)](https://travis-ci.com/Garee/ray-tracer)
+
 A Ray Tracer implementation using JavaScript and Canvas.
 
 <p align="center">
