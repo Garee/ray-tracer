@@ -111,7 +111,7 @@ test("multiply a matrix by the identity matrix", () => {
     [2, 4, 8, 16],
     [4, 8, 16, 32],
   ]);
-  expect(m.multiply(m.identity())).toEqual(m);
+  expect(m.multiply(Matrix.identity)).toEqual(m);
 });
 
 test("matrix transposition", () => {
