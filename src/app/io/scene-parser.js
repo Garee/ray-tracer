@@ -4,7 +4,6 @@ import {
   Point,
   Vector,
   World,
-  Matrix,
   Material,
   Color,
 } from "../../models";
