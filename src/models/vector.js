@@ -19,7 +19,7 @@ export class Vector extends Tuple {
   /**
    * Create a new 3D Vector from an object.
    *
-   * @param {Object} object - The object to create from.
+   * @param {object} object - The object to create from.
    * @param {number} [object.x=0] - The x coordinate.
    * @param {number} [object.y=0] - The y coordinate.
    * @param {number} [object.z=0] - The z coordinate.

@@ -23,7 +23,7 @@ export class Canvas {
   /**
    * Create a new Canvas from an object.
    *
-   * @param {Object} object - The object to create from.
+   * @param {object} object - The object to create from.
    * @param {number} [object.width=100] - The width of the canvas in pixels.
    * @param {number} [object.height=50] - The height of the canvas in pixels.
    * @param {*} [pixels=] - The pixels to populate the canvas with.
@@ -36,7 +36,7 @@ export class Canvas {
   /**
    * Get the pixel color at a specific (x,y) coordinate location.
    *
-   * @param {Object} location - The location of the pixel.
+   * @param {object} location - The location of the pixel.
    * @param {number} location.x - The x coordinate of the pixel.
    * @param {number} location.y - The y coordinate of the pixel.
    * @returns {Color} A new color representing the pixel at the given (x,y) location.
@@ -49,7 +49,7 @@ export class Canvas {
   /**
    * Change the color of the pixel at the given (x,y) coordinate location.
    *
-   * @param {Object} operation - The write operation details.
+   * @param {object} operation - The write operation details.
    * @param {number} operation.x - The x coordinate of the pixel.
    * @param {number} operation.y - The y coordinate of the pixel.
    * @param {Color} operation.color - The color to write at the pixel.

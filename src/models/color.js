@@ -28,7 +28,7 @@ export class Color extends Tuple {
   /**
    * Create a new Color from an object.
    *
-   * @param {Object} object - The object to create from.
+   * @param {object} object - The object to create from.
    * @param {number} [object.r=0] - The red color component.
    * @param {number} [object.g=0] - The green color component.
    * @param {number} [object.b=0] - The blue color component.
