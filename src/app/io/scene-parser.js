@@ -16,6 +16,7 @@ import {
   rotateY,
   rotateZ,
   shear,
+  chain,
 } from "../../models/transformations";
 import {
   Sphere,
@@ -193,18 +194,14 @@ export class SceneParser {
   }
 
   static getTransform(props) {
-    let transform = Matrix.identity;
-
-    for (let [type, args] of Object.entries(props)) {
+    const transformations = Object.entries(props).map((transformation) => {
+      let [type, args] = transformation;
       type = type.replace(/[0-9]/g, "");
-      const transformFn = transformFns[type];
-      const transformArgs = transformFnArgs[type]
-        ? transformFnArgs[type](args)
-        : args;
-      transform = transform.multiply(transformFn(transformArgs));
-    }
+      args = transformFnArgs[type] ? transformFnArgs[type](args) : args;
+      return transformFns[type](args);
+    });
 
-    return transform;
+    return chain(...transformations);
   }
 
   static createGroup(props) {
