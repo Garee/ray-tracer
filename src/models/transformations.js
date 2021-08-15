@@ -4,6 +4,17 @@ import { toRadians } from "../util/maths";
 /**
  * Matrix transformations that are used to move and deform points.
  * The w=0 value of a vector causes the transformations to disappear.
+ *
+ * A transformation matrix converts point between two different coordinate
+ * systems: world space and object space. In world space, everything is
+ * relative to the overall world. In object space, everything is relative
+ * to an object.
+ *
+ * Multiplying a point in object space by a transformation matrix converts
+ * it to world space.
+ *
+ * Multiplying a point in world space by the inverse of the transformation
+ * matrix converts it to object space.
  */
 
 /**
