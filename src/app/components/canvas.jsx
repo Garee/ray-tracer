@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-export function AppCanvas({ width, height, pixels }) {
+export function AppCanvas({ width, height, pixels, scale = 1 }) {
   function draw(pixels) {
     const el = document.getElementById("canvas");
     const ctx = el.getContext("2d");
@@ -22,13 +22,21 @@ export function AppCanvas({ width, height, pixels }) {
     if (pixels) {
       draw(pixels);
     }
-  }, [pixels, width, height]);
+  }, [pixels, width, height, scale]);
 
-  return <canvas id="canvas" width={width} height={height}></canvas>;
+  return (
+    <canvas
+      id="canvas"
+      width={width}
+      height={height}
+      style={{ width: width * scale, height: height * scale }}
+    ></canvas>
+  );
 }
 
 AppCanvas.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
+  scale: PropTypes.number,
   pixels: PropTypes.array,
 };

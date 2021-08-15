@@ -51,6 +51,7 @@ export function App() {
             pixels={pixels}
             width={scene.camera.width}
             height={scene.camera.height}
+            scale={scene.scale}
           />
           <SceneForm scene={scene} onSubmit={onSceneFormSubmit} />
         </>
