@@ -56,7 +56,9 @@ export class Sphere extends Shape {
    * @returns {Intersection[]} An array of intersections with this sphere.
    */
   _intersect({ origin, direction }) {
+    // The vector from the sphere's center to the ray's origin.
     const toRay = origin.subtract(this.center);
+    // The ray misses if the discriminant < 1 (no real roots.)
     const a = direction.dot(direction);
     const b = 2 * direction.dot(toRay);
     const c = toRay.dot(toRay) - 1;
