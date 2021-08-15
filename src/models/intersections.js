@@ -59,6 +59,14 @@ export function prepareComputations(intersection, ray, intersections = []) {
   };
 }
 
+/**
+ * Get the intersection that is visible from the ray origin.
+ *
+ * This is the intersection with the lowest non-negative t value.
+ *
+ * @param {Intersection[]} intersections - The ray-object intersections.
+ * @returns {Intersection} The intersection that is visible.
+ */
 export function hit(intersections) {
   return intersections
     .filter((i) => i.t >= 0)

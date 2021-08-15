@@ -77,7 +77,9 @@ export class Sphere extends Shape {
   }
 
   /**
-   * Get the normal vector at a given point.
+   * Get the surface normal vector at a given point.
+   *
+   * The surface normal is the vector perpendicular to the surface at a point.
    *
    * @param {Point} point - The point at which to obtain the normal vector.
    * @returns {Vector} The normal vector at the point.

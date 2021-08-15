@@ -41,6 +41,12 @@ export class Shape {
     return this.normalToWorld(objNormal);
   }
 
+  /**
+   * Transform a point in world space to a point in object space.
+   *
+   * @param {Point} point - The point in world space to transform.
+   * @returns {Point} The point in object space.
+   */
   worldToObject(point) {
     if (this.parent) {
       point = this.parent.worldToObject(point);
@@ -49,7 +55,15 @@ export class Shape {
     return this.transform.inverse().multiply(point);
   }
 
+  /**
+   * Transform a normal vector in object space to one in world space.
+   *
+   * @param {Vector} normal - The normal vector in object space.
+   * @returns {Vector} The vector in object space.
+   */
   normalToWorld(normal) {
+    // To keep normals perpendicular we must multiply by the inverse transpose
+    // transformation matrix rather than just the transformation matrix.
     normal = this.transform.inverse().transpose().multiply(normal).normalize();
 
     if (this.parent) {

@@ -1,6 +1,19 @@
 import { Color } from "./color";
 
+/**
+ * A representation of an objects material properties.
+ */
 export class Material {
+  /**
+   * Create a new Material.
+   *
+   * @param {object} [object=] - The object properties to create from.
+   * @param {Color} [object.color=Color.white] - The color.
+   * @param {number} [object.ambient=0.1] - The intensity of light reflected from other objects.Color
+   * @param {number} [object.diffuse=0.9] - The intensity light reflected from a matte surface.
+   * @param {number} [object.specular=0.9] - The intensity of the reflection of the light source (specular highlight.)
+   * @param {number} [object.shininess=200] - The how large the highlight should be (typically between 10-200.)
+   */
   constructor({
     color = Color.white,
     ambient = 0.1,

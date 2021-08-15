@@ -228,7 +228,8 @@ export class Tuple {
   }
 
   /**
-   * Calculate the reflection vector from a normal.
+   * Calculate the reflection vector from a reflecting this vector
+   * around a surface normal vector.
    *
    * @param {Tuple} normal - The normal vector.
    * @returns {Tuple} A new tuple representing the reflection vector.
