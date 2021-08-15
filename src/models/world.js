@@ -102,15 +102,7 @@ export class World {
     const { material } = object;
     const colors = this.lights.map((light) => {
       const isShadowed = this.isShadowed(overPoint);
-      const surface = lighting(
-        material,
-        object,
-        light,
-        point,
-        eye,
-        normal,
-        isShadowed
-      );
+      const surface = lighting(object, light, point, eye, normal, isShadowed);
 
       const reflected = this.reflectedColor(comps, remaining);
       const refracted = this.refractedColor(comps, remaining);

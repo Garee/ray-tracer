@@ -41,19 +41,10 @@ export class Light {
  * @param {boolean} [inShadow=false] - Determines if the object is shadowed.
  * @return {Color} The shaded color at the point.
  */
-export function lighting(
-  material, // TODO: Remove this as it's available in object.
-  object,
-  light,
-  point,
-  eye,
-  normal,
-  inShadow = false
-) {
-  let materialColor = material.color;
-  if (material.pattern) {
-    materialColor = material.pattern.at(object, point);
-  }
+export function lighting(object, light, point, eye, normal, inShadow = false) {
+  const { material } = object;
+  const materialColor = material.pattern?.at(object, point) ?? material.color;
+
   // Combine the surface color with the light's colour.
   const color = materialColor.multiply(light.intensity);
   // Compute the ambient light contribution from other objects in the environment.
