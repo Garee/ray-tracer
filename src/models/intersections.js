@@ -1,6 +1,19 @@
 import { Epsilon } from "../util";
 import { OpType } from "./shapes";
 
+/**
+ * Compute useful quantities about a ray-object intersection.
+ *
+ * - The point in world space where the intersection occurred.
+ * - The eye vector that points towards the camera.
+ * - The surface normal vector.
+ * - Whether the intersection occurred inside the object.
+ *
+ * @param {Intersection} intersection - The intersection that occurred.
+ * @param {Ray} ray - The ray that intersected with an object.
+ * @param {Intersections[]} intersections - All ray intersections.
+ * @returns Precomputed quantities relating to the intersection.
+ */
 export function prepareComputations(intersection, ray, intersections = []) {
   const { t, object } = intersection;
   const point = ray.position(intersection.t);
