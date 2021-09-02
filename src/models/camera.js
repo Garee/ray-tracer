@@ -2,7 +2,7 @@ import { Canvas } from "./canvas";
 import { Matrix } from "./matrix";
 import { Point } from "./point";
 import { Ray } from "./ray";
-import { toDegrees, toRadians } from "../util/maths";
+import { toRadians } from "../util/maths";
 
 /**
  * A representation of a virtual camera that resides in a scene.
